@@ -97,9 +97,9 @@
       "flags": {}
     }
   ],
-  "url": "https://github.com/ShazProd/alien-mu-th-ur",
-  "manifest": "https://github.com/ShazProd/alien-mu-th-ur/releases/latest/download/module.json",
-  "download": "https://github.com/ShazProd/alien-mu-th-ur/releases/download/2.0.0/alien-mu-th-ur.zip",
+  "url": "https://github.com/KorujaSedex123/alien-mu-th-ur-pt-br",
+  "manifest": "https://github.com/KorujaSedex123/alien-mu-th-ur-pt-br/releases/latest/download/module.json",
+  "download": "https://github.com/KorujaSedex123/alien-mu-th-ur-pt-br/releases/download/2.1.0/alien-mu-th-ur.zip",
   "license": "LICENSE.txt",
   "flags": {}
 }

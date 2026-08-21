@@ -1,0 +1,32 @@
+<form autocomplete="off" onsubmit="event.preventDefault();">
+    <p style="color: #00ff00; font-family: monospace;">Cadastre os comandos e as respostas da MUTHUR:</p>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+        <thead>
+            <tr style="border-bottom: 1px solid #00ff00; color: #ff9900;">
+                <th style="text-align: left;">Comando (Ex: PURGA)</th>
+                <th style="text-align: left;">Resposta da IA</th>
+                <th style="width: 40px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each commands}}
+            <tr class="command-row">
+                <td><input type="text" name="commandKey" value="{{this.command}}" style="background: black; color: #00ff00; border: 1px solid #333; font-family: monospace;" placeholder="COMANDO"/></td>
+                <td><input type="text" name="commandResponse" value="{{this.response}}" style="background: black; color: #00ff00; border: 1px solid #333; font-family: monospace;" placeholder="Resposta..."/></td>
+                <td style="text-align: center;">
+                    <button type="button" class="remove-command" style="background: #330000; color: #ff0000; border: 1px solid #ff0000; width: 30px; height: 30px;" title="Remover"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    
+    <div style="display: flex; gap: 10px;">
+        <button type="button" class="add-command" style="background: black; color: #00ff00; border: 1px solid #00ff00; font-family: monospace;">
+            <i class="fas fa-plus"></i> Adicionar Comando
+        </button>
+        <button type="submit" name="submit" style="background: black; color: #ff9900; border: 1px solid #ff9900; font-family: monospace;">
+            <i class="fas fa-save"></i> Salvar Protocolos
+        </button>
+    </div>
+</form>

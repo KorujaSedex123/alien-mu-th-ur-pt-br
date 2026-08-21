@@ -451,6 +451,73 @@ function sendToGM(message, actionType = 'command', commandType = '') {
     }
 }
 
+// --- CLASSE DO MENU DE COMANDOS PERSONALIZADOS ---
+class MuthurCommandsConfig extends FormApplication {
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            id: 'muthur-custom-commands-menu',
+            title: 'Protocolos e Comandos MUTHUR',
+            template: 'modules/alien-mu-th-ur/templates/custom-commands.hbs',
+            width: 600,
+            height: "auto",
+            closeOnSubmit: true
+        });
+    }
+
+    getData() {
+        let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || {};
+        // Converte o Objeto em uma Array para o Handlebars listar na tela
+        let commandList = Object.keys(cmds).map(k => ({ command: k, response: cmds[k] }));
+        return { commands: commandList };
+    }
+
+    activateListeners(html) {
+        super.activateListeners(html);
+        // Botão de adicionar nova linha
+        html.find('.add-command').click(async (event) => {
+            event.preventDefault();
+            const tbody = html.find('tbody');
+            tbody.append(`
+                <tr class="command-row">
+                    <td><input type="text" name="commandKey" value="" style="background: black; color: #00ff00; border: 1px solid #333; font-family: monospace;" placeholder="NOVO COMANDO"/></td>
+                    <td><input type="text" name="commandResponse" value="" style="background: black; color: #00ff00; border: 1px solid #333; font-family: monospace;" placeholder="Nova resposta..."/></td>
+                    <td style="text-align: center;"><button type="button" class="remove-command" style="background: #330000; color: #ff0000; border: 1px solid #ff0000; width: 30px; height: 30px;"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `);
+            // Reativa o evento de deletar para a nova linha
+            html.find('.remove-command').off('click').click(e => $(e.currentTarget).closest('.command-row').remove());
+            this.setPosition({ height: "auto" });
+        });
+
+        // Botão de remover linha existente
+        html.find('.remove-command').click(event => {
+            event.preventDefault();
+            $(event.currentTarget).closest('.command-row').remove();
+            this.setPosition({ height: "auto" });
+        });
+    }
+
+    async _updateObject(event, formData) {
+        let keys = formData.commandKey || [];
+        let values = formData.commandResponse || [];
+        
+        // Garante que são arrays mesmo se houver apenas 1 comando
+        if (!Array.isArray(keys)) keys = [keys];
+        if (!Array.isArray(values)) values = [values];
+
+        let newData = {};
+        for(let i = 0; i < keys.length; i++){
+            let k = (keys[i] || "").trim().toUpperCase();
+            let v = (values[i] || "").trim();
+            if(k && v) {
+                newData[k] = v;
+            }
+        }
+        await game.settings.set('alien-mu-th-ur', 'customCommandsData', newData);
+    }
+}
+// --- FIM DA CLASSE ---
+
 Hooks.once('init', () => {
     game.modules.get('alien-mu-th-ur').api = {
         version: "1.0.0"
@@ -462,14 +529,22 @@ Hooks.once('init', () => {
         translations: {}
     };
 
-    game.settings.register('alien-mu-th-ur', 'customCommands', {
+    // Registra o Menu que abrirá o botão
+    game.settings.registerMenu('alien-mu-th-ur', 'customCommandsMenu', {
         name: 'ALIEN-MU-TH-UR.Settings.CustomCommands.Name',
+        label: 'Configurar Protocolos',
         hint: 'ALIEN-MU-TH-UR.Settings.CustomCommands.Hint',
-        scope: 'world',
-        config: true,
-        type: String,
-        default: '{"EXEMPLO": "Resposta da MU/TH/UR para o comando exemplo."}',
+        icon: 'fas fa-terminal',
+        type: MuthurCommandsConfig,
         restricted: true
+    });
+
+    // Registra o Objeto invisível que guarda os dados salvos pelo Menu
+    game.settings.register('alien-mu-th-ur', 'customCommandsData', {
+        scope: 'world',
+        config: false, // Fica invisível, pois o menu acima gerencia isso
+        type: Object,
+        default: { "QUEM E VOCE?": "Eu sou a interface principal da MU/TH/UR 6000." }
     });
 
     window.hackingSequences = [

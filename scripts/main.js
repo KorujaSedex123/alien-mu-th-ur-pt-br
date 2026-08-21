@@ -454,7 +454,7 @@ function sendToGM(message, actionType = 'command', commandType = '') {
 // --- CLASSE DO MENU DE COMANDOS PERSONALIZADOS ---
 class MuthurCommandsConfig extends FormApplication {
     static get defaultOptions() {
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             id: 'muthur-custom-commands-menu',
             title: 'Protocolos e Comandos MUTHUR',
             template: 'modules/alien-mu-th-ur/templates/custom-commands.hbs',

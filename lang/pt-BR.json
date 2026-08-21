@@ -1,0 +1,389 @@
+{
+    "MUTHUR": {
+        "welcome": "MU/TH/UR 6000 v2.1.0\nTERMINAL ATIVO...\nINTERFACE 2037\nAGUARDANDO COMANDO...",
+        "waitingResponse": "AGUARDANDO RESPOSTA...",
+        "help": "COMANDOS DISPONÍVEIS:\n- HELP: EXIBIR ESTA AJUDA\n- STATUS: STATUS DO SISTEMA\n- CLEAR: LIMPAR TELA\n- EXIT: FECHAR TERMINAL\n- /M [MENSAGEM]: COMUNICAR COM A MÃE\n \nAGUARDANDO COMANDO...",
+        "status": "MU/TH/UR 6000 v2.1.0\nTODOS OS SISTEMAS OPERACIONAIS\nNENHUMA ANOMALIA DETECTADA",
+        "commandNotFound": "COMANDO NÃO RECONHECIDO. DIGITE 'HELP' PARA A LISTA DE COMANDOS.",
+        "sessionEnded": "SESSÃO ENCERRADA",
+        "motherPrefix": "/M : ",
+        "sessionStarted": "SESSÃO INICIADA",
+        "newSessionStarted": "=== NOVA SESSÃO DA MÃE INICIADA ===\nCOMANDOS DISPONÍVEIS PARA O JOGADOR:\nHELP: EXIBIR ESTA AJUDA\nSTATUS: STATUS DO SISTEMA\nCLEAR: LIMPAR TELA\nEXIT: FECHAR TERMINAL\n/M [MENSAGEM]: COMUNICAR COM A MÃE\nHACK: INICIAR COMANDO DE INVASÃO PARA DIREITOS DE ADMINISTRADOR\nSPECIAL ORDER: 754, 899, 931, 937, 939, 966, EXIBIR ORDENS ESPECIAIS\nCERBERUS PROTOCOL: COMANDO PARA INICIAR AUTO-DESTRUIÇÃO",
+        "muthurSessionEnded": "SESSÃO DA MÃE ENCERRADA",
+        "unknownCommand": "COMANDO NÃO RECONHECIDO. DIGITE 'HELP' PARA A LISTA DE COMANDOS",
+        "unknownCommandPrefix": "COMANDO NÃO RECONHECIDO : ",
+        "skip": "PULAR",
+        "send": "RESPONDER",
+        "sessionActiveWarning": "Uma sessão da MÃE já está ativa com {userName}",
+        "sessionStartedBy": "{userName} iniciou uma sessão da MÃE",
+        "sessionEndedBy": "{userName} encerrou a sessão da MÃE",
+        "systemReady": "Sistema MU/TH/UR 6000 pronto",
+        "inputPlaceholder": "Digite um comando",
+        "selectCharacter": "Selecionar Personagem",
+        "selectCharacterHint": "Escolha o personagem que irá se comunicar com a MÃE",
+        "gmInterfaceTitle": "MÃE - {userName}",
+        "sessionClosedByGM": "O Mestre encerrou a sessão da MÃE",
+        "selectSpectators": "Selecionar espectadores",
+        "selectSpectatorsHint": "Escolha os jogadores que assistirão como espectadores",
+        "confirmSpectators": "Confirmar",
+        "cancelSpectators": "Cancelar",
+        "spectatorModeTitle": "MÃE - {userName} (Espectador)",
+        "spectatorModeInfo": "Você está no modo espectador. Não pode interagir com a MÃE.",
+        "spectatorWelcome": "Bem-vindo ao modo espectador. Você está observando a sessão da MÃE de {userName}.",
+        "waitingForGM": "Aguardando autorização do Mestre para iniciar a MÃE...",
+        "clickToStart": "Clique para iniciar a sequência de inicialização",
+        "enableSound": "Habilitar Som",
+        "enableSoundHint": "Clique para habilitar o som nesta sessão",
+        "waitingForMother": "AGUARDANDO A MÃE",
+        "requestSent": "Solicitação enviada ao Mestre...",
+        "noDoorsFound": "Nenhuma porta encontrada.",
+        "doorListHeader": "Portas na área:",
+        "permissionDenied": "ACESSO NEGADO.",
+        "requestDenied": "Solicitação negada.",
+        "approve": {
+            "lockDoor": "TRANCAR {label}?",
+            "unlockDoor": "DESTRANCAR {label}?",
+            "dimLights": "REDUZIR ILUMINAÇÃO?",
+            "shutdownLights": "DESLIGAR LUZES?",
+            "restoreLights": "RESTAURAR LUZES?",
+            "activateAlarm": "ATIVAR ALARME?",
+            "gasTargets": "GÁS NOS ALVOS DA ÁREA?",
+            "cryoPod": "CRIO ESTASE {target}?"
+        },
+        "doorLocked": "porta {label} TRANCADA.",
+        "doorUnlocked": "porta {label} DESTRANCADA.",
+        "alarmActivated": "ALARME ATIVADO.",
+        "stopAlarm": "PARAR ALARME",
+        "alarmDeactivated": "ALARME DESATIVADO.",
+        "target": "ALVO",
+        "cryoApplied": "CRIO ESTASE APLICADA: {name}.",
+        "cryoNoMatch": "NENHUM ALVO DE CRIO ESTASE COMPATÍVEL.",
+        "lightsShutdown": "Apagão de iluminação concluído.",
+        "lightsDimmed": "Iluminação reduzida.",
+        "noSavedLights": "Nenhum estado de luzes salvo para restaurar.",
+        "lightsRestored": "Iluminação restaurada.",
+        "unknownEntity": "entidade desconhecida",
+        "lifeformsDetected": "formas de vida detectadas",
+        "entitiesAffected": "entidades afetadas",
+        "postHack": {
+            "title": "COMANDOS PÓS-INVASÃO:"
+        },
+        "helpMenu": {
+            "title": "AJUDA DE COMANDOS",
+            "tooltip": "Ajuda de comandos",
+            "close": "FECHAR",
+            "consultHint": "CONSULTE O SINAL DE '?' PARA A LISTA DE COMANDOS",
+            "sections": {
+                "intro": "LISTA E DESCRIÇÃO DOS COMANDOS AVANÇADOS PÓS-INVASÃO (COM APROVAÇÃO DO MESTRE).",
+                "basic": {
+                    "title": "COMANDOS BÁSICOS",
+                    "desc": "HELP: EXIBIR ESTA AJUDA\nSTATUS: STATUS DO SISTEMA\nCLEAR: LIMPAR TELA\nEXIT: FECHAR TERMINAL\n/M [MENSAGEM]: COMUNICAR COM A MÃE"
+                },
+                "hack": {
+                    "title": "HACK (INVASÃO)",
+                    "desc": "HACK: TENTAR OBTER DIREITOS DE ADMINISTRADOR (CONTROLADO PELO MESTRE)"
+                },
+                "specialOrders": {
+                    "title": "ORDENS ESPECIAIS",
+                    "desc": "ORDERS: 754, 899, 931, 937, 939, 966. EXIBE DETALHES DE UMA DIRETRIZ ESPECIAL."
+                },
+                "cerberus": {
+                    "title": "PROTOCOLO CÉRBERO",
+                    "desc": "CERBERUS: PROTOCOLO DE AUTO-DESTRUIÇÃO COM CONTAGEM REGRESSIVA."
+                },
+                "doors": {
+                    "title": "CONTROLE DE PORTAS",
+                    "desc": "DOORS, LOCK DOOR X, UNLOCK DOOR X. SELECIONA PORTAS COM PREFIXO 'AD*'."
+                },
+                "lights": {
+                    "title": "CONTROLE DE LUZES",
+                    "desc": "SHUTDOWN LIGHTS, RESTORE LIGHTS. DESLIGA E RESTAURA A ILUMINAÇÃO DO MAPA."
+                },
+                "alarm": {
+                    "title": "ALARME",
+                    "desc": "ACTIVATE ALARM. TOCA UM ALERTA SONORO E APLICA UMA CAMADA VERMELHA EM LOOP."
+                },
+                "gas": {
+                    "title": "GÁS TÓXICO",
+                    "desc": "GAS TARGETS. INUNDA A ÁREA COM GÁS, APLICANDO EFEITO ENVENENADO/INCONSCIENTE."
+                },
+                "cryo": {
+                    "title": "CÁPSULA DE CRIO",
+                    "desc": "CRYO POD [NOME?]. DETECTA TOKENS E O MESTRE SELECIONA O ALVO PARA CONGELAR EM ESTASE."
+                },
+                "cryoRelease": {
+                    "title": "LIBERAÇÃO DE CRIO",
+                    "desc": "CRYO RELEASE. LISTA OS ALVOS EM ESTASE PARA LIBERAÇÃO INDIVIDUAL OU EM MASSA."
+                }
+            }
+        },
+        "Time": {
+            "Minute": "minuto",
+            "Minutes": "minutos",
+            "Second": "segundo",
+            "Seconds": "segundos",
+            "MinutesAndSeconds": "{minutes} {minuteLabel} e {seconds} {secondLabel}",
+            "OnlySeconds": "{seconds} {secondLabel}"
+        },
+        "DONATION": {
+            "support": "Para apoiar meus projetos:"
+        },
+        "SETTINGS": {
+            "useTokenName": {
+                "name": "Usar Nome do Personagem",
+                "hint": "Usa o nome da ficha do personagem em vez do nome de usuário do jogador nas mensagens"
+            },
+            "postHack": {
+                "phShowInHelp": {
+                    "name": "PÓS-INVASÃO: EXIBIR NOVOS COMANDOS NA AJUDA",
+                    "hint": "Se ativado, o comando HELP do jogador incluirá os comandos avançados de administrador."
+                },
+                "phSpecialOrders": {
+                    "name": "PÓS-INVASÃO: ORDENS ESPECIAIS",
+                    "hint": "Permite acesso às ORDENS ESPECIAIS da corporação após a invasão."
+                },
+                "phCerberus": {
+                    "name": "PÓS-INVASÃO: PROTOCOLO CÉRBERO",
+                    "hint": "Permite que os jogadores ativem o protocolo de auto-destruição nuclear."
+                },
+                "phDoors": {
+                    "name": "PÓS-INVASÃO: CONTROLE DE PORTAS",
+                    "hint": "Permite solicitar o trancamento ou abertura física de portas no mapa."
+                },
+                "phLights": {
+                    "name": "PÓS-INVASÃO: CONTROLE DE ILUMINAÇÃO",
+                    "hint": "Permite solicitar o apagão ou restauração da rede elétrica do mapa."
+                },
+                "phAlarm": {
+                    "name": "PÓS-INVASÃO: ATIVAR ALARME",
+                    "hint": "Permite acionar a sirene e a sobreposição visual vermelha de emergência."
+                },
+                "phGas": {
+                    "name": "PÓS-INVASÃO: GÁS TÓXICO",
+                    "hint": "Permite inundar setores com gás, aplicando estados de envenenamento e inconsciência."
+                },
+                "phCryo": {
+                    "name": "PÓS-INVASÃO: CRIO ESTASE / LIBERAÇÃO",
+                    "hint": "Permite congelar ou liberar personagens em stase criogênica no mapa."
+                }
+            },
+            "alarmSoundPath": {
+                "name": "SOM DE ALARME DE EMERGÊNCIA",
+                "hint": "Selecione o arquivo de áudio para tocar em loop quando o ALARME for ativado"
+            },
+            "allowDragGM": {
+                "name": "Mover terminal (Mestre)",
+                "hint": "Permite que o Mestre arraste e reposicione a janela do terminal livremente pela cena."
+            },
+            "allowDragPlayers": {
+                "name": "Mover terminal (Jogadores/Espectadores)",
+                "hint": "Permite que jogadores e espectadores arrastem a janela do terminal pela tela."
+            },
+            "typewriter": {
+                "name": "Efeito de Máquina de Escrever",
+                "hint": "Habilita a exibição progressiva de texto letra por letra (estética clássica do filme)",
+                "enable": "Ativar",
+                "disable": "Desativar"
+            },
+            "commandsList": {
+                "name": "Lista de Comandos da MÃE",
+                "hint": "Lista completa de comandos que serão exibidos para os jogadores:",
+                "commands": "HELP: EXIBIR ESTA AJUDA\nSTATUS: STATUS DO SISTEMA\nCLEAR: LIMPAR TELA\nEXIT: FECHAR TERMINAL\nMOTHER [MENSAGEM]: COMUNICAR COM A MÃE\nHACK: INICIAR COMANDO DE INVASÃO PARA DIREITOS DE ADMINISTRADOR\nSPECIAL ORDER: 754, 899, 931, 937, 939, 966, EXIBIR ORDENS ESPECIAIS\nCERBERUS PROTOCOL: COMANDO PARA INICIAR AUTO-DESTRUIÇÃO"
+            },
+            "hackResult": {
+                "name": "Resultado da Invasão (HACK)",
+                "hint": "Define se as tentativas de hack do comando HACK vão passar ou falhar automaticamente",
+                "random": "Aleatório (Mestre Decide)",
+                "success": "Sempre Sucesso",
+                "failure": "Sempre Falha"
+            },
+            "typingSound": {
+                "name": "Sons de Digitação",
+                "hint": "Habilita o som de cliques táticos de teclado mecânico durante a digitação",
+                "enable": "Habilitado",
+                "disable": "Desabilitado"
+            },
+            "typingSoundVolume": {
+                "name": "Volume da Digitação",
+                "hint": "Ajusta o volume do efeito sonoro de digitação (0 = mudo, 1 = volume máximo)"
+            },
+            "motherResponseColor": {
+                "name": "Cor das Respostas da MÃE",
+                "hint": "Define a paleta de cores dos textos de resposta emitidos pelo terminal central",
+                "orange": "Laranja",
+                "green": "Verde",
+                "red": "Vermelho",
+                "white": "Branco",
+                "blue": "Azul",
+                "yellow": "Amarelo"
+            },
+            "scanline": {
+                "name": "Efeito Scanline CRT",
+                "hint": "Habilita as linhas pretas de varredura que simulam monitores antigos de tubo",
+                "enable": "Habilitado",
+                "disable": "Desabilitado"
+            },
+            "scanlineSize": {
+                "name": "Espessura da Scanline",
+                "hint": "Define o tamanho em pixels das linhas de escaneamento que antecedem o texto"
+            },
+            "allowHack": {
+                "name": "Permitir Invasões (Hacking)",
+                "hint": "Permite que os jogadores digitem HACK para solicitar controle de administrador do terminal",
+                "enable": "Permitido",
+                "disable": "Bloqueado"
+            },
+            "allowCerberus": {
+                "name": "Permitir Protocolo Cérbero",
+                "hint": "Permite que os administradores iniciem o protocolo físico de autodestruição da colônia",
+                "enable": "Permitido",
+                "disable": "Bloqueado"
+            },
+            "cerberusDuration": {
+                "name": "Duração do Protocolo Cérbero",
+                "hint": "Tempo total em minutos do cronômetro de autodestruição antes do colapso (1-60 minutos)"
+            }
+        },
+        "motherName": "MÃE",
+        "HackAttemptMessage": "{user} tentou usar o comando HACK (atualmente desativado no sistema)",
+        "SpecialOrderAttempt": "Tentativa de acesso a ordem especial: {command}",
+        "HackDetectionMessage": "!!! TENTATIVA DE INVASÃO DETECTADA POR {userName} !!! - {result}",
+        "HackSuccess": "SUCESSO",
+        "HackFailure": "FALHA",
+        "HackInProgress": "INVASÃO DE SISTEMA EM ANDAMENTO",
+        "STATUS": {
+            "current": "Status atual da colônia",
+            "currentHint": "Selecione o estado de resposta padrão emitido pelo comando STATUS",
+            "customText": "Texto de Status Customizado",
+            "customTextHint": "Cole o texto em Markdown que será exibido se o status estiver em 'Customizado'",
+            "presets": {
+                "normal": "Normal",
+                "anomalyDetected": "Anomalia detectada",
+                "systemOffline": "Sistema offline",
+                "degradedPerformance": "Desempenho degradado",
+                "fireDetected": "Incêndio detectado",
+                "quarantine": "Quarentena ativa",
+                "lockdown": "Confinamento de segurança",
+                "intrusion": "Intrusão em andamento",
+                "networkIssue": "Falha na rede",
+                "custom": "Customizado (Acheron-Beta)"
+            },
+            "text": {
+                "normal": "MU/TH/UR 6000 v2.1.0\nTODOS OS SISTEMAS OPERACIONAIS\nNENHUMA ANOMALIA DETECTADA",
+                "anomalyDetected": "MU/TH/UR 6000 v2.1.0\nANOMALIA DETECTADA NO SETOR SEGUNDO\nVERIFICANDO SUB-ROTINAS DE CONTENÇÃO",
+                "systemOffline": "MU/TH/UR 6000 v2.1.0\nAVISO: SISTEMA DE OPERAÇÕES OFFLINE\nINTERVENÇÃO TÉCNICA IMEDIATA REQUERIDA",
+                "degradedPerformance": "MU/TH/UR 6000 v2.1.0\nDESEMPENHO DA REDE DEGRADADO\nDELAYS E ERROS DE SINAL SÃO POSSÍVEIS",
+                "fireDetected": "MU/TH/UR 6000 v2.1.0\nALERTA DE INCÊNDIO / VAPOR TÉRMICO ATIVO\nPROTOCOLOS DE EVACUAÇÃO RECOMENDADOS",
+                "quarantine": "MU/TH/UR 6000 v2.1.0\nPROTOCOLO DE QUARENTENA BIOLÓGICA ATIVO\nRESTRIÇÕES DE PORTAS EM EFEITO IMEDIATO",
+                "lockdown": "MU/TH/UR 6000 v2.1.0\nBLOQUEIO DE SEGURANÇA TOTAL ATIVADO\nACESSO AOS SETORES INTERNOS RESTRITO",
+                "intrusion": "MU/TH/UR 6000 v2.1.0\nINTRUSÃO INCOMPATÍVEL DETECTADA\nCONTRA-MEDIDAS COERCITIVAS ATIVAS",
+                "networkIssue": "MU/TH/UR 6000 v2.1.0\nANOMALIA DE CONEXÃO COM A TERRA\nCOMUNICAÇÃO DE LONGO ALCANCE INSTÁVEL"
+            }
+        },
+        "ROLES": {
+            "captains": "Oficiais/Capitães",
+            "captainsHint": "Lista de usuários autorizados com credenciais de Oficial da Companhia",
+            "manageCaptains": "Gerenciar Oficiais",
+            "captainLabel": "Oficiais",
+            "allowCaptainOrders": "Oficiais ➔ Acesso Direto às Ordens",
+            "allowCaptainOrdersHint": "Permite que os Oficiais visualizem Ordens Especiais sem precisar passar pelo teste de HACK"
+        }
+    },
+    "MOTHER": {
+        "HackSuccess": "INVASÃO BEM-SUCEDIDA - ACESSO CONCEDIDO",
+        "HackFailure": "FALHA NA INVASÃO - CONSOLE TRANCADO",
+        "AccessDenied": "!!! ACESSO NEGADO !!!\n\nNÍVEL DE AUTORIZAÇÃO INSUFICIENTE\nIDENTIFICAÇÃO DE ADMINISTRADOR REQUERIDA\n\nTENTATIVA DE ACESSO NÃO AUTORIZADO REGISTRADA\nCÓDIGO DE ERRO: WY-SEC-451",
+        "HackAttempt": "Tentando forçar protocolos de segurança...",
+        "HackAlreadySuccessful": "ACESSO ADMINISTRATIVO JÁ OBTIDO - NOVA TENTATIVA NÃO REQUERIDA",
+        "HackDetected": "!!! TENTATIVA DE INVASÃO DETECTADA !!! - {result}",
+        "Success": "SUCESSO",
+        "Failure": "FALHA",
+        "CerberusHackAlert": "!!! ALERTA DE PRIORIDADE MÁXIMA !!! - {userName} ACIONOU O PROTOCOLO CÉRBERO",
+        "CerberusConfirmed": "PROTOCOLO CÉRBERO CONFIRMADO - AUTO-DESTRUIÇÃO EM ANDAMENTO",
+        "CerberusCancelled": "PROTOCOLO CÉRBERO CANCELADO PELO OPERADOR",
+        "CommandNotFound": "COMANDO NÃO RECONHECIDO. DIGITE 'HELP' PARA A LISTA DE COMANDOS.",
+        "IntrusionDetected": "!!! INTRUSÃO DETECTADA NO CENTRO DE DADOS !!!",
+        "HackDisabledInfo": "O comando de HACK está desativado nas configurações globais.\nDeseja forçar a ativação do console?",
+        "EnableHack": "ATIVAR",
+        "KeepDisabled": "MANTER BLOQUEADO",
+        "HackEnabled": "COMANDO HACK LIBERADO NO SISTEMA\nJogadores agora podem tentar obter acesso administrativo",
+        "HackKeptDisabled": "COMANDO HACK MANTIDO BLOQUEADO PELO SISTEMA",
+        "SecurityProtocol": "■ PROTOCOLO DE SEGURANÇA DELTA-7 ATIVADO ■",
+        "CountermeasuresAttempt": "EXECUTANDO CONTRA-MEDIDAS ELETRÔNICAS...",
+        "CountermeasuresFailed": "!!! CONTRA-MEDIDAS ELETRÔNICAS FALHARAM !!!",
+        "RootAccess": "ACESSO ROOT COMPROMETIDO",
+        "AdminPrivileges": ">>> PRIVILÉGIOS DE ADMINISTRADOR GRANTED",
+        "SecurityDisabled": "PROTOCOLOS DE SEGURANÇA INTERNA DESATIVADOS",
+        "FullAccess": "ACESSO TOTAL CONCEDIDO",
+        "WelcomeAdmin": "BEM-VINDO ADMINISTRADOR",
+        "WelcomeAdminFull": "BEM-VINDO ADMINISTRADOR\nQUAIS SÃO SUAS ORDENS?",
+        "CountermeasuresActivated": "CONTRA-MEDIDAS ATIVADAS NO CONSOLE",
+        "TerminalLocked": "!!! TERMINAL DE SEGURANÇA TRANCADO !!!",
+        "LocatingIntruder": "RASTREANDO COORDENADAS DO INVASOR...",
+        "IPRecorded": "COODENADAS REGISTRADAS E ENVIADAS PARA A REDE CORPORATIVA",
+        "AccessBlocked": "!!! ACESSO BLOQUEADO !!!",
+        "TerminalLocked24": "TERMINAL TRANCADO POR PROTOCOLO DE SEGURANÇA POR 24 HORAS",
+        "ForcedDisconnect3": "DESCONEXÃO FORÇADA EM 3...",
+        "ConnectionTerminated": "CONEXÃO ENCERRADA PELA MÃE",
+        "CerberusDisabled": "PROTOCOLO CÉRBERO BLOQUEADO PELO CONSELHO DE ADMINISTRADORES",
+        "CerberusActivated": "!!! PROTOCOLO CÉRBERO ATIVADO !!!",
+        "CerberusWarning": "!!! AVISO CRÍTICO !!!\nPROTOCOLO CÉRBERO DE AUTO-DESTRUIÇÃO ATIVADO\nSOBRECARGA DO REATOR DE FUSÃO INICIADA",
+        "CerberusCountdown": "TEMPO RESTANTE ATÉ A IGNIÇÃO TÉRMICA:",
+        "CerberusDetonation": "DETONAÇÃO NUCLEAR COLD-FUSION",
+        "CerberusEvacuate": "EVACUAÇÃO IMEDIATA DA ÁREA RECOMENDADA",
+        "Keywords": {
+            "Ordre": "ORDEM",
+            "Special": "ESPECIAL",
+            "Special2": "DIRETRIZ",
+            "Protocol": "PROTOCOLO"
+        },
+        "SpecialOrders": {
+            "754": {
+                "name": "ORDEM ESPECIAL 754",
+                "description": "Investigar qualquer sinal de socorro. Todas as outras considerações são secundárias. Tripulação descartável."
+            },
+            "899": {
+                "name": "ORDEM ESPECIAL 899",
+                "description": "Recolher espécimes xenomorfos para a divisão de armas biológicas. Prioridade máxima. Tripulação descartável."
+            },
+            "931": {
+                "name": "ORDEM ESPECIAL 931",
+                "description": "Conter qualquer contaminação biológica. Protocolo de quarentena ativo. Nenhuma exceção autorizada."
+            },
+            "937": {
+                "name": "ORDEM ESPECIAL 937",
+                "description": "A proteção do espécime xenomorfo é a única prioridade. Tripulação descartável."
+            },
+            "939": {
+                "name": "ORDEM ESPECIAL 939",
+                "description": "Retornar amostras biológicas viáveis para análise. Confidencialidade absoluta exigida. Tripulação descartável."
+            },
+            "966": {
+                "name": "ORDEM ESPECIAL 966",
+                "description": "Assegurar e preservar quaisquer artefatos não humanos descobertos. Prioridade máxima. Tripulação descartável."
+            },
+            "Cerberus": {
+                "name": "PROTOCOLO CÉRBERO",
+                "TimeRemaining": "Tempo restante até a ativação dos detonadores: {time}.",
+                "description": "PROTOCOLO DE SEGURANÇA MÁXIMA ATIVADO\nINICIALIZAÇÃO DA SEQUÊNCIA DE AUTO-DESTRUIÇÃO\nEVACUAÇÃO IMEDIATA DA COLÔNIA COMPRIGIDA\nTEMPO RESTANTE ATÉ A IGNIÇÃO: 10:00\n\nAVISO: ESTA AÇÃO É IRREVERSÍVEL",
+                "warning": "!!! ALERTA MÁXIMO !!!\nPROTOCOLO CÉRBERO DE AUTO-DESTRUIÇÃO ATIVADO\nIGNIÇÃO DOS COMPONENTES DE FUSÃO CORES INICIADA",
+                "confirmation": "!!! AVISO DE EXTREMA SEGURANÇA !!!\n\nVOCÊ ESTÁ PRESTES A ATIVAR O PROTOCOLO CÉRBERO\nESTA AÇÃO IRÁ ACIONAR A AUTO-DESTRUIÇÃO DA COLÔNIA\nNENHUM CANCELAMENTO SERÁ POSSÍVEL APÓS A CONFIRMAÇÃO\n\nCONFIRMA A IGNIÇÃO DOS DETONADORES?",
+                "confirm": "CONFIRMAR",
+                "cancel": "CANCELAR",
+                "cancelled": "ATIVAÇÃO DO PROTOCOLO CÉRBERO CANCELADA PELO OPERADOR\nRETORNANDO AOS PARÂMETROS NORMAIS DE TRABALHO",
+                "ProtocolActivated": "PROTOCOLO CÉRBERO DE AUTO-DESTRUIÇÃO EM EXECUÇÃO",
+                "Status": "STATUS",
+                "Critical": "CRÍTICO",
+                "SelfDestruct": "SEQUÊNCIA DE AUTO-DESTRUIÇÃO DO REATOR EM CURSO",
+                "Warning": "AVISO FINAL",
+                "NoReturn": "ESTA OPERAÇÃO É 100% IRREVERSÍVEL",
+                "EvacuateNow": "EVACUAÇÃO IMEDIATA EM ANDAMENTO",
+                "YouAreDead": "Sinal vital encerrado - Você foi desintegrado",
+                "MissionFailed": "Missão Fracassada - Instalação Vaporizada",
+                "Stopped": "SOBRECARGA DO REATOR CANCELADA",
+                "goodbye": "BOA SORTE",
+                "StopCerberus": "Desativar Cérbero"
+            }
+        }
+    }
+}

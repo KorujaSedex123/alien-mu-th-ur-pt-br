@@ -1,0 +1,327 @@
+{
+    "MUTHUR": {
+        "welcome": "MUTHUR 6000 v2.1.0\nTERMINAL AKTIV...\nGRÄNSSNITT 2037\nVÄNTAR PÅ KOMMANDO...",
+        "waitingResponse": "VÄNTAR PÅ SVAR...",
+        "help": "TILLGÄNGLIGA KOMMANDON:\n- HELP: VISA DENNA HJÄLP\n- STATUS: SYSTEMSTATUS\n- CLEAR: RENSA SKÄRM\n- EXIT: STÄNG TERMINAL\n- /M [MEDDELANDE]: KOMMUNICERA MED MUTHUR\n \nVÄNTAR PÅ KOMMANDO...",
+        "status": "MUTHUR 6000 v2.1.0\nALLA SYSTEM FUNGERAR\nINGA AVVIKELSER UPPTÄCKTA",
+        "commandNotFound": "KOMMANDO EJ IGENKÄND. SKRIV 'HELP' FÖR KOMMANDOLISTA.",
+        "sessionEnded": "SESSION AVSLUTAD",
+        "motherPrefix": "/M :",
+        "sessionStarted": "SESSION STARTAD",
+        "newSessionStarted": "=== NY MUTHUR SESSION STARTAD ===\nHÄR ÄR TILLGÄNGLIGA KOMMANDON FÖR SPELAREN:\nHELP: VISA DENNA HJÄLP\nSTATUS: SYSTEMSTATUS\nCLEAR: RENSA SKÄRM\nEXIT: STÄNG TERMINAL\n/M [MEDDELANDE]: KOMMUNICERA MED MUTHUR\nHACK: STARTA HACK-KOMMANDO FÖR ADMINISTRATÖRSRÄTTIGHETER\nSPECIAL ORDER: 754, 899, 931, 937, 939, 966, VISA SPECIALORDER\nCERBERUS PROTOCOL: KOMMANDO FÖR ATT STARTA SJÄLVFÖRSTÖRELSE",
+        "muthurSessionEnded": "MUTHUR SESSION AVSLUTAD",
+        "unknownCommand": "KOMMANDO EJ IGENKÄND. SKRIV 'HELP' FÖR KOMMANDOLISTA",
+        "unknownCommandPrefix": "KOMMANDO EJ IGENKÄND : ",
+        "skip": "HOPPA ÖVER",
+        "send": "SVARA",
+        "sessionActiveWarning": "En MUTHUR session är redan aktiv med {userName}",
+        "sessionStartedBy": "{userName} har startat en MUTHUR session",
+        "sessionEndedBy": "{userName} har avslutat MUTHUR sessionen",
+        "systemReady": "MUTHUR 6000 system redo",
+        "inputPlaceholder": "Ange ett kommando",
+        "selectCharacter": "Välj Karaktär",
+        "selectCharacterHint": "Välj karaktären som ska kommunicera med MUTHUR",
+        "gmInterfaceTitle": "MUTHUR - {userName}",
+        "sessionClosedByGM": "GM har avslutat MUTHUR sessionen",
+        "selectSpectators": "Välj Åskådare",
+        "selectSpectatorsHint": "Välj spelarna som kommer att se som åskådare",
+        "confirmSpectators": "Bekräfta",
+        "cancelSpectators": "Avbryt",
+        "spectatorModeTitle": "MUTHUR - {userName} (Åskådare)",
+        "spectatorModeInfo": "Du är i åskådarläge. Du kan inte interagera med MUTHUR.",
+        "spectatorWelcome": "Välkommen till åskådarläge. Du observerar {userName}s MUTHUR-session.",
+        "waitingForGM": "Väntar på GM-godkännande för att starta MUTHUR...",
+        "clickToStart": "Klicka för att starta uppstartssekvensen",
+        "enableSound": "Aktivera ljud",
+        "enableSoundHint": "Klicka för att aktivera ljud för denna session",
+        "waitingForMother": "VÄNTAR PÅ MODER",
+        "requestSent": "Förfrågan skickad till GM...",
+        "noDoorsFound": "Inga dörrar hittades.",
+        "doorListHeader": "Dörrar i området:",
+        "permissionDenied": "ÅTKOMST NEKAD.",
+        "requestDenied": "Förfrågan nekad.",
+        "approve": {
+            "lockDoor": "LÅSA {label}?",
+            "unlockDoor": "LÅSA UPP {label}?",
+            "dimLights": "DÄMPA LJUS?",
+            "shutdownLights": "STÄNGA AV LJUS?",
+            "restoreLights": "ÅTERSTÄLLA LJUS?",
+            "activateAlarm": "AKTIVERA ALARM?",
+            "gasTargets": "GASA MÅL I OMRÅDET?",
+            "cryoPod": "CRYO POD {target}?"
+        },
+        "doorLocked": "DÖRR {label} LÅST.",
+        "doorUnlocked": "DÖRR {label} UPPLÅST.",
+        "alarmActivated": "ALARM AKTIVERAT.",
+        "stopAlarm": "STOPPA ALARM",
+        "alarmDeactivated": "ALARM AVAKTIVERAD.",
+        "target": "MÅL",
+        "cryoApplied": "CRYO-STASIS APPLICERAD: {name}.",
+        "cryoNoMatch": "INGET MATCHANDE CRYO-MÅL.",
+        "lightsShutdown": "Avstängning av ljus slutförd.",
+        "lightsDimmed": "Ljus dämpade.",
+        "noSavedLights": "Ingen sparad ljusstatus att återställa.",
+        "lightsRestored": "Ljus återställda.",
+        "unknownEntity": "okänd enhet",
+        "lifeformsDetected": "livsformer upptäckta",
+        "entitiesAffected": "påverkade enheter",
+        "postHack": { "title": "POST-HACK-KOMMANDON:" },
+            "alarmSoundPath": {
+                "name": "ALARMLJUD",
+                "hint": "Välj ljudfilen som spelas när ALARM är aktiv"
+            },
+        "helpMenu": {
+            "title": "KOMMANDOHJÄLP",
+            "tooltip": "Kommandohjälp",
+            "close": "STÄNG",
+            "consultHint": "KONSULTERA ? FÖR KOMMANDOLISTAN",
+            "sections": {
+                "intro": "LISTA OCH BESKRIVNING AV TILLGÄNGLIGA POST-HACK-KOMMANDON (MED GM-GODKÄNNANDE).",
+                "basic": { "title": "GRUNDKOMMANDON", "desc": "HELP: VISA DENNA HJÄLP\nSTATUS: SYSTEMSTATUS\nCLEAR: RENSA SKÄRM\nEXIT: STÄNG TERMINAL\n/M [MEDDELANDE]: KOMMUNICERA MED MODER" },
+                "hack": { "title": "HACK", "desc": "HACK: FÖRSÖK ATT FÅ ADMINRÄTTIGHETER (GM-STYRT)" },
+                "specialOrders": { "title": "SPECIALORDER", "desc": "ORDERS: 754, 899, 931, 937, 939, 966. VISAR ORDERDETALJER." },
+                "cerberus": { "title": "CERBERUS-PROTOKOLL", "desc": "CERBERUS: SJÄLVFÖRSTÖRELSEPROTOKOLL MED NEDRÄKNING." },
+                "doors": { "title": "DÖRRKONTROLL", "desc": "DOORS, LOCK DOOR X, UNLOCK DOOR X. MÅLRiktar DÖRRAR 'AD*'." },
+                "lights": { "title": "LJUSKONTROLL", "desc": "SHUTDOWN LIGHTS, RESTORE LIGHTS. STÄNGER AV OCH ÅTERSTÄLLER BELYSNING." },
+                "alarm": { "title": "ALARM", "desc": "ACTIVATE ALARM. SPELAR ALARM OCH KAN LÄGGA RÖD OVERLAY." },
+                "gas": { "title": "GAS", "desc": "GAS TARGETS. APPLICERAR FÖRGIFTAD/MEDETSLÖS EFFEKT I OMRÅDET." },
+                "cryo": { "title": "CRYO POD", "desc": "CRYO POD [NAMN?]. LISTAR TOKENS, GM VÄLJER MÅL FÖR STASIS." },
+                "cryoRelease": { "title": "CRYO RELEASE", "desc": "CRYO RELEASE. LISTAR KARAKTÄRER I STASIS FÖR FLERVALSFRIGIVNING." }
+            }
+        },
+        "Time": {
+                "Minute": "minut",
+                "Minutes": "minuter",
+                "Second": "sekund",
+                "Seconds": "sekunder",
+                "MinutesAndSeconds": "{minutes} {minuteLabel} och {seconds} {secondLabel}",
+                "OnlySeconds": "{seconds} {secondLabel}"
+            },
+        "DONATION": {
+            "support": "För att stödja mina projekt:"
+        },
+        "SETTINGS": {
+            "useTokenName": {
+                "name": "Använd Karaktärsnamn",
+                "hint": "Använd karaktärsnamn istället för spelarnamn i meddelanden"
+            },
+            "postHack": {
+                "phShowInHelp": {"name": "EFTER HACK: VISA NYA KOMMANDON I HELP", "hint": "Om aktiverat inkluderar HELP avancerade kommandon."},
+                "phSpecialOrders": {"name": "EFTER HACK: SPECIALORDER", "hint": "Tillåt SPECIALORDER efter HACK."},
+                "phCerberus": {"name": "EFTER HACK: CERBERUS PROTOCOL", "hint": "Tillåt CERBERUS-protokoll efter HACK."},
+                "phDoors": {"name": "EFTER HACK: DÖRRKONTROLL", "hint": "Tillåt LOCK/UNLOCK/DOORS."},
+                "phLights": {"name": "EFTER HACK: LJUSKONTROLL", "hint": "Tillåt DIM/SHUTDOWN/RESTORE LIGHTS."},
+                "phAlarm": {"name": "EFTER HACK: AKTIVERA ALARM", "hint": "Tillåt alarmsound + overlay."},
+                "phGas": {"name": "EFTER HACK: GAS TARGETS", "hint": "Tillåt gaseffekt (förgiftad/medvetslös)."},
+                "phCryo": {"name": "EFTER HACK: CRYO POD/RELEASE", "hint": "Tillåt stasis/frisläppande av ett mål."}
+            },
+            "typewriter": {
+                "name": "Skrivmaskineffekt",
+                "hint": "Aktiverar progressiv textvisning som i Alien-filmen",
+                "enable": "Aktivera",
+                "disable": "Inaktivera"
+            },
+            "commandsList": {
+                "name": "MU/TH/UR Kommandolista",
+                "hint": "Fullständig lista över tillgängliga kommandon för spelare:",
+                "commands": "HELP: VISA DENNA HJÄLP\nSTATUS: SYSTEMSTATUS\nCLEAR: RENSA SKÄRM\nEXIT: STÄNG TERMINAL\nMOTHER [MEDDELANDE]: KOMMUNICERA MED MUTHUR\nHACK: STARTA HACK-KOMMANDO FÖR ADMINISTRATÖRSRÄTTIGHETER\nSPECIAL ORDER: 754, 899, 931, 937, 939, 966, VISA SPECIALORDER\nCERBERUS PROTOCOL: KOMMANDO FÖR ATT STARTA SJÄLVFÖRSTÖRELSE"
+            },
+            "hackResult": {
+                "name": "Hack Resultat",
+                "hint": "Bestämmer om hackförsök med HACK-kommandot lyckas eller misslyckas",
+                "random": "Slumpmässigt",
+                "success": "Alltid Lyckat",
+                "failure": "Alltid Misslyckat"
+            },
+            "typingSound": {
+                "name": "Skrivljud",
+                "hint": "Aktiverar tangentbordsljud som i Alien-filmen",
+                "enable": "Aktiverat",
+                "disable": "Inaktiverat"
+            },
+            "typingSoundVolume": {
+                "name": "Skrivljudsvolym",
+                "hint": "Justerar volymen på skrivljuden (0 = tyst, 1 = maximum)"
+            },
+            "allowDragGM": { "name": "Flytta terminal (SL)", "hint": "Tillåt MODER (SL) att dra terminalen på scenen." },
+            "allowDragPlayers": { "name": "Flytta terminal (Spelare/Åskådare)", "hint": "Tillåt spelare och åskådare att dra sin terminal på scenen." },
+            "motherResponseColor": {
+                "name": "MOTHER Svarsfärg",
+                "hint": "Ställer in färgen på MOTHERs svarsmeddelanden",
+                "orange": "Orange",
+                "green": "Grön",
+                "red": "Röd",
+                "white": "Vit",
+                "blue": "Blå",
+                "yellow": "Gul"
+            },
+            "scanline": {
+                "name": "Scanline Effekt",
+                "hint": "Aktiverar ljusskanningseffekten före textvisning",
+                "enable": "Aktiverad",
+                "disable": "Inaktiverad"
+            },
+            "scanlineSize": {
+                "name": "Scanline Storlek",
+                "hint": "Ställer in storleken på ljuspunkten som föregår textvisning (i pixlar)"
+            },
+            "allowHack": {
+                "name": "Tillåt Hackning",
+                "hint": "Låter spelare använda HACK-kommandot för administratörsåtkomst",
+                "enable": "Tillåtet",
+                "disable": "Ej Tillåtet"
+            },
+            "allowCerberus": {
+                "name": "Tillåt Cerberus Protokoll",
+                "hint": "Låter spelare aktivera självförstörelseprotokollet",
+                "enable": "Tillåtet",
+                "disable": "Ej Tillåtet"
+            },
+            "cerberusDuration": {
+                "name": "Cerberus Protokoll Varaktighet",
+                "hint": "Varaktighet i minuter före självförstörelse (1-60 minuter)"
+            }
+        },
+        "motherName": "MODER",
+        "HackAttemptMessage": "{user} försökte använda HACK-kommandot (för närvarande inaktiverat)",
+        "SpecialOrderAttempt": "Försök till åtkomst av specialorder: {command}",
+        "HackDetectionMessage": "!!! HACKNINGSFÖRSÖK UPPTÄCKT AV {userName} !!! - {result}",
+        "HackSuccess": "LYCKADES",
+        "HackFailure": "MISSLYCKADES",
+        "HackInProgress": "HACKNINGSFÖRSÖK PÅGÅR",
+        "STATUS": {
+            "current": "Systemstatus",
+            "currentHint": "Välj statusen som STATUS-kommandot returnerar",
+            "customText": "Anpassad statustext",
+            "customTextHint": "Text som visas när status är 'Anpassad'",
+            "presets": {
+                "normal": "Normal",
+                "anomalyDetected": "Avvikelse upptäckt",
+                "systemOffline": "System offline",
+                "degradedPerformance": "Försämrad prestanda",
+                "fireDetected": "Brand upptäckt",
+                "quarantine": "Karantän",
+                "lockdown": "Nedstängning",
+                "intrusion": "Intrång upptäckt",
+                "networkIssue": "Nätverksproblem",
+                "custom": "Anpassad"
+            },
+            "text": {
+                "normal": "MUTHUR 6000 v2.1.0\nALLA SYSTEM FUNGERAR\nINGA AVVIKELSER UPPTÄCKTA",
+                "anomalyDetected": "MUTHUR 6000 v2.1.0\nAVVIKELSE UPPTÄCKT\nKONTROLLERAR DELSYSTEM",
+                "systemOffline": "MUTHUR 6000 v2.1.0\nVARNING: SYSTEM OFFLINE\nTEKNISK ÅTGÄRD KRÄVS",
+                "degradedPerformance": "MUTHUR 6000 v2.1.0\nFÖRSÄMRAD PRESTANDA\nFÖRSENINGAR OCH FEL MÖJLIGA",
+                "fireDetected": "MUTHUR 6000 v2.1.0\nBRANDVARNING\nEVAKUERINGS-PROTOKOLL REKOMMENDERAS",
+                "quarantine": "MUTHUR 6000 v2.1.0\nKARANTÄNPROTOKOLL AKTIVT\nRESTRIKTIONER GÄLLER",
+                "lockdown": "MUTHUR 6000 v2.1.0\nSÄKERHETS-NEDSTÄNGNING AKTIV\nÅTKOMST BEGRÄNSAD",
+                "intrusion": "MUTHUR 6000 v2.1.0\nINTRÅNG UPPTÄCKT\nMOTÅTGÄRDER AKTIVERAS",
+                "networkIssue": "MUTHUR 6000 v2.1.0\nNÄTVERKSAVVIKELSE\nOSTABILA KOMMUNIKATIONER"
+            }
+        },
+        "ROLES": {
+            "captains": "Kaptener",
+            "captainsHint": "Lista över användare som är behöriga som Kaptener",
+            "manageCaptains": "Hantera Kaptener",
+            "captainLabel": "Kaptener",
+            "allowCaptainOrders": "Kapten → Specialorder utan HACK",
+            "allowCaptainOrdersHint": "Tillåt Kaptener att komma åt Specialorder utan HACK"
+        }
+    },
+    "MOTHER": {
+        "HackSuccess": "HACK LYCKADES - ÅTKOMST BEVILJAD",
+        "HackFailure": "HACK MISSLYCKADES - TERMINAL LÅST",
+        "AccessDenied": "!!! ÅTKOMST NEKAD !!!\n\nOTILLRÄCKLIG BEHÖRIGHETSNIVÅ\nADMINISTRATÖRSIDENTIFIERING KRÄVS\n\nOAUKTORISERAT ÅTKOMSTFÖRSÖK REGISTRERAT\nFELKOD: WY-SEC-451",
+        "HackAttempt": "Hackförsök pågår...",
+        "HackAlreadySuccessful": "ADMINISTRATÖRSÅTKOMST REDAN ERHÅLLEN - NYTT HACKFÖRSÖK EJ AUKTORISERAT",
+        "HackDetected": "!!! HACKFÖRSÖK UPPTÄCKT !!! - {result}",
+        "Success": "LYCKAT",
+        "Failure": "MISSLYCKAT",
+        "CerberusHackAlert": "!!! PRIORITETSALARM !!! - {userName} HAR INITIERAT CERBERUS PROTOKOLLET",
+        "CerberusConfirmed": "CERBERUS PROTOKOLL BEKRÄFTAT - SJÄLVFÖRSTÖRELSE PÅGÅR",
+        "CerberusCancelled": "CERBERUS PROTOKOLL AVBRUTET",
+        "CommandNotFound": "KOMMANDO EJ IGENKÄNT. SKRIV 'HELP' FÖR KOMMANDOLISTA.",
+        "IntrusionDetected": "!!! INTRÅNG UPPTÄCKT !!!",
+        "HackDisabledInfo": "HACK-kommandot är för närvarande inaktiverat i systeminställningarna\nVill du aktivera det?",
+        "EnableHack": "AKTIVERA",
+        "KeepDisabled": "BEHÅLL INAKTIVERAT",
+        "HackEnabled": "HACK-KOMMANDO AKTIVERAT\nSpelare kan nu använda kommandot",
+        "HackKeptDisabled": "HACK-KOMMANDO FÖRBLIR INAKTIVERAT",
+        "SecurityProtocol": "■ SÄKERHETSPROTOKOLL DELTA-7 AKTIVERAT ■",
+        "CountermeasuresAttempt": "FÖRSÖKER MOTÅTGÄRDER...",
+        "CountermeasuresFailed": "!!! MOTÅTGÄRDER MISSLYCKADES !!!",
+        "RootAccess": "ROOT-ÅTKOMST KOMPROMETTERAD",
+        "AdminPrivileges": ">>> ADMINISTRATÖRSRÄTTIGHETER BEVILJADE",
+        "SecurityDisabled": "SÄKERHETSPROTOKOLL INAKTIVERADE",
+        "FullAccess": "FULL ÅTKOMST BEVILJAD",
+        "WelcomeAdmin": "VÄLKOMMEN ADMINISTRATÖR",
+        "WelcomeAdminFull": "VÄLKOMMEN ADMINISTRATÖR\nVAD KAN JAG HJÄLPA DIG MED?",
+        "CountermeasuresActivated": "MOTÅTGÄRDER AKTIVERADE",
+        "TerminalLocked": "!!! TERMINAL LÅST !!!",
+        "LocatingIntruder": "LOKALISERAR INKRÄKTARE...",
+        "IPRecorded": "IP-KOORDINATER REGISTRERADE",
+        "AccessBlocked": "!!! ÅTKOMST BLOCKERAD !!!",
+        "TerminalLocked24": "TERMINAL LÅST I 24 TIMMAR",
+        "ForcedDisconnect3": "TVINGAD FRÅNKOPPLING OM 3...",
+        "ConnectionTerminated": "ANSLUTNING AVSLUTAD",
+        "CerberusDisabled": "CERBERUS PROTOKOLL INAKTIVERAT AV ADMINISTRATÖR",
+        "CerberusActivated": "!!! CERBERUS PROTOKOLL AKTIVERAT !!!",
+        "CerberusWarning": "!!! VARNING !!!\nCERBERUS PROTOKOLL AKTIVERAT\nSJÄLVFÖRSTÖRELSE INITIERAD",
+        "CerberusCountdown": "ÅTERSTÅENDE TID TILL DETONATION:",
+        "CerberusDetonation": "DETONATION",
+        "CerberusEvacuate": "OMEDELBAR EVAKUERING KRÄVS",
+        "Keywords": {
+            "Ordre": "ORDER",
+            "Special": "SPECIAL",
+            "Special2": "SPECIAL",
+            "Protocol": "PROTOCOL"
+        },
+        "SpecialOrders": {
+            "754": {
+                "name": "SPECIAL ORDER 754",
+                "description": "Undersök nödsignal. Alla andra överväganden sekundära. Besättning ersättningsbar."
+            },
+            "899": {
+                "name": "SPECIAL ORDER 899",
+                "description": "Samla xenomorf-prover för biologiska vapenavdelningen. Högsta prioritet. Besättning ersättningsbar."
+            },
+            "931": {
+                "name": "SPECIAL ORDER 931",
+                "description": "Begränsa biologisk kontaminering. Karantänprotokoll aktiverade. Inga undantag tillåtna."
+            },
+            "937": {
+                "name": "SPECIAL ORDER 937",
+                "description": "Skydd av xenomorf-prover prioriterat. Besättning ersättningsbar."
+            },
+            "939": {
+                "name": "SPECIAL ORDER 939",
+                "description": "Returnera livsdugliga prover för analys. Absolut sekretess krävs. Besättning ersättningsbar."
+            },
+            "966": {
+                "name": "SPECIAL ORDER 966",
+                "description": "Säkra och bevara alla icke-mänskliga artefakter. Högsta prioritet. Besättning ersättningsbar."
+            },
+            "Cerberus": {
+                "name": "CERBERUS PROTOCOL",
+                "TimeRemaining": "Du har {time} före CERBERUS protokoll aktivering.",
+                "description": "MAXIMALT SÄKERHETSPROTOKOLL AKTIVERAT\nSJÄLVFÖRSTÖRELSE INITIALISERING\nOMEDELBAR EVAKUERING REKOMMENDERAD\nÅTERSTÅENDE TID TILL DETONATION: 10:00\n\nVARNING: DENNA ÅTGÄRD KAN INTE ÅNGRAS",
+                "warning": "!!! VARNING !!!\nCERBERUS PROTOKOLL AKTIVERAT\nSJÄLVFÖRSTÖRELSE INITIERAD",
+                "confirmation": "!!! VARNING !!!\n\nDU ÄR PÅ VÄG ATT AKTIVERA CERBERUS PROTOKOLLET\nDENNA ÅTGÄRD KOMMER ATT UTLÖSA STATIONENS SJÄLVFÖRSTÖRELSE\nINGEN ÅTERVÄNDO MÖJLIG\n\nBEKRÄFTA AKTIVERING?",
+                "confirm": "BEKRÄFTA",
+                "cancel": "AVBRYT",
+                "cancelled": "AKTIVERING AV CERBERUS PROTOKOLL AVBRUTEN\nÅTERGÅR TILL NORMAL DRIFT",
+                "ProtocolActivated": "CERBERUS PROTOKOLL AKTIVERAT",
+                "Status": "STATUS",
+                "Critical": "KRITISK",
+                "SelfDestruct": "SJÄLVFÖRSTÖRELSESEKVENS INITIERAD",
+                "Warning": "SISTA VARNING",
+                "NoReturn": "DENNA ÅTGÄRD ÄR OÅTERKALLELIG",
+                "EvacuateNow": "OMEDELBAR EVAKUERING KRÄVS",
+                "YouAreDead": "Du är död",
+                "MissionFailed": "Uppdrag misslyckat - Installation förstörd",
+                "Stopped": "DU HAR ÖVERLEVT",
+                "goodbye": "LYCKA TILL",
+                "StopCerberus": "Stoppa Cerberus"
+            }
+        }
+    }
+}

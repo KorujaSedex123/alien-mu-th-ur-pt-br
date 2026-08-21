@@ -1,0 +1,351 @@
+{
+    "MUTHUR": {
+        "welcome": "MUTHUR 6000 v2.1.0\nTERMINAL ACTIVE...\nINTERFACE 2037\nAWAITING COMMAND...",
+        "waitingResponse": "AWAITING RESPONSE...",
+        "help": "AVAILABLE COMMANDS:\n- HELP: DISPLAY THIS HELP\n- STATUS: SYSTEM STATUS\n- CLEAR: CLEAR SCREEN\n- EXIT: CLOSE TERMINAL\n- /M [MESSAGE]: COMMUNICATE WITH MUTHUR\n \nAWAITING COMMAND...",
+        "status": "MUTHUR 6000 v2.1.0\nALL SYSTEMS FUNCTIONAL\nNO ANOMALIES DETECTED",
+        "commandNotFound": "COMMAND NOT RECOGNIZED. TYPE 'HELP' FOR COMMAND LIST.",
+        "sessionEnded": "SESSION TERMINATED",
+        "motherPrefix": "/M : ",
+        "sessionStarted": "SESSION STARTED",
+        "newSessionStarted": "=== NEW MUTHUR SESSION STARTED ===\nHERE ARE THE AVAILABLE COMMANDS FOR THE PLAYER:\nHELP: DISPLAY THIS HELP\nSTATUS: SYSTEM STATUS\nCLEAR: CLEAR SCREEN\nEXIT: CLOSE TERMINAL\n/M [MESSAGE]: COMMUNICATE WITH MUTHUR\nHACK: INITIATE HACK COMMAND FOR ADMINISTRATOR RIGHTS\nSPECIAL ORDER: 754, 899, 931, 937, 939, 966, DISPLAY SPECIAL ORDERS\nCERBERUS PROTOCOL: COMMAND TO INITIATE SELF-DESTRUCT",
+        "muthurSessionEnded": "MUTHUR SESSION TERMINATED",
+        "unknownCommand": "COMMAND NOT RECOGNIZED. TYPE 'HELP' FOR COMMAND LIST",
+        "unknownCommandPrefix": "COMMAND NOT RECOGNIZED : ",
+        "skip": "SKIP",
+        "send": "REPLY",
+        "sessionActiveWarning": "A MUTHUR session is already active with {userName}",
+        "sessionStartedBy": "{userName} has started a MUTHUR session",
+        "sessionEndedBy": "{userName} has ended their MUTHUR session",
+        "systemReady": "MUTHUR 6000 system ready",
+        "inputPlaceholder": "Enter a command",
+        "selectCharacter": "Select Character",
+        "selectCharacterHint": "Choose the character who will communicate with MUTHUR",
+        "gmInterfaceTitle": "MUTHUR - {userName}",
+        "sessionClosedByGM": "GM has closed the MUTHUR session",
+        "selectSpectators": "Select spectators",
+        "selectSpectatorsHint": "Choose the players who will view as spectators",
+        "confirmSpectators": "Confirm",
+        "cancelSpectators": "Cancel",
+        "spectatorModeTitle": "MUTHUR - {userName} (Spectator)",
+        "spectatorModeInfo": "You are in spectator mode. You cannot interact with MUTHUR.",
+        "spectatorWelcome": "Welcome to spectator mode. You are observing {userName}'s MUTHUR session.",
+        "waitingForGM": "Waiting for GM authorization to start MUTHUR...",
+        "clickToStart": "Click to start the boot sequence",
+        "enableSound": "Enable Sound",
+        "enableSoundHint": "Click to enable sound for this session",
+        "waitingForMother": "WAITING FOR MOTHER",
+        "requestSent": "Request sent to GM...",
+        "noDoorsFound": "No doors found.",
+        "doorListHeader": "Doors in area:",
+        "permissionDenied": "ACCESS DENIED.",
+        "requestDenied": "Request denied.",
+        "approve": {
+            "lockDoor": "LOCK {label}?",
+            "unlockDoor": "UNLOCK {label}?",
+            "dimLights": "DIM LIGHTS?",
+            "shutdownLights": "SHUT DOWN LIGHTS?",
+            "restoreLights": "RESTORE LIGHTS?",
+            "activateAlarm": "ACTIVATE ALARM?",
+            "gasTargets": "GAS TARGETS IN AREA?",
+            "cryoPod": "CRYO POD {target}?"
+        },
+        "doorLocked": "door {label} LOCKED.",
+        "doorUnlocked": "door {label} UNLOCKED.",
+        "alarmActivated": "ALARM ACTIVATED.",
+        "stopAlarm": "STOP ALARM",
+        "alarmDeactivated": "ALARM DEACTIVATED.",
+        "target": "TARGET",
+        "cryoApplied": "CRYO STASIS APPLIED: {name}.",
+        "cryoNoMatch": "NO MATCHING CRYO TARGET.",
+        "lightsShutdown": "Lights shutdown completed.",
+        "lightsDimmed": "Lights dimmed.",
+        "noSavedLights": "No saved lighting state to restore.",
+        "lightsRestored": "Lights restored.",
+        "unknownEntity": "unknown entity",
+        "lifeformsDetected": "lifeforms detected",
+        "entitiesAffected": "entities affected",
+        "postHack": { "title": "POST-HACK COMMANDS:" },
+        "helpMenu": {
+            "title": "COMMANDS HELP",
+            "tooltip": "Commands help",
+            "close": "CLOSE",
+            "consultHint": "CONSULT THE ? FOR THE COMMANDS LIST",
+            "sections": {
+                "intro": "LIST AND DESCRIPTION OF AVAILABLE POST-HACK COMMANDS (WITH GM APPROVAL).",
+                "basic": { "title": "BASIC COMMANDS", "desc": "HELP: DISPLAY THIS HELP\nSTATUS: SYSTEM STATUS\nCLEAR: CLEAR SCREEN\nEXIT: CLOSE TERMINAL\n/M [MESSAGE]: COMMUNICATE WITH MOTHER" },
+                "hack": { "title": "HACK", "desc": "HACK: ATTEMPT TO OBTAIN ADMIN RIGHTS (GM-CONTROLLED)" },
+                "specialOrders": {
+                    "title": "SPECIAL ORDERS",
+                    "desc": "ORDERS: 754, 899, 931, 937, 939, 966. DISPLAYS ORDER DETAILS."
+                },
+                "cerberus": {
+                    "title": "CERBERUS PROTOCOL",
+                    "desc": "CERBERUS: SELF-DESTRUCT PROTOCOL WITH COUNTDOWN."
+                },
+                "doors": {
+                    "title": "DOOR CONTROL",
+                    "desc": "DOORS, LOCK DOOR X, UNLOCK DOOR X. TARGETS DOORS NAMED 'AD*'."
+                },
+                "lights": {
+                    "title": "LIGHTS CONTROL",
+                    "desc": "SHUTDOWN LIGHTS, RESTORE LIGHTS. TURN OFF AND RESTORE LIGHTING."
+                },
+                "alarm": {
+                    "title": "ALARM",
+                    "desc": "ACTIVATE ALARM. PLAYS AN ALERT AND CAN APPLY A RED OVERLAY."
+                },
+                "gas": {
+                    "title": "GAS",
+                    "desc": "GAS TARGETS. APPLIES POISONED/UNCONSCIOUS EFFECT IN AREA."
+                },
+                "cryo": {
+                    "title": "CRYO POD",
+                    "desc": "CRYO POD [NAME?]. LISTS TOKENS, GM PICKS TARGET TO PUT IN STASIS."
+                },
+                "cryoRelease": {
+                    "title": "CRYO RELEASE",
+                    "desc": "CRYO RELEASE. LISTS CHARACTERS IN STASIS FOR MULTI-SELECTION RELEASE."
+                }
+            }
+        },
+        "Time": {
+                "Minute": "minute",
+                "Minutes": "minutes",
+                "Second": "second",
+                "Seconds": "seconds",
+                "MinutesAndSeconds": "{minutes} {minuteLabel} and {seconds} {secondLabel}",
+                "OnlySeconds": "{seconds} {secondLabel}"
+            },
+        "DONATION": {
+            "support": "To support my projects:"
+        },
+        "SETTINGS": {
+            "useTokenName": {
+                "name": "Use Character Name",
+                "hint": "Use character name instead of player name in messages"
+            },
+            "postHack": {
+                "phShowInHelp": {"name": "POST-HACK: SHOW NEW COMMANDS IN HELP", "hint": "If enabled, player HELP includes advanced commands."},
+                "phSpecialOrders": {"name": "POST-HACK: SPECIAL ORDERS", "hint": "Allow SPECIAL ORDERS after HACK."},
+                "phCerberus": {"name": "POST-HACK: CERBERUS PROTOCOL", "hint": "Allow CERBERUS protocol after HACK."},
+                "phDoors": {"name": "POST-HACK: DOOR CONTROL", "hint": "Allow LOCK/UNLOCK/DOORS."},
+                "phLights": {"name": "POST-HACK: LIGHTS CONTROL", "hint": "Allow DIM/SHUTDOWN/RESTORE LIGHTS."},
+                "phAlarm": {"name": "POST-HACK: ACTIVATE ALARM", "hint": "Allow alarm sound + overlay."},
+                "phGas": {"name": "POST-HACK: GAS TARGETS", "hint": "Allow gas effect (poisoned/unconscious)."},
+                "phCryo": {"name": "POST-HACK: CRYO POD/RELEASE", "hint": "Allow stasis/release of a target."}
+            },
+            "alarmSoundPath": {
+                "name": "ALARM SOUND",
+                "hint": "Choose the audio file played when ALARM is active"
+            },
+            "allowDragGM": { "name": "Move terminal (GM)", "hint": "Allow MOTHER (GM) to drag the terminal on the scene." },
+            "allowDragPlayers": { "name": "Move terminal (Players/Spectators)", "hint": "Allow players and spectators to drag their terminal on the scene." },
+            "typewriter": {
+                "name": "Typewriter Effect",
+                "hint": "Enables progressive text display like in the Alien movie",
+                "enable": "Enable",
+                "disable": "Disable"
+            },
+            "commandsList": {
+                "name": "MU/TH/UR Commands List",
+                "hint": "Complete list of available commands for players:",
+                "commands": "HELP: DISPLAY THIS HELP\nSTATUS: SYSTEM STATUS\nCLEAR: CLEAR SCREEN\nEXIT: CLOSE TERMINAL\nMOTHER [MESSAGE]: COMMUNICATE WITH MUTHUR\nHACK: INITIATE HACK COMMAND FOR ADMINISTRATOR RIGHTS\nSPECIAL ORDER: 754, 899, 931, 937, 939, 966, DISPLAY SPECIAL ORDERS\nCERBERUS PROTOCOL: COMMAND TO INITIATE SELF-DESTRUCT"
+            },
+            "hackResult": {
+                "name": "Hack Result",
+                "hint": "Determines if hack attempts succeed or fail with the HACK command",
+                "random": "Random",
+                "success": "Always Succeed",
+                "failure": "Always Fail"
+            },
+            "typingSound": {
+                "name": "Typing Sounds",
+                "hint": "Enables keyboard typing sounds like in the Alien movie",
+                "enable": "Enabled",
+                "disable": "Disabled"
+            },
+            "typingSoundVolume": {
+                "name": "Typing Volume",
+                "hint": "Adjusts typing sound volume (0 = mute, 1 = maximum)"
+            },
+            "motherResponseColor": {
+                "name": "MOTHER Response Color",
+                "hint": "Sets the color of MOTHER's response messages",
+                "orange": "Orange",
+                "green": "Green",
+                "red": "Red",
+                "white": "White",
+                "blue": "Blue",
+                "yellow": "Yellow"
+            },
+            "scanline": {
+                "name": "Scanline Effect",
+                "hint": "Enables the light scanning effect before text display",
+                "enable": "Enabled",
+                "disable": "Disabled"
+            },
+            "scanlineSize": {
+                "name": "Scanline Size",
+                "hint": "Sets the size of the light point that precedes text display (in pixels)"
+            },
+            "allowHack": {
+                "name": "Allow Hacking",
+                "hint": "Allows players to use the HACK command to attempt administrator access",
+                "enable": "Allowed",
+                "disable": "Not Allowed"
+            },
+            "allowCerberus": {
+                "name": "Allow Cerberus Protocol",
+                "hint": "Allows players to activate the self-destruct protocol",
+                "enable": "Allowed",
+                "disable": "Not Allowed"
+            },
+            "cerberusDuration": {
+                "name": "Cerberus Protocol Duration",
+                "hint": "Duration in minutes before self-destruct (1-60 minutes)"
+            }
+        },
+        "motherName": "MOTHER",
+        "HackAttemptMessage": "{user} attempted to use the HACK command (currently disabled)",
+        "SpecialOrderAttempt": "Special order access attempt: {command}",
+        "HackDetectionMessage": "!!! HACKING ATTEMPT DETECTED BY {userName} !!! - {result}",
+        "HackSuccess": "SUCCESS",
+        "HackFailure": "FAILURE",
+        "HackInProgress": "HACK ATTEMPT IN PROGRESS",
+        "STATUS": {
+            "current": "System status",
+            "currentHint": "Select the status returned by the STATUS command",
+            "customText": "Custom status text",
+            "customTextHint": "Enter the text shown when status is set to 'Custom'",
+            "presets": {
+                "normal": "Normal",
+                "anomalyDetected": "Anomaly detected",
+                "systemOffline": "System offline",
+                "degradedPerformance": "Degraded performance",
+                "fireDetected": "Fire detected",
+                "quarantine": "Quarantine",
+                "lockdown": "Lockdown",
+                "intrusion": "Intrusion detected",
+                "networkIssue": "Network issue",
+                "custom": "Custom"
+            },
+            "text": {
+                "normal": "MUTHUR 6000 v2.1.0\nALL SYSTEMS FUNCTIONAL\nNO ANOMALIES DETECTED",
+                "anomalyDetected": "MUTHUR 6000 v2.1.0\nANOMALY DETECTED\nCHECKING SUBSYSTEMS",
+                "systemOffline": "MUTHUR 6000 v2.1.0\nWARNING: SYSTEM OFFLINE\nTECHNICAL INTERVENTION REQUIRED",
+                "degradedPerformance": "MUTHUR 6000 v2.1.0\nDEGRADED PERFORMANCE\nDELAYS AND ERRORS POSSIBLE",
+                "fireDetected": "MUTHUR 6000 v2.1.0\nFIRE ALERT\nEVACUATION PROTOCOLS RECOMMENDED",
+                "quarantine": "MUTHUR 6000 v2.1.0\nQUARANTINE PROTOCOL ACTIVE\nRESTRICTIONS IN EFFECT",
+                "lockdown": "MUTHUR 6000 v2.1.0\nSECURITY LOCKDOWN ACTIVE\nACCESS LIMITED",
+                "intrusion": "MUTHUR 6000 v2.1.0\nINTRUSION DETECTED\nCOUNTERMEASURES ENGAGED",
+                "networkIssue": "MUTHUR 6000 v2.1.0\nNETWORK ANOMALY\nUNSTABLE COMMUNICATIONS"
+            }
+        },
+        "ROLES": {
+            "captains": "Captains",
+            "captainsHint": "List of users authorized as Captains",
+            "manageCaptains": "Manage Captains",
+            "captainLabel": "Captains",
+            "allowCaptainOrders": "Captain → Special Orders without HACK",
+            "allowCaptainOrdersHint": "Allow Captains to access Special Orders without passing HACK"
+        }
+    },
+    "MOTHER": {
+        "HackSuccess": "HACK SUCCESSFUL - ACCESS GRANTED",
+        "HackFailure": "HACK FAILED - TERMINAL LOCKED",
+        "AccessDenied": "!!! ACCESS DENIED !!!\n\nINSUFFICIENT AUTHORIZATION LEVEL\nADMINISTRATOR IDENTIFICATION REQUIRED\n\nUNAUTHORIZED ACCESS ATTEMPT LOGGED\nERROR CODE: WY-SEC-451",
+        "HackAttempt": "Hack Attempt in Progress...",
+        "HackAlreadySuccessful": "ADMINISTRATOR ACCESS ALREADY OBTAINED - NEW HACK ATTEMPT NOT AUTHORIZED",
+        "HackDetected": "!!! HACK ATTEMPT DETECTED !!! - {result}",
+        "Success": "SUCCESS",
+        "Failure": "FAILURE",
+        "CerberusHackAlert": "!!! PRIORITY ALERT !!! - {userName} HAS INITIATED CERBERUS PROTOCOL",
+        "CerberusConfirmed": "CERBERUS PROTOCOL CONFIRMED - SELF-DESTRUCT IN PROGRESS",
+        "CerberusCancelled": "CERBERUS PROTOCOL CANCELLED",
+        "CommandNotFound": "COMMAND NOT RECOGNIZED. TYPE 'HELP' FOR COMMAND LIST.",
+        "IntrusionDetected": "!!! INTRUSION DETECTED !!!",
+        "HackDisabledInfo": "The HACK command is currently disabled in system settings\nWould you like to enable it?",
+        "EnableHack": "ENABLE",
+        "KeepDisabled": "KEEP DISABLED",
+        "HackEnabled": "HACK COMMAND ENABLED\nPlayers can now use the command",
+        "HackKeptDisabled": "HACK COMMAND KEPT DISABLED",
+        "SecurityProtocol": "■ SECURITY PROTOCOL DELTA-7 ACTIVATED ■",
+        "CountermeasuresAttempt": "ATTEMPTING COUNTERMEASURES...",
+        "CountermeasuresFailed": "!!! COUNTERMEASURES FAILED !!!",
+        "RootAccess": "ROOT ACCESS COMPROMISED",
+        "AdminPrivileges": ">>> ADMINISTRATOR PRIVILEGES GRANTED",
+        "SecurityDisabled": "SECURITY PROTOCOLS DISABLED",
+        "FullAccess": "FULL ACCESS GRANTED",
+        "WelcomeAdmin": "WELCOME ADMINISTRATOR",
+        "WelcomeAdminFull": "WELCOME ADMINISTRATOR\nWHAT CAN I DO FOR YOU?",
+        "CountermeasuresActivated": "COUNTERMEASURES ACTIVATED",
+        "TerminalLocked": "!!! TERMINAL LOCKED !!!",
+        "LocatingIntruder": "LOCATING INTRUDER...",
+        "IPRecorded": "IP COORDINATES RECORDED",
+        "AccessBlocked": "!!! ACCESS BLOCKED !!!",
+        "TerminalLocked24": "TERMINAL LOCKED FOR 24 HOURS",
+        "ForcedDisconnect3": "FORCED DISCONNECT IN 3...",
+        "ConnectionTerminated": "CONNECTION TERMINATED",
+        "CerberusDisabled": "CERBERUS PROTOCOL DISABLED BY ADMINISTRATOR",
+        "CerberusActivated": "!!! CERBERUS PROTOCOL ACTIVATED !!!",
+        "CerberusWarning": "!!! WARNING !!!\nCERBERUS PROTOCOL ACTIVATED\nSELF-DESTRUCT INITIATED",
+        "CerberusCountdown": "TIME REMAINING UNTIL DETONATION:",
+        "CerberusDetonation": "DETONATION",
+        "CerberusEvacuate": "IMMEDIATE EVACUATION REQUIRED",
+        "Keywords": {
+            "Ordre": "ORDER",
+            "Special": "SPECIAL",
+            "Special2": "SPECIAL",
+            "Protocol": "PROTOCOL"
+        },
+        "SpecialOrders": {
+            "754": {
+                "name": "SPECIAL ORDER 754",
+                "description": "Investigate any distress signal. All other considerations secondary. Crew expendable."
+            },
+            "899": {
+                "name": "SPECIAL ORDER 899",
+                "description": "Collect xenomorph specimens for biological weapons division. Maximum priority. Crew expendable."
+            },
+            "931": {
+                "name": "SPECIAL ORDER 931",
+                "description": "Contain any biological contamination. Quarantine protocols activated. No exceptions authorized."
+            },
+            "937": {
+                "name": "SPECIAL ORDER 937",
+                "description": "Protection of xenomorph specimens priority. Crew expendable."
+            },
+            "939": {
+                "name": "SPECIAL ORDER 939",
+                "description": "Return viable samples for analysis. Absolute confidentiality required. Crew expendable."
+            },
+            "966": {
+                "name": "SPECIAL ORDER 966",
+                "description": "Secure and preserve any non-human artifacts. Maximum priority. Crew expendable."
+            },
+            "Cerberus": {
+                "name": "CERBERUS PROTOCOL",
+                "TimeRemaining": "You have {time} before CERBERUS protocol activation.",
+                "description": "MAXIMUM SECURITY PROTOCOL ACTIVATED\nSELF-DESTRUCT INITIALIZATION\nIMMEDIATE EVACUATION RECOMMENDED\nTIME REMAINING UNTIL DETONATION: 10:00\n\nWARNING: THIS ACTION CANNOT BE UNDONE",
+                "warning": "!!! WARNING !!!\nCERBERUS PROTOCOL ACTIVATED\nSELF-DESTRUCT INITIATED",
+                "confirmation": "!!! WARNING !!!\n\nYOU ARE ABOUT TO ACTIVATE THE CERBERUS PROTOCOL\nTHIS ACTION WILL TRIGGER THE STATION'S SELF-DESTRUCT\nNO RETURN WILL BE POSSIBLE\n\nCONFIRM ACTIVATION?",
+                "confirm": "CONFIRM",
+                "cancel": "CANCEL",
+                "cancelled": "CERBERUS PROTOCOL ACTIVATION CANCELLED\nRETURNING TO NORMAL OPERATION",
+                "ProtocolActivated": "CERBERUS PROTOCOL ACTIVATED",
+                "Status": "STATUS",
+                "Critical": "CRITICAL",
+                "SelfDestruct": "SELF-DESTRUCT SEQUENCE INITIATED",
+                "Warning": "FINAL WARNING",
+                "NoReturn": "THIS ACTION IS IRREVERSIBLE",
+                "EvacuateNow": "IMMEDIATE EVACUATION REQUIRED",
+                "YouAreDead": "You are dead",
+                "MissionFailed": "Mission failed - Installation destroyed",
+                "Stopped": "YOU HAVE SURVIVED",
+                "goodbye": "GOOD LUCK",
+                "StopCerberus": "Stop Cerberus"
+            }
+        }
+    }
+}

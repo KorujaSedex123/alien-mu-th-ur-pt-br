@@ -465,14 +465,9 @@ class MuthurCommandsConfig extends FormApplication {
     }
 
     getData() {
-        let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || {};
-        let commandList = Object.keys(cmds).map(k => {
-            let data = cmds[k];
-            // Se for string (salvo antes da atualização), converte sem quebrar
-            if (typeof data === "string") return { command: k, response: data, requiresHack: false };
-            return { command: k, response: data.response, requiresHack: data.requiresHack };
-        });
-        return { commands: commandList };
+        let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || [];
+        if (!Array.isArray(cmds)) cmds = []; 
+        return { commands: cmds };
     }
 
     activateListeners(html) {
@@ -499,15 +494,14 @@ class MuthurCommandsConfig extends FormApplication {
     }
 
     async _updateObject(event, formData) {
-        const newData = {};
-        // Lemos os dados direto do HTML da janela para evitar dessincronização de Checkboxes
+        const newData = [];
         this.element.find('.command-row').each((index, row) => {
             const key = $(row).find('[name="commandKey"]').val().trim().toUpperCase();
             const response = $(row).find('[name="commandResponse"]').val().trim();
             const requiresHack = $(row).find('[name="commandRequiresHack"]').is(':checked');
             
             if(key && response) {
-                newData[key] = { response: response, requiresHack: requiresHack };
+                newData.push({ command: key, response: response, requiresHack: requiresHack });
             }
         });
         await game.settings.set('alien-mu-th-ur', 'customCommandsData', newData);
@@ -539,9 +533,9 @@ Hooks.once('init', () => {
     // Registra o Objeto invisível que guarda os dados salvos pelo Menu
     game.settings.register('alien-mu-th-ur', 'customCommandsData', {
         scope: 'world',
-        config: false, // Fica invisível, pois o menu acima gerencia isso
+        config: Array, // Fica invisível, pois o menu acima gerencia isso
         type: Object,
-        default: { "QUEM E VOCE?": "Eu sou a interface principal da MU/TH/UR 6000." }
+        default: []
     });
 
     window.hackingSequences = [
@@ -1096,15 +1090,28 @@ function showMuthurInterface() {
 
          // --- INÍCIO: COMANDOS PERSONALIZADOS ---
             try {
-                const customCommandsObj = game.settings.get('alien-mu-th-ur', 'customCommandsData') || {};
-                
-                if (customCommandsObj[command]) {
-                    const cmdData = customCommandsObj[command];
-                    const resposta = typeof cmdData === "string" ? cmdData : cmdData.response;
-                    const requiresHack = typeof cmdData === "string" ? false : cmdData.requiresHack;
+                let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || [];
+                if (!Array.isArray(cmds)) cmds = []; 
 
-                    // Bloqueia o comando se ele exigir hack, o terminal não estiver hackeado e o usuário não for o Mestre
-                    if (requiresHack && !hackSuccessful && !game.user.isGM) {
+                // Pega todas as versões do comando digitado (tanto as públicas quanto as hackeadas)
+                const matchedCommands = cmds.filter(c => c.command === command);
+
+                if (matchedCommands.length > 0) {
+                    const unlockedCmd = matchedCommands.find(c => !c.requiresHack);
+                    const lockedCmd = matchedCommands.find(c => c.requiresHack);
+
+                    let finalResponse = null;
+                    let denyAccess = false;
+
+                    if (lockedCmd && (hackSuccessful || game.user.isGM)) {
+                        finalResponse = lockedCmd.response;
+                    } else if (unlockedCmd) {
+                        finalResponse = unlockedCmd.response;
+                    } else if (lockedCmd && !hackSuccessful && !game.user.isGM) {
+                        denyAccess = true;
+                    }
+
+                    if (denyAccess) {
                         await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.permissionDenied") || "ACCESS DENIED.", '', '#ff0000', 'error');
                         if (!game.user.isGM) {
                             sendToGM(game.i18n.format("MUTHUR.SpecialOrderAttempt", { command: command }));
@@ -1112,15 +1119,16 @@ function showMuthurInterface() {
                         if (game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
                             playErrorSound();
                         }
-                        return; // Barra a execução e acende luz vermelha
+                        return; // Barra a execução
                     }
 
-                    // Se não exigir hack ou se o hack já foi feito, responde normalmente:
-                    await syncMessageToSpectators(chatLog, resposta, '', '#00ff00', 'reply');
-                    if (!game.user.isGM) {
-                        sendToGM(command, 'command', 'valid');
+                    if (finalResponse) {
+                        await syncMessageToSpectators(chatLog, finalResponse, '', '#00ff00', 'reply');
+                        if (!game.user.isGM) {
+                            sendToGM(command, 'command', 'valid');
+                        }
+                        return; // Encerra a função
                     }
-                    return; // Encerra a função
                 }
             } catch (e) {
                 console.error("MUTHUR | Erro ao ler comandos personalizados:", e);
@@ -1323,13 +1331,45 @@ function showMuthurInterface() {
                     }
                     return; 
                 case 'HELP':
+                    // 1. Mostra a ajuda nativa básica
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.help"), '', '#00ff00', 'reply');
+                    
+                    // 2. Mostra a ajuda nativa Pós-Hack (Ordens 937, etc)
                     if (hackSuccessful && game.settings.get('alien-mu-th-ur', 'phShowInHelp')) {
                         const extra = buildPostHackHelpList();
                         if (extra) {
                             await syncMessageToSpectators(chatLog, extra, '', '#00ff00', 'reply');
                         }
                     }
+
+                    // --- 3. INÍCIO: MOSTRAR COMANDOS PERSONALIZADOS NO HELP ---
+                    try {
+                        let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || [];
+                        if (!Array.isArray(cmds)) cmds = [];
+                        
+                        let availableCustomCmds = new Set(); // Usamos Set para evitar nomes duplicados na tela
+                        
+                        cmds.forEach(c => {
+                            // Só adiciona na lista se não exigir hack, OU se o terminal já estiver hackeado (ou for o GM)
+                            if (!c.requiresHack || hackSuccessful || game.user.isGM) {
+                                availableCustomCmds.add(c.command);
+                            }
+                        });
+
+                        if (availableCustomCmds.size > 0) {
+                            // Monta o texto de exibição
+                            let customHelpText = "COMANDOS DE SISTEMA ADICIONAIS:\n";
+                            availableCustomCmds.forEach(cmd => {
+                                customHelpText += `- ${cmd}\n`;
+                            });
+                            // Envia para o terminal com efeito de digitação
+                            await syncMessageToSpectators(chatLog, customHelpText, '', '#00ff00', 'reply');
+                        }
+                    } catch (e) {
+                        console.error("MUTHUR | Erro ao gerar lista de ajuda customizada:", e);
+                    }
+                    // --- FIM: COMANDOS PERSONALIZADOS NO HELP ---
+
                     if (!game.user.isGM) {
                         sendToGM(command, 'command', 'valid');
                     }

@@ -129,6 +129,14 @@
             "support": "Para apoiar meus projetos:"
         },
         "SETTINGS": {
+            "ALIEN-MU-TH-UR": {
+                "Settings": {
+                    "CustomCommands": {
+                        "Name": "Comandos Personalizados",
+                        "Hint": "Cadastre novos comandos em formato JSON. Exemplo: {\"PURGA\": \"Iniciando ejeção de gás...\", \"SENHA\": \"Acesso concedido.\"}."
+                    }
+                }
+            },
             "useTokenName": {
                 "name": "Usar Nome do Personagem",
                 "hint": "Usa o nome da ficha do personagem em vez do nome de usuário do jogador nas mensagens"

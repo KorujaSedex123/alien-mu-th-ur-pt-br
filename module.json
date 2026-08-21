@@ -2,7 +2,7 @@
   "id": "alien-mu-th-ur",
   "title": "Alien-Mu-Th-Ur",
   "description": "Module MU/TH/UR 6000 pour Alien RPG",
-  "version": "2.2.1",
+  "version": "2.3.1",
   "compatibility": {
     "minimum": "14",
     "verified": "14"
@@ -99,7 +99,7 @@
   ],
   "url": "https://github.com/KorujaSedex123/alien-mu-th-ur-pt-br",
   "manifest": "https://github.com/KorujaSedex123/alien-mu-th-ur-pt-br/releases/latest/download/module.json",
-  "download": "https://github.com/KorujaSedex123/alien-mu-th-ur-pt-br/releases/download/2.2.1/alien-mu-th-ur.zip",
+  "download": "https://github.com/KorujaSedex123/alien-mu-th-ur-pt-br/releases/download/2.3.1/alien-mu-th-ur.zip",
   "license": "LICENSE.txt",
   "flags": {}
 }

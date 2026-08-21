@@ -466,30 +466,31 @@ class MuthurCommandsConfig extends FormApplication {
 
     getData() {
         let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || {};
-        // Converte o Objeto em uma Array para o Handlebars listar na tela
-        let commandList = Object.keys(cmds).map(k => ({ command: k, response: cmds[k] }));
+        let commandList = Object.keys(cmds).map(k => {
+            let data = cmds[k];
+            // Se for string (salvo antes da atualização), converte sem quebrar
+            if (typeof data === "string") return { command: k, response: data, requiresHack: false };
+            return { command: k, response: data.response, requiresHack: data.requiresHack };
+        });
         return { commands: commandList };
     }
 
     activateListeners(html) {
         super.activateListeners(html);
-        // Botão de adicionar nova linha
         html.find('.add-command').click(async (event) => {
             event.preventDefault();
-            const tbody = html.find('tbody');
-            tbody.append(`
+            html.find('tbody').append(`
                 <tr class="command-row">
                     <td><input type="text" name="commandKey" value="" style="background: black; color: #00ff00; border: 1px solid #333; font-family: monospace;" placeholder="NOVO COMANDO"/></td>
                     <td><input type="text" name="commandResponse" value="" style="background: black; color: #00ff00; border: 1px solid #333; font-family: monospace;" placeholder="Nova resposta..."/></td>
+                    <td style="text-align: center;"><input type="checkbox" name="commandRequiresHack" style="cursor: pointer;"/></td>
                     <td style="text-align: center;"><button type="button" class="remove-command" style="background: #330000; color: #ff0000; border: 1px solid #ff0000; width: 30px; height: 30px;"><i class="fas fa-trash"></i></button></td>
                 </tr>
             `);
-            // Reativa o evento de deletar para a nova linha
             html.find('.remove-command').off('click').click(e => $(e.currentTarget).closest('.command-row').remove());
             this.setPosition({ height: "auto" });
         });
 
-        // Botão de remover linha existente
         html.find('.remove-command').click(event => {
             event.preventDefault();
             $(event.currentTarget).closest('.command-row').remove();
@@ -498,21 +499,17 @@ class MuthurCommandsConfig extends FormApplication {
     }
 
     async _updateObject(event, formData) {
-        let keys = formData.commandKey || [];
-        let values = formData.commandResponse || [];
-        
-        // Garante que são arrays mesmo se houver apenas 1 comando
-        if (!Array.isArray(keys)) keys = [keys];
-        if (!Array.isArray(values)) values = [values];
-
-        let newData = {};
-        for(let i = 0; i < keys.length; i++){
-            let k = (keys[i] || "").trim().toUpperCase();
-            let v = (values[i] || "").trim();
-            if(k && v) {
-                newData[k] = v;
+        const newData = {};
+        // Lemos os dados direto do HTML da janela para evitar dessincronização de Checkboxes
+        this.element.find('.command-row').each((index, row) => {
+            const key = $(row).find('[name="commandKey"]').val().trim().toUpperCase();
+            const response = $(row).find('[name="commandResponse"]').val().trim();
+            const requiresHack = $(row).find('[name="commandRequiresHack"]').is(':checked');
+            
+            if(key && response) {
+                newData[key] = { response: response, requiresHack: requiresHack };
             }
-        }
+        });
         await game.settings.set('alien-mu-th-ur', 'customCommandsData', newData);
     }
 }
@@ -1097,28 +1094,36 @@ function showMuthurInterface() {
             await syncMessageToSpectators(chatLog, command, '> ');
             chatLog.scrollTop = chatLog.scrollHeight;
 
-            // --- INÍCIO: COMANDOS PERSONALIZADOS ---
+         // --- INÍCIO: COMANDOS PERSONALIZADOS ---
             try {
-                const settingsStr = game.settings.get('alien-mu-th-ur', 'customCommands');
-                if (settingsStr && settingsStr.trim() !== "") {
-                    const customCommandsObj = JSON.parse(settingsStr);
-                    
-                    // Verifica se o comando exato existe no JSON cadastrado
-                    if (customCommandsObj[command]) {
-                        const resposta = customCommandsObj[command];
-                        
-                        // Envia a resposta sincronizada para o jogador e espectadores
-                        await syncMessageToSpectators(chatLog, resposta, '', '#00ff00', 'reply');
-                        
-                        // Notifica o GM no painel dele que um comando válido foi usado
+                const customCommandsObj = game.settings.get('alien-mu-th-ur', 'customCommandsData') || {};
+                
+                if (customCommandsObj[command]) {
+                    const cmdData = customCommandsObj[command];
+                    const resposta = typeof cmdData === "string" ? cmdData : cmdData.response;
+                    const requiresHack = typeof cmdData === "string" ? false : cmdData.requiresHack;
+
+                    // Bloqueia o comando se ele exigir hack, o terminal não estiver hackeado e o usuário não for o Mestre
+                    if (requiresHack && !hackSuccessful && !game.user.isGM) {
+                        await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.permissionDenied") || "ACCESS DENIED.", '', '#ff0000', 'error');
                         if (!game.user.isGM) {
-                            sendToGM(command, 'command', 'valid');
+                            sendToGM(game.i18n.format("MUTHUR.SpecialOrderAttempt", { command: command }));
                         }
-                        return; // Encerra a função para não dar "Command Not Found"
+                        if (game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
+                            playErrorSound();
+                        }
+                        return; // Barra a execução e acende luz vermelha
                     }
+
+                    // Se não exigir hack ou se o hack já foi feito, responde normalmente:
+                    await syncMessageToSpectators(chatLog, resposta, '', '#00ff00', 'reply');
+                    if (!game.user.isGM) {
+                        sendToGM(command, 'command', 'valid');
+                    }
+                    return; // Encerra a função
                 }
             } catch (e) {
-                console.error("MUTHUR | Erro de formatação no JSON de comandos personalizados:", e);
+                console.error("MUTHUR | Erro ao ler comandos personalizados:", e);
             }
             // --- FIM: COMANDOS PERSONALIZADOS ---
 

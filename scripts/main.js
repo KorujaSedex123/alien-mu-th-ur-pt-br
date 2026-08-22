@@ -62,11 +62,11 @@ async function showBootSequence(isSpectator = false) {
 
     try {
         gsap.timeline()
-        .to(backgroundLogo, {
-            opacity: 0.1,
-            duration: 1.2,
-            ease: 'power2.inOut'
-        });
+            .to(backgroundLogo, {
+                opacity: 0.1,
+                duration: 1.2,
+                ease: 'power2.inOut'
+            });
     } catch (e) { /* no-op if GSAP missing */ }
 
     // Logo Weyland-Yutani
@@ -134,7 +134,7 @@ async function showBootSequence(isSpectator = false) {
         100% { opacity: 0.5; }
     }
 `;
-    try { document.head.appendChild(styleSheet); } catch (e) {}
+    try { document.head.appendChild(styleSheet); } catch (e) { }
 
     // Vignette ajustée
     const vignette = document.createElement('div');
@@ -254,7 +254,7 @@ async function showBootSequence(isSpectator = false) {
     });
 }
 
-try { window.showBootSequence = showBootSequence; } catch (e) {}
+try { window.showBootSequence = showBootSequence; } catch (e) { }
 
 function startCerberusCountdown(minutes) {
     const duration = Number.isFinite(minutes) && minutes > 0 ? minutes : 10;
@@ -466,7 +466,7 @@ class MuthurCommandsConfig extends FormApplication {
 
     getData() {
         let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || [];
-        if (!Array.isArray(cmds)) cmds = []; 
+        if (!Array.isArray(cmds)) cmds = [];
         return { commands: cmds };
     }
 
@@ -499,8 +499,8 @@ class MuthurCommandsConfig extends FormApplication {
             const key = $(row).find('[name="commandKey"]').val().trim().toUpperCase();
             const response = $(row).find('[name="commandResponse"]').val().trim();
             const requiresHack = $(row).find('[name="commandRequiresHack"]').is(':checked');
-            
-            if(key && response) {
+
+            if (key && response) {
                 newData.push({ command: key, response: response, requiresHack: requiresHack });
             }
         });
@@ -536,6 +536,13 @@ Hooks.once('init', () => {
         config: Array, // Fica invisível, pois o menu acima gerencia isso
         type: Object,
         default: []
+    });
+
+    game.settings.register('alien-mu-th-ur', 'welcomeMessageShown', {
+        scope: 'world', // Salva por mundo (cada mesa nova verá uma vez)
+        config: false,  // Fica invisível no menu
+        type: Boolean,
+        default: false  // Começa como falso
     });
 
     window.hackingSequences = [
@@ -622,7 +629,7 @@ Hooks.once('init', () => {
             default: '/modules/alien-mu-th-ur/sounds/reply/Computer_Reply_1.wav',
             filePicker: true
         });
-    } catch (e) {}
+    } catch (e) { }
 
     game.settings.register('alien-mu-th-ur', 'typingSoundVolume', {
         name: "MUTHUR.SETTINGS.typingSoundVolume.name",
@@ -802,7 +809,7 @@ window.MUTHUR.applyScreenGlitch = (durationMs = 1800) => {
     const overlay = document.createElement('div');
     overlay.className = 'muthur-glitch-overlay';
     const noise = document.createElement('div'); noise.className = 'muthur-glitch-noise'; overlay.appendChild(noise);
-    for (let i=0;i<3;i++){ const bar = document.createElement('div'); bar.className = 'muthur-glitch-bar'; bar.style.animationDelay = `${Math.random()*0.6}s`; bar.style.height = `${10+Math.floor(Math.random()*10)}px`; overlay.appendChild(bar); }
+    for (let i = 0; i < 3; i++) { const bar = document.createElement('div'); bar.className = 'muthur-glitch-bar'; bar.style.animationDelay = `${Math.random() * 0.6}s`; bar.style.height = `${10 + Math.floor(Math.random() * 10)}px`; overlay.appendChild(bar); }
     document.body.appendChild(overlay);
 
     const originalFilter = document.body.style.filter || '';
@@ -812,14 +819,14 @@ window.MUTHUR.applyScreenGlitch = (durationMs = 1800) => {
     const gmContainer = document.getElementById('gm-muthur-container');
     const shaken = container || gmContainer || document.body;
     const originalTransform = shaken.style.transform || '';
-    const jitter = setInterval(()=>{
-        const dx = (Math.random()-0.5)*3;
-        const dy = (Math.random()-0.5)*3;
-        const skew = (Math.random()-0.5)*1.5;
+    const jitter = setInterval(() => {
+        const dx = (Math.random() - 0.5) * 3;
+        const dy = (Math.random() - 0.5) * 3;
+        const skew = (Math.random() - 0.5) * 1.5;
         shaken.style.transform = `translate(${dx}px,${dy}px) skewX(${skew}deg)`;
     }, 35);
 
-    setTimeout(()=>{
+    setTimeout(() => {
         clearInterval(jitter);
         shaken.style.transform = originalTransform;
         document.body.style.filter = originalFilter;
@@ -867,7 +874,7 @@ async function displayMuthurMessage(chatLog, text, prefix = '', color = '#00ff00
     messageDiv.style.minHeight = '25px';
     chatLog.appendChild(messageDiv);
 
-    try { messageDiv.classList.add('message', messageType || 'normal'); } catch (e) {}
+    try { messageDiv.classList.add('message', messageType || 'normal'); } catch (e) { }
 
     const typewriterEnabled = game.settings.get('alien-mu-th-ur', 'enableTypewriter');
     const soundGloballyMuted = (window.MUTHUR && window.MUTHUR.muteForSpectator) ? true : false;
@@ -963,7 +970,7 @@ function showMuthurInterface() {
 
     const container = document.createElement('div');
     container.id = 'muthur-chat-container';
-    
+
     if (currentMuthurSession.active && currentMuthurSession.userId !== game.user.id) {
         ui.notifications.warn(game.i18n.format("MUTHUR.sessionActiveWarning", { userName: currentMuthurSession.userName }));
         return;
@@ -988,7 +995,7 @@ function showMuthurInterface() {
     const sidebar = document.getElementById('sidebar');
     const rightPosition = sidebar ? `${sidebar.offsetWidth + 20}px` : '320px';
 
-    const allowPlayersDrag = (()=>{ try { return game.settings.get('alien-mu-th-ur','allowDragPlayers'); } catch(_) { return false; } })();
+    const allowPlayersDrag = (() => { try { return game.settings.get('alien-mu-th-ur', 'allowDragPlayers'); } catch (_) { return false; } })();
     chatContainer.style.cssText = `
         position: ${allowPlayersDrag ? 'absolute' : 'fixed'};
         bottom: 20px;
@@ -1057,27 +1064,27 @@ function showMuthurInterface() {
 
     try {
         if (!game.user.isGM && allowPlayersDrag) {
-            let dragging=false, sx=0, sy=0, ox=0, oy=0;
-            const header = (()=> chatContainer.querySelector('.muthur-chat-header'))() || chatContainer;
+            let dragging = false, sx = 0, sy = 0, ox = 0, oy = 0;
+            const header = (() => chatContainer.querySelector('.muthur-chat-header'))() || chatContainer;
             header.style.cursor = 'move';
-            const start=(e)=>{
+            const start = (e) => {
                 const target = e.target;
                 if (e.button !== undefined && e.button !== 0) return;
                 if (target && target.closest && target.closest('input, textarea, button, select')) return;
-                dragging=true;
-                const r=chatContainer.getBoundingClientRect();
-                sx=r.left; sy=r.top;
-                ox=(e.touches?e.touches[0].clientX:e.clientX);
-                oy=(e.touches?e.touches[0].clientY:e.clientY);
+                dragging = true;
+                const r = chatContainer.getBoundingClientRect();
+                sx = r.left; sy = r.top;
+                ox = (e.touches ? e.touches[0].clientX : e.clientX);
+                oy = (e.touches ? e.touches[0].clientY : e.clientY);
                 e.preventDefault();
             };
-            const move=(e)=>{ if(!dragging) return; const cx=(e.touches?e.touches[0].clientX:e.clientX); const cy=(e.touches?e.touches[0].clientY:e.clientY); chatContainer.style.left=(sx+(cx-ox))+'px'; chatContainer.style.top=(sy+(cy-oy))+'px'; chatContainer.style.right=''; chatContainer.style.bottom=''; };
-            const end=()=>{ dragging=false; };
-            header.addEventListener('mousedown', start); header.addEventListener('touchstart', start, {passive:false});
-            window.addEventListener('mousemove', move); window.addEventListener('touchmove', move, {passive:false});
+            const move = (e) => { if (!dragging) return; const cx = (e.touches ? e.touches[0].clientX : e.clientX); const cy = (e.touches ? e.touches[0].clientY : e.clientY); chatContainer.style.left = (sx + (cx - ox)) + 'px'; chatContainer.style.top = (sy + (cy - oy)) + 'px'; chatContainer.style.right = ''; chatContainer.style.bottom = ''; };
+            const end = () => { dragging = false; };
+            header.addEventListener('mousedown', start); header.addEventListener('touchstart', start, { passive: false });
+            window.addEventListener('mousemove', move); window.addEventListener('touchmove', move, { passive: false });
             window.addEventListener('mouseup', end); window.addEventListener('touchend', end);
         }
-    } catch(_) {}
+    } catch (_) { }
 
     syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.welcome"), '', '#00ff00', 'reply');
 
@@ -1088,10 +1095,10 @@ function showMuthurInterface() {
             await syncMessageToSpectators(chatLog, command, '> ');
             chatLog.scrollTop = chatLog.scrollHeight;
 
-         // --- INÍCIO: COMANDOS PERSONALIZADOS ---
+            // --- INÍCIO: COMANDOS PERSONALIZADOS ---
             try {
                 let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || [];
-                if (!Array.isArray(cmds)) cmds = []; 
+                if (!Array.isArray(cmds)) cmds = [];
 
                 // Pega todas as versões do comando digitado (tanto as públicas quanto as hackeadas)
                 const matchedCommands = cmds.filter(c => c.command === command);
@@ -1226,7 +1233,7 @@ function showMuthurInterface() {
                     const d = doors[i];
                     const labelName = getDoorPreferredLabel(d);
                     if (!labelName) continue;
-                    await displayMuthurMessage(chatLog, `#${i+1} ${labelName}`, '', '#00ff00', 'reply');
+                    await displayMuthurMessage(chatLog, `#${i + 1} ${labelName}`, '', '#00ff00', 'reply');
                 }
                 return;
             }
@@ -1241,7 +1248,7 @@ function showMuthurInterface() {
                 try {
                     game.socket.emit('module.alien-mu-th-ur', { type: 'doorControlRequest', action: 'LOCK', index, filteredPrefix: 'AD', fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.requestSent") || "Request sent to GM...", '', '#00ff00', 'reply');
-                } catch(e) {}
+                } catch (e) { }
                 return;
             }
             if ((m = command.match(/^UNLOCK\s+DOOR\s+(\d+)$/))) {
@@ -1253,7 +1260,7 @@ function showMuthurInterface() {
                 try {
                     game.socket.emit('module.alien-mu-th-ur', { type: 'doorControlRequest', action: 'UNLOCK', index, filteredPrefix: 'AD', fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.requestSent") || "Request sent to GM...", '', '#00ff00', 'reply');
-                } catch(e) {}
+                } catch (e) { }
                 return;
             }
 
@@ -1265,7 +1272,7 @@ function showMuthurInterface() {
                 try {
                     game.socket.emit('module.alien-mu-th-ur', { type: 'lightsControlRequest', action: 'SHUTDOWN', fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
-                } catch(e) {}
+                } catch (e) { }
                 return;
             }
             if (/^RESTORE\s+LIGHTS$/.test(command)) {
@@ -1276,7 +1283,7 @@ function showMuthurInterface() {
                 try {
                     game.socket.emit('module.alien-mu-th-ur', { type: 'lightsControlRequest', action: 'RESTORE', fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
-                } catch(e) {}
+                } catch (e) { }
                 return;
             }
 
@@ -1288,8 +1295,8 @@ function showMuthurInterface() {
                 try {
                     game.socket.emit('module.alien-mu-th-ur', { type: 'alarmRequest', fromId: game.user.id, fromName: game.user.name, overlay: true });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
-                    try { sendToGM(command, 'command', 'valid'); } catch(_) {}
-                } catch(e) {}
+                    try { sendToGM(command, 'command', 'valid'); } catch (_) { }
+                } catch (e) { }
                 return;
             }
 
@@ -1298,7 +1305,7 @@ function showMuthurInterface() {
                 try {
                     game.socket.emit('module.alien-mu-th-ur', { type: 'gasRequest', fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
-                } catch(e) {}
+                } catch (e) { }
                 return;
             }
             if ((m = command.match(/^CRYO\s+POD(?:\s+(.*))?$/))) {
@@ -1307,7 +1314,7 @@ function showMuthurInterface() {
                 try {
                     game.socket.emit('module.alien-mu-th-ur', { type: 'cryoRequest', targetName, fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
-                } catch(e) {}
+                } catch (e) { }
                 return;
             }
 
@@ -1317,7 +1324,7 @@ function showMuthurInterface() {
                 try {
                     game.socket.emit('module.alien-mu-th-ur', { type: 'cryoReleaseRequest', all, fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
-                } catch(e) {}
+                } catch (e) { }
                 return;
             }
 
@@ -1329,11 +1336,11 @@ function showMuthurInterface() {
                     } else {
                         await simulateHackingAttempt(chatLog);
                     }
-                    return; 
+                    return;
                 case 'HELP':
                     // 1. Mostra a ajuda nativa básica
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.help"), '', '#00ff00', 'reply');
-                    
+
                     // 2. Mostra a ajuda nativa Pós-Hack (Ordens 937, etc)
                     if (hackSuccessful && game.settings.get('alien-mu-th-ur', 'phShowInHelp')) {
                         const extra = buildPostHackHelpList();
@@ -1346,9 +1353,9 @@ function showMuthurInterface() {
                     try {
                         let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || [];
                         if (!Array.isArray(cmds)) cmds = [];
-                        
+
                         let availableCustomCmds = new Set(); // Usamos Set para evitar nomes duplicados na tela
-                        
+
                         cmds.forEach(c => {
                             // Só adiciona na lista se não exigir hack, OU se o terminal já estiver hackeado (ou for o GM)
                             if (!c.requiresHack || hackSuccessful || game.user.isGM) {
@@ -1381,7 +1388,7 @@ function showMuthurInterface() {
                             fromId: game.user.id,
                             fromName: game.user.name
                         });
-                        try { sendToGM(command, 'command', 'valid'); } catch(e) {}
+                        try { sendToGM(command, 'command', 'valid'); } catch (e) { }
                         await displayMuthurMessage(chatLog, game.i18n.localize('MUTHUR.waitingResponse'), '', '#00ff00', 'communication');
                     } else {
                         const key = game.settings.get('alien-mu-th-ur', 'currentStatusKey');
@@ -1441,7 +1448,7 @@ function showMuthurInterface() {
                     return;
                 default:
                     if (!command.startsWith(motherPrefix)) {
-                        if (!game.user.isGM) { try { sendToGM(command, 'command', 'unknown'); } catch(_) {} }
+                        if (!game.user.isGM) { try { sendToGM(command, 'command', 'unknown'); } catch (_) { } }
                         await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.commandNotFound"), '', '#00ff00', 'error');
                     }
             }
@@ -1469,7 +1476,7 @@ function showWaitingMessage() {
     if (waitingContainer) {
         return waitingContainer;
     }
-    
+
     waitingContainer = document.createElement('div');
     waitingContainer.id = 'muthur-waiting-container';
     waitingContainer.style.cssText = `
@@ -1485,7 +1492,7 @@ function showWaitingMessage() {
         font-family: monospace;
         min-width: 400px;
     `;
-    
+
     const title = document.createElement('h2');
     title.textContent = "MU/TH/UR 6000";
     title.style.cssText = `
@@ -1494,7 +1501,7 @@ function showWaitingMessage() {
         font-family: monospace;
     `;
     waitingContainer.appendChild(title);
-    
+
     const message = document.createElement('p');
     message.textContent = game.i18n.localize("MUTHUR.waitingForGM");
     message.style.cssText = `
@@ -1503,7 +1510,7 @@ function showWaitingMessage() {
         margin-bottom: 20px;
     `;
     waitingContainer.appendChild(message);
-    
+
     const loadingIndicator = document.createElement('div');
     loadingIndicator.style.cssText = `
         color: #00ff00;
@@ -1512,16 +1519,16 @@ function showWaitingMessage() {
     `;
     loadingIndicator.textContent = ".";
     waitingContainer.appendChild(loadingIndicator);
-    
+
     let dots = 1;
     const loadingInterval = setInterval(() => {
         dots = (dots % 3) + 1;
         loadingIndicator.textContent = ".".repeat(dots);
     }, 500);
-    
+
     waitingContainer.dataset.intervalId = loadingInterval;
     document.body.appendChild(waitingContainer);
-    
+
     return waitingContainer;
 }
 
@@ -1555,17 +1562,17 @@ function toggleMuthurChat() {
         showMuthurInterface();
     } else {
         showWaitingMessage();
-        
+
         currentMuthurSession.active = true;
         currentMuthurSession.userId = game.user.id;
         currentMuthurSession.userName = game.user.name;
-        
+
         game.socket.emit('module.alien-mu-th-ur', {
             type: 'requestSpectatorSelection',
             userId: game.user.id,
             userName: game.user.name
         });
-        
+
         ui.notifications.info(game.i18n.localize("MUTHUR.waitingForGM"));
         return;
     }
@@ -1583,7 +1590,7 @@ function createGMMuthurInterface(userName, userId) {
     const rightPosition = sidebar ? `${sidebar.offsetWidth + 20}px` : '320px';
 
     container.style.cssText = `
-        position: ${game.settings.get('alien-mu-th-ur','allowDragGM') ? 'absolute' : 'fixed'};
+        position: ${game.settings.get('alien-mu-th-ur', 'allowDragGM') ? 'absolute' : 'fixed'};
         bottom: 20px;
         right: ${document.getElementById('sidebar').offsetWidth + 20}px;
         width: 400px;
@@ -1596,7 +1603,7 @@ function createGMMuthurInterface(userName, userId) {
         display: flex;
         flex-direction: column;
     `;
-    
+
     const headerContainer = document.createElement('div');
     headerContainer.style.cssText = `
         display: flex;
@@ -1604,7 +1611,7 @@ function createGMMuthurInterface(userName, userId) {
         align-items: center;
         margin-bottom: 10px;
     `;
-    
+
     const headerTitle = document.createElement('div');
     headerTitle.textContent = game.i18n.format("MUTHUR.gmInterfaceTitle", { userName: userName });
     headerTitle.style.cssText = `
@@ -1613,7 +1620,7 @@ function createGMMuthurInterface(userName, userId) {
         font-family: monospace;
         font-size: 16px;
     `;
-    
+
     const helpButton = document.createElement('button');
     helpButton.textContent = '?';
     helpButton.title = game.i18n.localize('MUTHUR.helpMenu.tooltip') || 'Commands Help';
@@ -1635,8 +1642,8 @@ function createGMMuthurInterface(userName, userId) {
 
     function buildGMHelpPanelContent() {
         const lines = [];
-        const g = (k)=>{ try { return game.settings.get('alien-mu-th-ur', k); } catch(e) { return false; } };
-        const sec = (k)=>({
+        const g = (k) => { try { return game.settings.get('alien-mu-th-ur', k); } catch (e) { return false; } };
+        const sec = (k) => ({
             title: game.i18n.localize(`MUTHUR.helpMenu.sections.${k}.title`) || k.toUpperCase(),
             desc: game.i18n.localize(`MUTHUR.helpMenu.sections.${k}.desc`) || ''
         });
@@ -1648,15 +1655,17 @@ function createGMMuthurInterface(userName, userId) {
         lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${hack.title}</div><div style=\"white-space:pre-wrap;\">${hack.desc}</div>`);
         if (g('phSpecialOrders')) { const s = sec('specialOrders'); lines.push(`<div style="margin:6px 0 2px 0; font-weight:bold;">${s.title}</div><div>${s.desc}</div>`); }
         { const s = sec('cerberus'); lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s.title}</div><div>${s.desc}</div>`); }
-        if (g('phDoors'))         { const s = sec('doors');         lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s.title}</div><div>${s.desc}</div>`); }
-        if (g('phLights'))        { const s = sec('lights');        lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s.title}</div><div>${s.desc}</div>`); }
-        if (g('phAlarm'))         { const s = sec('alarm');         lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s.title}</div><div>${s.desc}</div>`); }
-        if (g('phGas'))           { const s = sec('gas');           lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s.title}</div><div>${s.desc}</div>`); }
-        if (g('phCryo'))          { const s1 = sec('cryo');         lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s1.title}</div><div>${s1.desc}</div>`);
-                                     const s2 = sec('cryoRelease'); lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s2.title}</div><div>${s2.desc}</div>`); }
+        if (g('phDoors')) { const s = sec('doors'); lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s.title}</div><div>${s.desc}</div>`); }
+        if (g('phLights')) { const s = sec('lights'); lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s.title}</div><div>${s.desc}</div>`); }
+        if (g('phAlarm')) { const s = sec('alarm'); lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s.title}</div><div>${s.desc}</div>`); }
+        if (g('phGas')) { const s = sec('gas'); lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s.title}</div><div>${s.desc}</div>`); }
+        if (g('phCryo')) {
+            const s1 = sec('cryo'); lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s1.title}</div><div>${s1.desc}</div>`);
+            const s2 = sec('cryoRelease'); lines.push(`<div style=\"margin:6px 0 2px 0; font-weight:bold;\">${s2.title}</div><div>${s2.desc}</div>`);
+        }
 
         if (g('phSpecialOrders')) {
-            const orderCodes = ['754','899','931','937','939','966'];
+            const orderCodes = ['754', '899', '931', '937', '939', '966'];
             const items = orderCodes.map(code => {
                 const name = game.i18n.localize(`MOTHER.SpecialOrders.${code}.name`) || code;
                 const desc = game.i18n.localize(`MOTHER.SpecialOrders.${code}.description`) || '';
@@ -1699,7 +1708,7 @@ function createGMMuthurInterface(userName, userId) {
         close.innerHTML = '&#10006;';
         close.title = game.i18n.localize('MUTHUR.helpMenu.close') || 'Close';
         close.style.cssText = 'background:black; border:1px solid #ff9900; color:#ff9900; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; line-height:1;';
-        close.addEventListener('click', ()=> panel.remove());
+        close.addEventListener('click', () => panel.remove());
         header.appendChild(title);
         header.appendChild(close);
 
@@ -1713,9 +1722,9 @@ function createGMMuthurInterface(userName, userId) {
     }
 
     helpButton.addEventListener('click', toggleGMHelpPanel);
-    
+
     const closeButton = document.createElement('button');
-    closeButton.innerHTML = '&#10006;'; 
+    closeButton.innerHTML = '&#10006;';
     closeButton.style.cssText = `
         background: black;
         border: 1px solid #ff9900;
@@ -1730,12 +1739,12 @@ function createGMMuthurInterface(userName, userId) {
         padding: 0;
         line-height: 1;
     `;
-    
+
     closeButton.addEventListener('click', () => {
         if (document.body.contains(container)) {
             document.body.removeChild(container);
         }
-        
+
         game.socket.emit('module.alien-mu-th-ur', {
             type: 'closePlayerInterface',
             targetUserId: userId
@@ -1750,7 +1759,7 @@ function createGMMuthurInterface(userName, userId) {
             });
         } catch (e) { /* no-op */ }
     });
-    
+
     const rightControls = document.createElement('div');
     rightControls.style.cssText = 'display:flex; align-items:center; gap:0;';
 
@@ -1792,17 +1801,17 @@ function createGMMuthurInterface(userName, userId) {
     container.appendChild(headerContainer);
 
     try {
-        if (game.settings.get('alien-mu-th-ur','allowDragGM')) {
-            let isDragging = false; let ox=0; let oy=0; let sx=0; let sy=0;
-            const startDrag = (e)=>{ isDragging = true; const r = container.getBoundingClientRect(); sx = r.left; sy = r.top; ox = (e.touches?e.touches[0].clientX:e.clientX); oy = (e.touches?e.touches[0].clientY:e.clientY); e.preventDefault(); };
-            const onMove = (e)=>{ if(!isDragging) return; const cx = (e.touches?e.touches[0].clientX:e.clientX); const cy = (e.touches?e.touches[0].clientY:e.clientY); container.style.left = (sx + (cx-ox)) + 'px'; container.style.top = (sy + (cy-oy)) + 'px'; container.style.right=''; container.style.bottom=''; };
-            const endDrag = ()=>{ isDragging = false; };
+        if (game.settings.get('alien-mu-th-ur', 'allowDragGM')) {
+            let isDragging = false; let ox = 0; let oy = 0; let sx = 0; let sy = 0;
+            const startDrag = (e) => { isDragging = true; const r = container.getBoundingClientRect(); sx = r.left; sy = r.top; ox = (e.touches ? e.touches[0].clientX : e.clientX); oy = (e.touches ? e.touches[0].clientY : e.clientY); e.preventDefault(); };
+            const onMove = (e) => { if (!isDragging) return; const cx = (e.touches ? e.touches[0].clientX : e.clientX); const cy = (e.touches ? e.touches[0].clientY : e.clientY); container.style.left = (sx + (cx - ox)) + 'px'; container.style.top = (sy + (cy - oy)) + 'px'; container.style.right = ''; container.style.bottom = ''; };
+            const endDrag = () => { isDragging = false; };
             headerContainer.style.cursor = 'move';
-            headerContainer.addEventListener('mousedown', startDrag); headerContainer.addEventListener('touchstart', startDrag, {passive:false});
-            window.addEventListener('mousemove', onMove); window.addEventListener('touchmove', onMove, {passive:false});
+            headerContainer.addEventListener('mousedown', startDrag); headerContainer.addEventListener('touchstart', startDrag, { passive: false });
+            window.addEventListener('mousemove', onMove); window.addEventListener('touchmove', onMove, { passive: false });
             window.addEventListener('mouseup', endDrag); window.addEventListener('touchend', endDrag);
         }
-    } catch(_) {}
+    } catch (_) { }
 
     const chatLog = document.createElement('div');
     chatLog.className = 'gm-chat-log';
@@ -1855,7 +1864,7 @@ function createGMMuthurInterface(userName, userId) {
     document.body.appendChild(colorPicker);
 
     let savedColor = '#ff9900';
-    try { savedColor = game.settings.get('alien-mu-th-ur', 'gmResponseColor') || '#ff9900'; } catch (e) {}
+    try { savedColor = game.settings.get('alien-mu-th-ur', 'gmResponseColor') || '#ff9900'; } catch (e) { }
     colorPicker.value = savedColor;
 
     const colorDropdown = document.createElement('div');
@@ -1883,7 +1892,7 @@ function createGMMuthurInterface(userName, userId) {
             Array.from(colorMenu.children).forEach(c => c.setAttribute('aria-pressed', 'false'));
             btn.setAttribute('aria-pressed', 'true');
             colorDropdown.classList.remove('open');
-            try { game.settings.set('alien-mu-th-ur', 'gmResponseColor', selectedColor); } catch (e) {}
+            try { game.settings.set('alien-mu-th-ur', 'gmResponseColor', selectedColor); } catch (e) { }
         });
         return btn;
     };
@@ -1904,7 +1913,7 @@ function createGMMuthurInterface(userName, userId) {
         Array.from(colorMenu.children).forEach(c => c.setAttribute('aria-pressed', 'false'));
         customSwatch.setAttribute('aria-pressed', 'true');
         colorDropdown.classList.remove('open');
-        try { game.settings.set('alien-mu-th-ur', 'gmResponseColor', selectedColor); } catch (e) {}
+        try { game.settings.set('alien-mu-th-ur', 'gmResponseColor', selectedColor); } catch (e) { }
     });
     colorMenu.appendChild(customSwatch);
 
@@ -1934,16 +1943,16 @@ function createGMMuthurInterface(userName, userId) {
 
         const list = document.createElement('div');
         list.style.cssText = 'max-height: 240px; overflow: auto; margin-bottom: 8px;';
-        const ids = (() => { try { return game.settings.get('alien-mu-th-ur', 'captainUserIds') || []; } catch(e) { return []; } })();
+        const ids = (() => { try { return game.settings.get('alien-mu-th-ur', 'captainUserIds') || []; } catch (e) { return []; } })();
         game.users.forEach(u => {
-            if (u.isGM) return; 
+            if (u.isGM) return;
             const row = document.createElement('label');
             row.style.cssText = 'display:flex; align-items:center; gap:6px; margin: 2px 0;';
             const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = ids.includes(u.id);
             cb.addEventListener('change', async () => {
-                const current = (() => { try { return game.settings.get('alien-mu-th-ur', 'captainUserIds') || []; } catch(e) { return []; } })();
+                const current = (() => { try { return game.settings.get('alien-mu-th-ur', 'captainUserIds') || []; } catch (e) { return []; } })();
                 const next = cb.checked ? Array.from(new Set([...current, u.id])) : current.filter(id => id !== u.id);
-                try { await game.settings.set('alien-mu-th-ur', 'captainUserIds', next); } catch(e) { console.error(e); }
+                try { await game.settings.set('alien-mu-th-ur', 'captainUserIds', next); } catch (e) { console.error(e); }
             });
             const name = document.createElement('span'); name.textContent = u.name;
             row.appendChild(cb); row.appendChild(name); list.appendChild(row);
@@ -1953,9 +1962,9 @@ function createGMMuthurInterface(userName, userId) {
         const allowWrap = document.createElement('label');
         allowWrap.style.cssText = 'display:flex; align-items:center; gap:6px; margin-top: 6px;';
         const allow = document.createElement('input'); allow.type = 'checkbox';
-        try { allow.checked = game.settings.get('alien-mu-th-ur', 'allowCaptainSpecialOrders'); } catch(e) {}
+        try { allow.checked = game.settings.get('alien-mu-th-ur', 'allowCaptainSpecialOrders'); } catch (e) { }
         allow.addEventListener('change', async () => {
-            try { await game.settings.set('alien-mu-th-ur', 'allowCaptainSpecialOrders', allow.checked); } catch(e) { console.error(e); }
+            try { await game.settings.set('alien-mu-th-ur', 'allowCaptainSpecialOrders', allow.checked); } catch (e) { console.error(e); }
         });
         const allowLbl = document.createElement('span'); allowLbl.textContent = game.i18n.localize('MUTHUR.ROLES.allowCaptainOrders');
         allowWrap.appendChild(allow); allowWrap.appendChild(allowLbl);
@@ -2042,7 +2051,7 @@ async function handleGMResponse(data) {
     messageDiv.classList.add('maman-message');
 
     chatLog.scrollTop = chatLog.scrollHeight;
-    
+
     updateSpectatorsWithMessage(response, `${motherName}: `, data.color || '#ff9900', 'reply');
 }
 
@@ -2094,9 +2103,9 @@ function showGMSpectatorSelectionDialog(activeUserId, activeUserName) {
     dialog.appendChild(playerList);
 
     const activeScene = game.scenes.active;
-    const players = game.users.filter(user => 
-        !user.isGM && 
-        user.id !== activeUserId && 
+    const players = game.users.filter(user =>
+        !user.isGM &&
+        user.id !== activeUserId &&
         user.active
     );
 
@@ -2184,7 +2193,7 @@ function showGMSpectatorSelectionDialog(activeUserId, activeUserName) {
                 activeUserName: activeUserName
             });
         }
-        
+
         game.socket.emit('module.alien-mu-th-ur', {
             type: 'continueBootSequence',
             targetUserId: activeUserId,
@@ -2197,9 +2206,9 @@ function showGMSpectatorSelectionDialog(activeUserId, activeUserName) {
         dialog.remove();
         game.socket.emit('module.alien-mu-th-ur', {
             type: 'continueBootSequence',
-        targetUserId: activeUserId,
-        spectatorIds: [],
-        activeUserName: activeUserName
+            targetUserId: activeUserId,
+            spectatorIds: [],
+            activeUserName: activeUserName
         });
     });
 }
@@ -2230,7 +2239,7 @@ function showSpectatorInterface(activeUserId, activeUserName, skipWelcomeMessage
         display: flex;
         flex-direction: column;
     `;
-    
+
     const headerContainer = document.createElement('div');
     headerContainer.style.cssText = `
         display: flex;
@@ -2238,7 +2247,7 @@ function showSpectatorInterface(activeUserId, activeUserName, skipWelcomeMessage
         align-items: center;
         margin-bottom: 10px;
     `;
-    
+
     const headerTitle = document.createElement('div');
     headerTitle.textContent = game.i18n.format("MUTHUR.spectatorModeTitle", { userName: activeUserName });
     headerTitle.style.cssText = `
@@ -2247,9 +2256,9 @@ function showSpectatorInterface(activeUserId, activeUserName, skipWelcomeMessage
         font-family: monospace;
         font-size: 16px;
     `;
-    
+
     const closeButton = document.createElement('button');
-    closeButton.innerHTML = '&#10006;'; 
+    closeButton.innerHTML = '&#10006;';
     closeButton.style.cssText = `
         background: black;
         border: 1px solid #00ff00;
@@ -2264,11 +2273,11 @@ function showSpectatorInterface(activeUserId, activeUserName, skipWelcomeMessage
         padding: 0;
         line-height: 1;
     `;
-    
+
     closeButton.addEventListener('click', () => {
         document.body.removeChild(spectatorContainer);
     });
-    
+
     headerContainer.appendChild(headerTitle);
     headerContainer.appendChild(closeButton);
     spectatorContainer.appendChild(headerContainer);
@@ -2316,7 +2325,7 @@ try {
     window.createHackingWindows = createHackingWindows;
     window.clearHackingElements = clearHackingElements;
     window.stopAlarm = stopAlarm;
-} catch (e) {}
+} catch (e) { }
 
 async function handleMuthurResponse(data) {
     if (!game.user.isGM) return;
@@ -2405,17 +2414,17 @@ Hooks.on('getSceneControlButtons', (controls) => {
     console.error("Hook getSceneControlButtons appelé");
 
     const toolDef = {
-            name: "muthur",
-            title: "MU/TH/UR 6000",
-            icon: "fas fa-robot",
-            visible: true,
-            onClick: () => {
+        name: "muthur",
+        title: "MU/TH/UR 6000",
+        icon: "fas fa-robot",
+        visible: true,
+        onClick: () => {
             console.log("MUTHUR | bouton cliqué");
-                toggleMuthurChat();
-            },
-            button: true,
-            toggle: false,
-            active: false
+            toggleMuthurChat();
+        },
+        button: true,
+        toggle: false,
+        active: false
     };
 
     const controlList = Array.isArray(controls)
@@ -2486,24 +2495,22 @@ Hooks.on('getSceneControlButtons', (controls) => {
 });
 
 Hooks.once('ready', async () => {
-    if (game.user.isGM) {
+    if (game.user.isGM && !game.settings.get('alien-mu-th-ur', 'welcomeMessageShown')) {
         ChatMessage.create({
+            speaker: { alias: "MU/TH/UR 6000" },
             content: `
-                <div style="text-align: center; padding: 10px;">
-                    <img src="modules/alien-mu-th-ur/pub/Shazprod.jpg" style="height: 100px; margin-bottom: 10px;">
-                    <p style="font-weight: bold; text-decoration: underline;">${game.i18n.localize("MUTHUR.DONATION.support")}</p>
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
-                        <a href="https://ko-fi.com/shazprod" target="_blank">
-                            <img src="modules/alien-mu-th-ur/pub/kofi.webp" style="height: 36px;">
-                        </a>
-                        <a href="https://fr.tipeee.com/shaz-prod" target="_blank">
-                            <img src="modules/alien-mu-th-ur/pub/tipeee.png" style="height: 36px;">
-                        </a>
-                    </div>
+                <div style="background: #0a0a0a; border: 1px solid #00ff00; padding: 10px; color: #00ff00; font-family: monospace; font-size: 14px; text-shadow: 0 0 5px #00ff00;">
+                    <h3 style="color: #ff9900; border-bottom: 1px solid #ff9900; margin-bottom: 5px;">[SISTEMA INICIALIZADO]</h3>
+                    <p>> Módulo MUTHUR carregado com sucesso.</p>
+                    <p>> Interface de Protocolos Personalizados <b>ONLINE</b>.</p>
+                    <p style="color: #ff9900; font-size: 12px; margin-top: 10px;"><i>Dica: Acesse as configurações de Módulos para cadastrar os comandos da IA.</i></p>
                 </div>
             `,
             whisper: [game.user.id]
         });
+
+        // Atualiza a memória para "true" para não mostrar nunca mais neste mundo
+        game.settings.set('alien-mu-th-ur', 'welcomeMessageShown', true);
     }
 
     currentMuthurSession = {
@@ -2526,14 +2533,14 @@ Hooks.once('ready', async () => {
                 currentMuthurSession.userName = null;
                 ui.notifications.info(game.i18n.localize("MUTHUR.sessionClosedByGM"));
             }
-            
+
             const spectatorContainer = document.getElementById('muthur-spectator-container');
             if (spectatorContainer && document.body.contains(spectatorContainer)) {
                 document.body.removeChild(spectatorContainer);
             }
         } else if (data.type === 'openSpectatorInterface' && !game.user.isGM && data.spectatorIds.includes(game.user.id)) {
             showSpectatorInterface(data.activeUserId, data.activeUserName, true);
-            
+
             game.socket.emit('module.alien-mu-th-ur', {
                 type: 'requestCurrentMessages',
                 targetUserId: data.activeUserId,
@@ -2550,7 +2557,7 @@ Hooks.once('ready', async () => {
             if (chatLog) {
                 const messages = chatLog.querySelectorAll('.message');
                 const messageData = [];
-                
+
                 messages.forEach(msg => {
                     messageData.push({
                         text: msg.textContent,
@@ -2558,7 +2565,7 @@ Hooks.once('ready', async () => {
                         messageType: Array.from(msg.classList).find(c => c !== 'message') || 'normal'
                     });
                 });
-                
+
                 game.socket.emit('module.alien-mu-th-ur', {
                     type: 'syncMessages',
                     messages: messageData,
@@ -2569,23 +2576,23 @@ Hooks.once('ready', async () => {
             const spectatorLog = document.querySelector('.muthur-spectator-log');
             if (spectatorLog) {
                 spectatorLog.innerHTML = '';
-                
+
                 data.messages.forEach(msg => {
                     displayMuthurMessage(spectatorLog, msg.text, '', msg.color, msg.messageType);
                 });
-                
+
                 spectatorLog.scrollTop = spectatorLog.scrollHeight;
             }
         } else if (data.type === 'requestSpectatorSelection' && game.user.isGM) {
             showGMSpectatorSelectionDialog(data.userId, data.userName);
         } else if (data.type === 'continueBootSequence' && !game.user.isGM) {
             if (data.targetUserId === game.user.id) {
-            try { showBootSequence(); } catch(e) { console.warn('Boot sequence error (player):', e); }
+                try { showBootSequence(); } catch (e) { console.warn('Boot sequence error (player):', e); }
             } else if (data.spectatorIds && data.spectatorIds.includes(game.user.id)) {
-                try { showBootSequence(true); } catch(e) { console.warn('Boot sequence error (spectator):', e); }
-                try { showSpectatorInterface(data.targetUserId || data.activeUserId, data.activeUserName || (currentMuthurSession && currentMuthurSession.userName) || ''); } catch(e) { console.warn('Spectator interface error:', e); }
+                try { showBootSequence(true); } catch (e) { console.warn('Boot sequence error (spectator):', e); }
+                try { showSpectatorInterface(data.targetUserId || data.activeUserId, data.activeUserName || (currentMuthurSession && currentMuthurSession.userName) || ''); } catch (e) { console.warn('Spectator interface error:', e); }
             }
-            
+
             if (data.targetUserId === game.user.id) {
                 const waitingContainer = document.getElementById('muthur-waiting-container');
                 if (waitingContainer) {
@@ -2642,8 +2649,8 @@ Hooks.once('ready', async () => {
             const ko = document.createElement('button'); ko.textContent = 'X'; ko.style.cssText = 'background:black; color:#ff0000; border:1px solid #ff0000; padding:4px 10px;';
             wrap.appendChild(ok); wrap.appendChild(ko);
             appendDialogToGM(wrap, 'bottom-right', 8);
-            ok.onclick = ()=>{ const m = Math.max(1, Math.min(60, parseInt(inp.value, 10) || 10)); try { game.socket.emit('module.alien-mu-th-ur', { type: 'cerberusApproval', targetUserId: data.fromId, approved: true, minutes: m }); } catch(_) {} wrap.remove(); };
-            ko.onclick = ()=>{ try { game.socket.emit('module.alien-mu-th-ur', { type: 'cerberusApproval', targetUserId: data.fromId, approved: false }); } catch(_) {} wrap.remove(); };
+            ok.onclick = () => { const m = Math.max(1, Math.min(60, parseInt(inp.value, 10) || 10)); try { game.socket.emit('module.alien-mu-th-ur', { type: 'cerberusApproval', targetUserId: data.fromId, approved: true, minutes: m }); } catch (_) { } wrap.remove(); };
+            ko.onclick = () => { try { game.socket.emit('module.alien-mu-th-ur', { type: 'cerberusApproval', targetUserId: data.fromId, approved: false }); } catch (_) { } wrap.remove(); };
         } else if (data.type === 'cerberusApproval' && data.targetUserId === game.user.id) {
             if (!data.approved) {
                 const chatLog = document.querySelector('.muthur-chat-log'); if (chatLog) displayMuthurMessage(chatLog, game.i18n.localize('MUTHUR.requestDenied') || 'Request denied.', '', '#00ff00', 'reply');
@@ -2654,28 +2661,28 @@ Hooks.once('ready', async () => {
             if (chatLog) {
                 const warningText = game.i18n.localize('MOTHER.SpecialOrders.Cerberus.confirmation');
                 const maybe = displayMuthurMessage(chatLog, warningText, '', '#ff0000', 'error');
-                try { updateSpectatorsWithMessage(warningText, `${game.i18n.localize('MUTHUR.motherName')}: `, '#ff0000', 'error'); } catch(_) {}
+                try { updateSpectatorsWithMessage(warningText, `${game.i18n.localize('MUTHUR.motherName')}: `, '#ff0000', 'error'); } catch (_) { }
                 const injectButtons = () => {
                     const ui = document.createElement('div');
                     ui.style.cssText = 'display:flex; gap:8px; justify-content:center; margin:10px 0;';
                     const yesBtn = document.createElement('button'); yesBtn.textContent = game.i18n.localize('MOTHER.SpecialOrders.Cerberus.confirm'); yesBtn.style.cssText = 'background:black; color:#ff3333; border:1px solid #ff3333; padding:4px 10px;';
                     const noBtn = document.createElement('button'); noBtn.textContent = game.i18n.localize('MOTHER.SpecialOrders.Cerberus.cancel'); noBtn.style.cssText = 'background:black; color:#33ff33; border:1px solid #33ff33; padding:4px 10px;';
                     ui.appendChild(yesBtn); ui.appendChild(noBtn); chatLog.appendChild(ui);
-                    yesBtn.onclick = async ()=>{
+                    yesBtn.onclick = async () => {
                         ui.remove();
-                        try { await displayMuthurMessage(chatLog, game.i18n.localize('MOTHER.CerberusConfirmed'), '', '#ff0000', 'error'); } catch(_) {}
+                        try { await displayMuthurMessage(chatLog, game.i18n.localize('MOTHER.CerberusConfirmed'), '', '#ff0000', 'error'); } catch (_) { }
                         try {
                             createCerberusWindow();
                             startCerberusCountdown(window.__cerberusDurationMinutes || 10);
                             game.socket.emit('module.alien-mu-th-ur', { type: 'showCerberusGlobal', fromId: game.user.id, fromName: game.user.name, minutes: window.__cerberusDurationMinutes || 10, startTime: Date.now() });
-                        } catch(_) {}
+                        } catch (_) { }
                     };
-                    noBtn.onclick = async ()=>{
+                    noBtn.onclick = async () => {
                         ui.remove();
-                        try { await displayMuthurMessage(chatLog, game.i18n.localize('MOTHER.CerberusCancelled'), '', '#00ff00', 'reply'); } catch(_) {}
+                        try { await displayMuthurMessage(chatLog, game.i18n.localize('MOTHER.CerberusCancelled'), '', '#00ff00', 'reply'); } catch (_) { }
                     };
                 };
-                if (maybe && typeof maybe.then === 'function') { maybe.then(()=> setTimeout(injectButtons, 10)); }
+                if (maybe && typeof maybe.then === 'function') { maybe.then(() => setTimeout(injectButtons, 10)); }
                 else { setTimeout(injectButtons, 0); }
             }
         } else if (data.type === 'showCerberusGlobal') {
@@ -2684,7 +2691,7 @@ Hooks.once('ready', async () => {
                 createCerberusWindow();
                 startCerberusCountdown(window.__cerberusDurationMinutes);
             }
-        } else if (data.type === 'stopCerberus') { 
+        } else if (data.type === 'stopCerberus') {
             if (cerberusCountdownInterval) {
                 clearInterval(cerberusCountdownInterval);
             }
@@ -2695,7 +2702,7 @@ Hooks.once('ready', async () => {
                 });
             }, 5000);
 
-        } else if (data.type === 'closeMuthurChats') { 
+        } else if (data.type === 'closeMuthurChats') {
             const allMuthurChats = document.querySelectorAll('#muthur-chat-container, #gm-muthur-container');
             allMuthurChats.forEach(chat => {
                 chat.style.animation = 'fadeOut 1s ease-out';
@@ -2769,10 +2776,10 @@ Hooks.once('ready', async () => {
             const select = document.createElement('select');
             select.style.cssText = 'width:100%; background:black; color:#ff9900; border:1px solid #ff9900; margin-bottom:6px;';
             const options = [
-                {k:'normal'}, {k:'anomalyDetected'}, {k:'systemOffline'}, {k:'degradedPerformance'}, {k:'fireDetected'},
-                {k:'quarantine'}, {k:'lockdown'}, {k:'intrusion'}, {k:'networkIssue'}, {k:'custom'}
+                { k: 'normal' }, { k: 'anomalyDetected' }, { k: 'systemOffline' }, { k: 'degradedPerformance' }, { k: 'fireDetected' },
+                { k: 'quarantine' }, { k: 'lockdown' }, { k: 'intrusion' }, { k: 'networkIssue' }, { k: 'custom' }
             ];
-            options.forEach(o=>{
+            options.forEach(o => {
                 const opt = document.createElement('option');
                 opt.value = o.k;
                 opt.textContent = game.i18n.localize(`MUTHUR.STATUS.presets.${o.k}`);
@@ -2783,7 +2790,7 @@ Hooks.once('ready', async () => {
             const btn = document.createElement('button');
             btn.textContent = 'OK';
             btn.style.cssText = 'background:black; border:1px solid #ff9900; color:#ff9900; padding:4px 10px; cursor:pointer;';
-            btn.addEventListener('click', ()=>{
+            btn.addEventListener('click', () => {
                 const key = select.value;
                 const presets = {
                     normal: 'MUTHUR.STATUS.text.normal',
@@ -2811,7 +2818,7 @@ Hooks.once('ready', async () => {
             const cancel = document.createElement('button');
             cancel.textContent = 'X';
             cancel.style.cssText = 'float:right; background:black; border:1px solid #ff9900; color:#ff9900; padding:4px 8px; margin-left:6px; cursor:pointer;';
-            cancel.addEventListener('click', ()=>picker.remove());
+            cancel.addEventListener('click', () => picker.remove());
             picker.appendChild(cancel);
             appendDialogToGM(picker, 'bottom-right', 8);
 
@@ -2834,7 +2841,7 @@ Hooks.once('ready', async () => {
                     } catch (e) { /* noop */ }
                 };
                 if (maybePromise && typeof maybePromise.then === 'function') {
-                    maybePromise.then((div)=>{ handleGlitch(div); if (data.statusKey === 'degradedPerformance') window.MUTHUR.applyScreenGlitch(1200); broadcastToSpectators(); });
+                    maybePromise.then((div) => { handleGlitch(div); if (data.statusKey === 'degradedPerformance') window.MUTHUR.applyScreenGlitch(1200); broadcastToSpectators(); });
                 } else {
                     handleGlitch(maybePromise);
                     if (data.statusKey === 'degradedPerformance') window.MUTHUR.applyScreenGlitch(1200);
@@ -2845,7 +2852,7 @@ Hooks.once('ready', async () => {
             const doors = data.filteredPrefix ? getDoorsByPrefix(data.filteredPrefix) : getSortedDoorDocuments();
             const idx = Math.max(0, Math.min(doors.length - 1, data.index || 0));
             const target = doors[idx];
-            const pref = getDoorPreferredLabel(target) || `Door #${idx+1}`;
+            const pref = getDoorPreferredLabel(target) || `Door #${idx + 1}`;
             const approvText = data.action === 'LOCK'
                 ? game.i18n.format('MUTHUR.approve.lockDoor', { label: pref })
                 : game.i18n.format('MUTHUR.approve.unlockDoor', { label: pref });
@@ -2879,12 +2886,12 @@ Hooks.once('ready', async () => {
                 const msg = game.i18n.localize('MUTHUR.alarmActivated');
                 notifyBackToRequester(data.fromId, msg, '#ff0000');
                 broadcastToSpectators(msg, '#ff0000');
-                try { triggerAlarm(true); } catch(e) { console.warn('[MUTHUR][ALARM] local trigger error:', e); }
-                try { console.log('[MUTHUR][ALARM] emit alarmControl:on'); game.socket.emit('module.alien-mu-th-ur', { type: 'alarmControl', action: 'on' }); } catch(e) { console.warn('[MUTHUR][ALARM] emit on error:', e); }
+                try { triggerAlarm(true); } catch (e) { console.warn('[MUTHUR][ALARM] local trigger error:', e); }
+                try { console.log('[MUTHUR][ALARM] emit alarmControl:on'); game.socket.emit('module.alien-mu-th-ur', { type: 'alarmControl', action: 'on' }); } catch (e) { console.warn('[MUTHUR][ALARM] emit on error:', e); }
                 try {
                     const headerStopBtn = document.getElementById('gm-muthur-stop-alarm-btn');
                     if (headerStopBtn) headerStopBtn.style.display = 'flex';
-                } catch(_) {}
+                } catch (_) { }
             });
         } else if (data.type === 'hackDecisionRequest' && game.user.isGM) {
             const wrap = document.createElement('div');
@@ -2896,12 +2903,12 @@ Hooks.once('ready', async () => {
             const ko = document.createElement('button'); ko.textContent = 'ÉCHEC'; ko.style.cssText = 'background:black; color:#ff0000; border:1px solid #ff0000; padding:4px 10px;';
             wrap.appendChild(title); wrap.appendChild(ok); wrap.appendChild(ko);
             appendDialogToGM(wrap, 'bottom-right', 8);
-            const decide = (success)=>{
+            const decide = (success) => {
                 wrap.remove();
                 game.socket.emit('module.alien-mu-th-ur', { type: 'hackDecision', targetUserId: data.fromId, success });
             };
-            ok.onclick = ()=> decide(true);
-            ko.onclick = ()=> decide(false);
+            ok.onclick = () => decide(true);
+            ko.onclick = () => decide(false);
         } else if (data.type === 'gasRequest' && game.user.isGM) {
             const tokens = Array.from(canvas?.tokens?.placeables || []);
             const dialog = document.createElement('div');
@@ -2909,9 +2916,9 @@ Hooks.once('ready', async () => {
             const title = document.createElement('div'); title.textContent = game.i18n.localize('MUTHUR.approve.gasTargets'); title.style.cssText = 'margin-bottom:6px; font-weight:bold;'; dialog.appendChild(title);
             const list = document.createElement('div'); list.style.maxHeight = '260px'; list.style.overflow = 'auto'; list.style.marginBottom = '8px';
             const selections = new Map();
-            tokens.forEach((t)=>{
+            tokens.forEach((t) => {
                 const row = document.createElement('label'); row.style.cssText = 'display:flex; align-items:center; gap:8px; margin:3px 0;';
-                const cb = document.createElement('input'); cb.type = 'checkbox'; cb.onchange = ()=> selections.set(t.id, cb.checked);
+                const cb = document.createElement('input'); cb.type = 'checkbox'; cb.onchange = () => selections.set(t.id, cb.checked);
                 const name = document.createElement('span'); name.textContent = t.name || '—';
                 row.appendChild(cb); row.appendChild(name); list.appendChild(row);
             });
@@ -2919,16 +2926,16 @@ Hooks.once('ready', async () => {
             const actions = document.createElement('div'); actions.style.cssText = 'display:flex; gap:8px; justify-content:flex-end;';
             const confirm = document.createElement('button'); confirm.textContent = 'OK'; confirm.style.cssText = 'background:black; border:1px solid #00ff00; color:#00ff00; padding:2px 8px;';
             const cancel = document.createElement('button'); cancel.textContent = 'X'; cancel.style.cssText = 'background:black; border:1px solid #ff0000; color:#ff0000; padding:2px 8px;';
-            confirm.onclick = async ()=>{
+            confirm.onclick = async () => {
                 const picked = tokens.filter(t => selections.get(t.id));
                 const affected = await applyPoisonToTokens(picked);
-                const label = picked.map(t=>t.name).filter(Boolean).join(', ');
-                const msg = `${affected} ${game.i18n.localize('MUTHUR.entitiesAffected') || 'entities affected'} (poisoned).${label ? ' ['+label+']' : ''}`;
+                const label = picked.map(t => t.name).filter(Boolean).join(', ');
+                const msg = `${affected} ${game.i18n.localize('MUTHUR.entitiesAffected') || 'entities affected'} (poisoned).${label ? ' [' + label + ']' : ''}`;
                 notifyBackToRequester(data.fromId, msg, '#00ff00');
                 broadcastToSpectators(msg, '#00ff00');
                 dialog.remove();
             };
-            cancel.onclick = ()=> dialog.remove();
+            cancel.onclick = () => dialog.remove();
             actions.appendChild(confirm); actions.appendChild(cancel); dialog.appendChild(actions);
             appendDialogToGM(dialog, 'bottom-right', 8);
         } else if (data.type === 'cryoRequest' && game.user.isGM) {
@@ -2936,15 +2943,15 @@ Hooks.once('ready', async () => {
             const dialog = document.createElement('div');
             dialog.style.cssText = 'background:black; border:2px solid #ff9900; color:#ff9900; padding:10px; z-index:100004; font-family:monospace; min-width:260px;';
             const title = document.createElement('div');
-            title.textContent = game.i18n.localize('MUTHUR.approve.cryoPod').replace('{target}','');
+            title.textContent = game.i18n.localize('MUTHUR.approve.cryoPod').replace('{target}', '');
             title.style.cssText = 'margin-bottom:6px; font-weight:bold;';
             dialog.appendChild(title);
             const list = document.createElement('div'); list.style.maxHeight = '240px'; list.style.overflow = 'auto';
-            tokens.forEach((t)=>{
+            tokens.forEach((t) => {
                 const btn = document.createElement('button');
                 btn.textContent = t.name || '—';
                 btn.style.cssText = 'display:block; width:100%; text-align:left; background:black; border:1px solid #ff9900; color:#ff9900; margin:3px 0; padding:4px 8px;';
-                btn.onclick = async ()=>{
+                btn.onclick = async () => {
                     dialog.remove();
                     const ok = await applyCryoEffect(t.name || '');
                     const msg = ok ? game.i18n.format('MUTHUR.cryoApplied', { name: ok }) : game.i18n.localize('MUTHUR.cryoNoMatch');
@@ -2957,7 +2964,7 @@ Hooks.once('ready', async () => {
             const cancel = document.createElement('button');
             cancel.textContent = 'X';
             cancel.style.cssText = 'margin-top:6px; background:black; border:1px solid #ff0000; color:#ff0000; padding:2px 8px; float:right;';
-            cancel.onclick = ()=> dialog.remove();
+            cancel.onclick = () => dialog.remove();
             dialog.appendChild(cancel);
             appendDialogToGM(dialog, 'bottom-right', 8);
         } else if (data.type === 'cryoReleaseRequest' && game.user.isGM) {
@@ -2968,9 +2975,9 @@ Hooks.once('ready', async () => {
                 const title = document.createElement('div'); title.textContent = 'CRYO RELEASE'; title.style.cssText = 'margin-bottom:6px; font-weight:bold;'; dialog.appendChild(title);
                 const list = document.createElement('div'); list.style.maxHeight = '260px'; list.style.overflow = 'auto'; list.style.marginBottom = '8px';
                 const selections = new Map();
-                tokens.forEach((t)=>{
+                tokens.forEach((t) => {
                     const row = document.createElement('label'); row.style.cssText = 'display:flex; align-items:center; gap:8px; margin:3px 0;';
-                    const cb = document.createElement('input'); cb.type = 'checkbox'; cb.onchange = ()=> selections.set(t.id, cb.checked);
+                    const cb = document.createElement('input'); cb.type = 'checkbox'; cb.onchange = () => selections.set(t.id, cb.checked);
                     const name = document.createElement('span'); name.textContent = t.name || '—';
                     row.appendChild(cb); row.appendChild(name); list.appendChild(row);
                 });
@@ -2978,43 +2985,43 @@ Hooks.once('ready', async () => {
                 const actions = document.createElement('div'); actions.style.cssText = 'display:flex; gap:8px; justify-content:flex-end;';
                 const confirm = document.createElement('button'); confirm.textContent = 'OK'; confirm.style.cssText = 'background:black; border:1px solid #00ff00; color:#00ff00; padding:2px 8px;';
                 const cancel = document.createElement('button'); cancel.textContent = 'X'; cancel.style.cssText = 'background:black; border:1px solid #ff0000; color:#ff0000; padding:2px 8px;';
-                confirm.onclick = async ()=>{
+                confirm.onclick = async () => {
                     const picked = tokens.filter(t => selections.get(t.id));
-                    const released = await releaseCryoForTokens(picked.length ? picked : tokens.filter(t=>false));
-                    const label = picked.length ? picked.map(t=>t.name).join(', ') : 'NONE';
+                    const released = await releaseCryoForTokens(picked.length ? picked : tokens.filter(t => false));
+                    const label = picked.length ? picked.map(t => t.name).join(', ') : 'NONE';
                     const msg = released > 0 ? `CRYO RELEASED: ${label}.` : 'NO CRYO TO RELEASE.';
                     notifyBackToRequester(data.fromId, msg, '#00ff00');
                     broadcastToSpectators(msg, '#00ff00');
                     dialog.remove();
                 };
-                cancel.onclick = ()=> dialog.remove();
+                cancel.onclick = () => dialog.remove();
                 actions.appendChild(confirm); actions.appendChild(cancel); dialog.appendChild(actions);
                 appendDialogToGM(dialog, 'bottom-right', 8);
             })();
         } else if (data.type === 'alarmControl') {
             console.log('[MUTHUR][ALARM] recv alarmControl:', data);
             if (data.action === 'on') {
-                try { triggerAlarm(true); } catch(e) { console.warn('[MUTHUR][ALARM] trigger on error:', e); }
+                try { triggerAlarm(true); } catch (e) { console.warn('[MUTHUR][ALARM] trigger on error:', e); }
             } else {
-                try { stopAlarm(); } catch(e) { console.warn('[MUTHUR][ALARM] trigger off error:', e); }
+                try { stopAlarm(); } catch (e) { console.warn('[MUTHUR][ALARM] trigger off error:', e); }
                 try {
                     const msg = game.i18n.localize('MUTHUR.alarmDeactivated') || 'ALARME DÉSACTIVÉE';
                     const chatLog = document.querySelector('.muthur-chat-log');
                     if (chatLog) { displayMuthurMessage(chatLog, msg, '', '#00ff00', 'reply'); }
                     updateSpectatorsWithMessage(msg, `${game.i18n.localize('MUTHUR.motherName')}: `, '#00ff00', 'reply');
-                } catch(_) {}
+                } catch (_) { }
             }
         } else if (data.type === 'spectatorAlarm' && !game.user.isGM) {
             try {
                 if (data.action === 'on') {
-                    (window.muthurSpectatorAlarmOn || (()=>{}))();
+                    (window.muthurSpectatorAlarmOn || (() => { }))();
                 } else {
-                    (window.muthurSpectatorAlarmOff || (()=>{}))();
+                    (window.muthurSpectatorAlarmOff || (() => { }))();
                 }
-            } catch(_) {}
+            } catch (_) { }
         }
     });
-    try { window.__muthurMainSocketBound = true; } catch(e) {}
+    try { window.__muthurMainSocketBound = true; } catch (e) { }
 
     console.log(game.i18n.localize("MUTHUR.systemReady"));
 });
@@ -3088,7 +3095,7 @@ let lastComSoundAt = 0;
 function playComSoundThrottled(minIntervalMs = 200) {
     const now = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
     if (now - lastComSoundAt < minIntervalMs) {
-        try { console.log('MUTHUR Audio | playComSound throttled'); } catch(e) {}
+        try { console.log('MUTHUR Audio | playComSound throttled'); } catch (e) { }
         return Promise.resolve();
     }
     lastComSoundAt = now;
@@ -3103,12 +3110,12 @@ function playTypeSound() {
 
         const sound = new Audio(soundPath);
         sound.volume = volume;
-        sound.onplay = () => { try { console.log('MUTHUR Audio | playTypeSound onplay', { soundPath, volume }); } catch(e) {} };
-        sound.onended = () => { try { console.log('MUTHUR Audio | playTypeSound ended'); } catch(e) {} };
-        sound.onerror = (e) => { try { console.error('MUTHUR Audio | playTypeSound error', { soundPath, error: e }); } catch(_) {} };
+        sound.onplay = () => { try { console.log('MUTHUR Audio | playTypeSound onplay', { soundPath, volume }); } catch (e) { } };
+        sound.onended = () => { try { console.log('MUTHUR Audio | playTypeSound ended'); } catch (e) { } };
+        sound.onerror = (e) => { try { console.error('MUTHUR Audio | playTypeSound error', { soundPath, error: e }); } catch (_) { } };
 
         const p = sound.play();
-        try { console.log('MUTHUR Audio | playTypeSound invoked', { soundPath, volume }); } catch(e) {}
+        try { console.log('MUTHUR Audio | playTypeSound invoked', { soundPath, volume }); } catch (e) { }
         return p;
 
     } catch (error) {
@@ -3121,7 +3128,7 @@ function isTypewriterEnabled() {
         return game.settings.get('alien-mu-th-ur', 'enableTypewriter');
     } catch (error) {
         console.warn("Erreur lors de la lecture des paramètres typewriter:", error);
-        return true; 
+        return true;
     }
 }
 
@@ -3131,7 +3138,7 @@ async function playSoundWithHelper(soundPath, volume, loop = false, label = 'gen
             const result = await AudioHelper.play({ src: soundPath, volume, autoplay: true, loop }, true);
             return result;
         }
-    } catch (e) {}
+    } catch (e) { }
     const sound = new Audio(soundPath);
     sound.volume = volume;
     sound.loop = !!loop;
@@ -3188,17 +3195,17 @@ async function playReplySound() {
             }, 900);
             return true;
         } else {
-        currentReplySound = new Audio(soundPath);
-        currentReplySound.volume = volume;
-        currentReplySound.onended = async () => {
-            if (shouldContinueReplySound) {
-                await playReplySound(); 
+            currentReplySound = new Audio(soundPath);
+            currentReplySound.volume = volume;
+            currentReplySound.onended = async () => {
+                if (shouldContinueReplySound) {
+                    await playReplySound();
                 } else {
                     /* no-op */
-            }
-        };
+                }
+            };
             currentReplySound.onerror = () => { currentReplySound = null; };
-        return currentReplySound.play();
+            return currentReplySound.play();
         }
 
     } catch (error) {
@@ -3210,7 +3217,7 @@ async function playReplySound() {
 function stopReplySound() {
     shouldContinueReplySound = false;
     if (currentReplySound) {
-        try { console.log('MUTHUR Audio | stopReplySound invoked'); } catch(e) {}
+        try { console.log('MUTHUR Audio | stopReplySound invoked'); } catch (e) { }
         currentReplySound.pause();
         currentReplySound.currentTime = 0;
         currentReplySound = null;
@@ -3228,7 +3235,7 @@ async function displayHackMessage(chatLog, message, color, type, isPassword = fa
     if (isPassword) {
         messageDiv.textContent = message;
         if (!soundGloballyMuted && game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
-                playComSoundThrottled(); 
+            playComSoundThrottled();
         }
         return Promise.resolve();
     } else {
@@ -3237,7 +3244,7 @@ async function displayHackMessage(chatLog, message, color, type, isPassword = fa
             displayedText += char;
             messageDiv.textContent = displayedText;
             if (!soundGloballyMuted && game.settings.get('alien-mu-th-ur', 'enableTypingSounds') && char === ' ') {
-                playComSoundThrottled(); 
+                playComSoundThrottled();
             }
             await new Promise(resolve => setTimeout(resolve, 20));
         }
@@ -3246,7 +3253,7 @@ async function displayHackMessage(chatLog, message, color, type, isPassword = fa
 }
 
 async function simulateHackingAttempt(chatLog) {
-    try { console.log('MUTHUR | simulateHackingAttempt déclenché (joueur=', !game.user.isGM, ', gm=', game.user.isGM, ')'); } catch(e) {}
+    try { console.log('MUTHUR | simulateHackingAttempt déclenché (joueur=', !game.user.isGM, ', gm=', game.user.isGM, ')'); } catch (e) { }
 
     if (hackSuccessful) {
         await displayMuthurMessage(
@@ -3260,12 +3267,12 @@ async function simulateHackingAttempt(chatLog) {
     }
 
     const container = document.getElementById('muthur-chat-container');
-    try { console.log('MUTHUR | container chat trouvé côté initiateur =', !!container); } catch(e) {}
+    try { console.log('MUTHUR | container chat trouvé côté initiateur =', !!container); } catch (e) { }
     container.classList.add('hacking-active');
 
     const typingSoundEnabled = game.settings.get('alien-mu-th-ur', 'enableTypingSounds');
     const originalTypeSound = playTypeSound;
-    playTypeSound = () => { }; 
+    playTypeSound = () => { };
 
     let isSuccess;
     let roll;
@@ -3282,7 +3289,7 @@ async function simulateHackingAttempt(chatLog) {
                 };
                 game.socket.on('module.alien-mu-th-ur', handler);
             });
-        } catch(_) {}
+        } catch (_) { }
     } else {
         roll = await new Roll('1d6').evaluate({ async: true });
         isSuccess = roll.total % 2 === 0;
@@ -3290,10 +3297,10 @@ async function simulateHackingAttempt(chatLog) {
 
     const generatePassword = () => {
         const thematicPasswords = [
-            'FACEHUGGER', 'XENOMORPH', 'RIPLEY', 'NOSTROMO', 'WEYLAND', 'SULACO', 'LV426', 
-            'CHESTBURSTER', 'HADLEYHOPE', 'BISHOP', 'ASH', 'BURKE', 'NARCISSUS', 'SEVASTOPOL', 
-            'TORRENS', 'ANESIDORA', 'WARRANT0FFICER', 'JONESY', 'PROMETHEUS', 'DERELICT', 
-            'SPACEJOCKEY', 'UNITYPREFAB', 'GATEWAY', 'COLONIAL', 'MARINES', 'POWERLOADER', 
+            'FACEHUGGER', 'XENOMORPH', 'RIPLEY', 'NOSTROMO', 'WEYLAND', 'SULACO', 'LV426',
+            'CHESTBURSTER', 'HADLEYHOPE', 'BISHOP', 'ASH', 'BURKE', 'NARCISSUS', 'SEVASTOPOL',
+            'TORRENS', 'ANESIDORA', 'WARRANT0FFICER', 'JONESY', 'PROMETHEUS', 'DERELICT',
+            'SPACEJOCKEY', 'UNITYPREFAB', 'GATEWAY', 'COLONIAL', 'MARINES', 'POWERLOADER',
             'SMARTGUN', 'M41APULSE', 'USCM', 'BUILDBET7ER'
         ];
 
@@ -3376,14 +3383,14 @@ async function simulateHackingAttempt(chatLog) {
         type: 'reply'
     }));
 
-    try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackingAttempt', fromId: game.user.id }); console.log('MUTHUR | hackingAttempt émis aux spectateurs'); } catch(e) { console.warn('MUTHUR | emission hackingAttempt échouée', e); }
+    try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackingAttempt', fromId: game.user.id }); console.log('MUTHUR | hackingAttempt émis aux spectateurs'); } catch (e) { console.warn('MUTHUR | emission hackingAttempt échouée', e); }
     const stopHackingWindows = createHackingWindows();
-    try { console.log('MUTHUR | createHackingWindows() appelée côté initiateur'); } catch(e) {}
+    try { console.log('MUTHUR | createHackingWindows() appelée côté initiateur'); } catch (e) { }
     try {
         for (let i = 0; i < window.hackingSequences.length; i++) {
             const line = window.hackingSequences[i];
             await displayHackMessage(chatLog, line, '#00ff00', 'reply', false);
-            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: line, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch(e) {}
+            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: line, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
             chatLog.scrollTop = chatLog.scrollHeight;
 
             if (!game.user.isGM) {
@@ -3398,7 +3405,7 @@ async function simulateHackingAttempt(chatLog) {
         for (let i = 0; i < passwordAttempts.length; i++) {
             const attempt = passwordAttempts[i];
             await displayHackMessage(chatLog, attempt.text, attempt.color, attempt.type, true);
-            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: attempt.text, color: attempt.color, msgType: attempt.type, isPassword: true }); } catch(e) {}
+            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: attempt.text, color: attempt.color, msgType: attempt.type, isPassword: true }); } catch (e) { }
             chatLog.scrollTop = chatLog.scrollHeight;
 
             if (Math.random() < (i / passwordAttempts.length) * 0.5) {
@@ -3418,7 +3425,7 @@ async function simulateHackingAttempt(chatLog) {
         for (let i = 0; i < window.postPasswordSequences.length; i++) {
             const line = window.postPasswordSequences[i];
             await displayHackMessage(chatLog, line, '#00ff00', 'reply', false);
-            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: line, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch(e) {}
+            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: line, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
 
             if (Math.random() < 0.6) {
                 await glitchEffect();
@@ -3440,11 +3447,11 @@ async function simulateHackingAttempt(chatLog) {
             await new Promise(resolve => setTimeout(resolve, 100));
             const txt = game.i18n.localize(alertSequences[i].text);
             await displayHackMessage(chatLog, txt, alertSequences[i].color, alertSequences[i].type, false);
-            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: txt, color: alertSequences[i].color, msgType: alertSequences[i].type, isPassword: false }); } catch(e) {}
+            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: txt, color: alertSequences[i].color, msgType: alertSequences[i].type, isPassword: false }); } catch (e) { }
             chatLog.scrollTop = chatLog.scrollHeight;
 
             if (alertSequences[i].text === 'MOTHER.AdminPrivileges') {
-                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStopGlitch' }); } catch(e) {}
+                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStopGlitch' }); } catch (e) { }
             }
 
             if (!game.user.isGM) {
@@ -3457,7 +3464,7 @@ async function simulateHackingAttempt(chatLog) {
 
             if (Math.random() > 0.7) {
                 await glitchEffect();
-                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackGlitch' }); } catch(e) {}
+                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackGlitch' }); } catch (e) { }
                 if (game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
                     playErrorSound();
                 }
@@ -3473,7 +3480,7 @@ async function simulateHackingAttempt(chatLog) {
                 overlay.style.opacity = '0.8';
                 overlay.style.backgroundColor = 'rgba(255,0,0,0.2)';
                 await glitchEffect();
-                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackGlitch' }); } catch(e) {}
+                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackGlitch' }); } catch (e) { }
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
 
@@ -3482,7 +3489,7 @@ async function simulateHackingAttempt(chatLog) {
 
             for (let i = 0; i < 5; i++) {
                 await glitchEffect();
-                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackGlitch' }); } catch(e) {}
+                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackGlitch' }); } catch (e) { }
                 await new Promise(resolve => setTimeout(resolve, 200));
             }
 
@@ -3494,7 +3501,7 @@ async function simulateHackingAttempt(chatLog) {
                     fromName: game.user.name
                 });
             }
-            try { stopHackingWindows(); } catch(e) {}
+            try { stopHackingWindows(); } catch (e) { }
 
             await new Promise(resolve => setTimeout(resolve, 2000));
             chatLog.innerHTML = '';
@@ -3507,13 +3514,13 @@ async function simulateHackingAttempt(chatLog) {
                 'normal',
                 false
             );
-            
+
             syncCommandResult('HACK', {
                 text: game.i18n.localize('MOTHER.WelcomeAdminFull'),
                 color: '#00ff00',
                 type: 'normal'
             });
-            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: game.i18n.localize('MOTHER.WelcomeAdminFull'), color: '#00ff00', msgType: 'normal', isPassword: false }); } catch(e) {}
+            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: game.i18n.localize('MOTHER.WelcomeAdminFull'), color: '#00ff00', msgType: 'normal', isPassword: false }); } catch (e) { }
         }
 
     } finally {
@@ -3573,9 +3580,9 @@ async function simulateHackingAttempt(chatLog) {
         if (typeof stopHackingWindows === 'function') {
             stopHackingWindows();
         }
-        
+
         clearHackingElements();
-        
+
         setTimeout(() => {
             const muthurChat = document.getElementById('muthur-chat-container');
             if (muthurChat) {
@@ -3599,10 +3606,10 @@ async function simulateHackingAttempt(chatLog) {
 function clearHackingElements() {
     const hackingWindows = document.querySelectorAll('.hacking-window');
     hackingWindows.forEach(window => window.remove());
-    
+
     const hackingStyles = document.querySelectorAll('style[data-hacking]');
     hackingStyles.forEach(style => style.remove());
-    
+
     const overlays = document.querySelectorAll('.matrix-code, #muthur-glitch-overlay');
     overlays.forEach(overlay => overlay.remove());
 }
@@ -3612,9 +3619,9 @@ function getSortedDoorDocuments() {
     if (!scene) return [];
     const walls = scene.walls?.contents || scene.walls || [];
     const doorDocs = walls.filter(w => (w.document?.door ?? w.door ?? 0) > 0);
-    const sorted = doorDocs.slice().sort((a,b)=>{
-        const ac = (a.document?.c || a.c || [0,0]);
-        const bc = (b.document?.c || b.c || [0,0]);
+    const sorted = doorDocs.slice().sort((a, b) => {
+        const ac = (a.document?.c || a.c || [0, 0]);
+        const bc = (b.document?.c || b.c || [0, 0]);
         const ax = ac[0], ay = ac[1];
         const bx = bc[0], by = bc[1];
         return ax - bx || ay - by;
@@ -3644,13 +3651,13 @@ function getDoorsByPrefix(prefix) {
 async function applyDoorAction(doorDoc, action) {
     if (!doorDoc) return;
     const doc = doorDoc.document || doorDoc;
-    const current = doc.ds ?? doc.document?.ds; 
+    const current = doc.ds ?? doc.document?.ds;
     let targetState = current;
     if (action === 'LOCK') targetState = 2;
-    if (action === 'UNLOCK') targetState = 1; 
+    if (action === 'UNLOCK') targetState = 1;
     try {
         await doc.update?.({ ds: targetState }) || await doc.update({ ds: targetState });
-    } catch(e) {}
+    } catch (e) { }
 }
 
 let savedLightStates = null;
@@ -3659,7 +3666,7 @@ async function applyLightsAction(action) {
     if (!scene) return 'No active scene.';
     const lights = scene.lights?.contents || scene.lights || [];
     if (action === 'SHUTDOWN') {
-        savedLightStates = lights.map(l=>({ id: (l.id || l.document?.id), bright: l.document?.bright ?? l.bright, dim: l.document?.dim ?? l.dim, hidden: l.document?.hidden ?? l.hidden, alpha: l.document?.alpha ?? l.alpha }));
+        savedLightStates = lights.map(l => ({ id: (l.id || l.document?.id), bright: l.document?.bright ?? l.bright, dim: l.document?.dim ?? l.dim, hidden: l.document?.hidden ?? l.hidden, alpha: l.document?.alpha ?? l.alpha }));
         for (const l of lights) {
             const doc = l.document || l;
             await doc.update({ hidden: true, alpha: 0 });
@@ -3668,7 +3675,7 @@ async function applyLightsAction(action) {
     }
     if (action === 'DIM') {
         if (!savedLightStates) {
-            savedLightStates = lights.map(l=>({ id: (l.id || l.document?.id), bright: l.document?.bright ?? l.bright, dim: l.document?.dim ?? l.dim, hidden: l.document?.hidden ?? l.hidden, alpha: l.document?.alpha ?? l.alpha }));
+            savedLightStates = lights.map(l => ({ id: (l.id || l.document?.id), bright: l.document?.bright ?? l.bright, dim: l.document?.dim ?? l.dim, hidden: l.document?.hidden ?? l.hidden, alpha: l.document?.alpha ?? l.alpha }));
         }
         for (const l of lights) {
             const doc = l.document || l;
@@ -3680,7 +3687,7 @@ async function applyLightsAction(action) {
     }
     if (action === 'RESTORE') {
         if (!savedLightStates) return game.i18n.localize('MUTHUR.noSavedLights') || 'No saved lights state to restore.';
-        const byId = new Map(savedLightStates.map(s=>[s.id, s]));
+        const byId = new Map(savedLightStates.map(s => [s.id, s]));
         for (const l of lights) {
             const doc = l.document || l;
             const s = byId.get(doc.id);
@@ -3711,8 +3718,8 @@ function showApprovalDialog(text, cb) {
     const ko = document.createElement('button'); ko.textContent = 'X'; ko.style.cssText = 'background:black; color:#ff0000; border:1px solid #ff0000; padding:4px 10px;';
     wrap.appendChild(ok); wrap.appendChild(ko);
     appendDialogToGM(wrap, 'bottom-right', 8);
-    ok.onclick = ()=>{ wrap.remove(); try{ cb(true); }catch(e){} };
-    ko.onclick = ()=>{ wrap.remove(); try{ cb(false); }catch(e){} };
+    ok.onclick = () => { wrap.remove(); try { cb(true); } catch (e) { } };
+    ko.onclick = () => { wrap.remove(); try { cb(false); } catch (e) { } };
 }
 
 function notifyBackToRequester(userId, text, color) {
@@ -3721,7 +3728,7 @@ function notifyBackToRequester(userId, text, color) {
 }
 
 function broadcastToSpectators(text, color) {
-    try { const motherName = game.i18n.localize('MUTHUR.motherName'); updateSpectatorsWithMessage(text, `${motherName}: `, color || '#00ff00', 'reply'); } catch(e) {}
+    try { const motherName = game.i18n.localize('MUTHUR.motherName'); updateSpectatorsWithMessage(text, `${motherName}: `, color || '#00ff00', 'reply'); } catch (e) { }
 }
 
 function appendDialogToGM(element, position = 'bottom-right', margin = 10) {
@@ -3750,7 +3757,7 @@ function appendDialogToGM(element, position = 'bottom-right', margin = 10) {
             container.appendChild(element);
             return true;
         }
-    } catch(_) {}
+    } catch (_) { }
     element.style.position = 'fixed';
     element.style.right = '20px';
     element.style.bottom = '150px';
@@ -3760,7 +3767,7 @@ function appendDialogToGM(element, position = 'bottom-right', margin = 10) {
 
 function buildPostHackHelpList() {
     const lines = [];
-    const g = (k)=>{ try { return game.settings.get('alien-mu-th-ur', k); } catch(e) { return false; } };
+    const g = (k) => { try { return game.settings.get('alien-mu-th-ur', k); } catch (e) { return false; } };
     if (g('phSpecialOrders')) lines.push('- ORDERS: 754, 899, 931, 937, 939, 966');
     lines.push('- CERBERUS');
     if (g('phDoors')) lines.push('- DOORS, LOCK DOOR X, UNLOCK DOOR X');
@@ -3768,7 +3775,7 @@ function buildPostHackHelpList() {
     if (g('phAlarm')) lines.push('- ACTIVATE ALARM');
     if (g('phGas')) lines.push('- GAS TARGETS');
     if (g('phCryo')) { lines.push('- CRYO POD <NAME?>'); lines.push('- CRYO RELEASE'); }
-    
+
     if (!lines.length) return '';
     const title = (game.i18n.localize('MUTHUR.postHack.title') || 'POST-HACK COMMANDS:');
     return title + '\n' + lines.join('\n');
@@ -3782,14 +3789,14 @@ async function triggerAlarm(withOverlay) {
         const volume = 1.0;
         if (src) {
             try {
-                if (currentAlarm.howl && typeof currentAlarm.howl.stop === 'function') { try { currentAlarm.howl.stop(); } catch(e) { console.warn('[MUTHUR][ALARM] pre-stop error:', e); } }
-            } catch(_) {}
+                if (currentAlarm.howl && typeof currentAlarm.howl.stop === 'function') { try { currentAlarm.howl.stop(); } catch (e) { console.warn('[MUTHUR][ALARM] pre-stop error:', e); } }
+            } catch (_) { }
             try {
                 const result = await AudioHelper.play({ src, volume, autoplay: true, loop: true }, true);
-                currentAlarm.howl = result; 
+                currentAlarm.howl = result;
                 currentAlarm.src = src;
                 console.log('[MUTHUR][ALARM] playing started | resultType=', typeof result, '| hasStop=', !!(result && result.stop), '| hasPause=', !!(result && result.pause));
-            } catch(e) {
+            } catch (e) {
                 console.error('[MUTHUR][ALARM] play error:', e);
                 await playErrorSound?.();
             }
@@ -3797,7 +3804,7 @@ async function triggerAlarm(withOverlay) {
             console.warn('[MUTHUR][ALARM] no src configured');
             await playErrorSound?.();
         }
-    } catch(e) {}
+    } catch (e) { }
     if (withOverlay) {
         console.log('[MUTHUR][ALARM] creating overlay');
         const id = 'muthur-alarm-overlay';
@@ -3808,7 +3815,7 @@ async function triggerAlarm(withOverlay) {
             ov.style.cssText = 'position:fixed; inset:0; background:rgba(255,0,0,0.12); pointer-events:none; z-index:100002; animation: alarmPulse 1s infinite;';
             const style = document.createElement('style');
             style.textContent = '@keyframes alarmPulse { 0%{opacity:0.3} 50%{opacity:0.6} 100%{opacity:0.3} }';
-            style.setAttribute('data-hacking','');
+            style.setAttribute('data-hacking', '');
             document.head.appendChild(style);
             document.body.appendChild(ov);
         }
@@ -3843,10 +3850,10 @@ function stopAlarm() {
                                 sound.stop?.();
                                 console.log(`[MUTHUR][ALARM] Forcefully stopped sound with matching src: ${sound.src}`);
                             }
-                        } catch (_) {}
+                        } catch (_) { }
                     }
                 }
-            } catch (_) {}
+            } catch (_) { }
         } catch (e) {
             console.error('[MUTHUR][ALARM] AudioHelper.stop error:', e);
         }
@@ -3860,24 +3867,24 @@ function stopAlarm() {
         if (headerStopBtn) {
             headerStopBtn.style.display = 'none';
         }
-    } catch (_) {}
+    } catch (_) { }
 }
 
 async function triggerConfinementAroundSelection() {
     const scene = game.scenes.active;
-    if (!scene) return {count:0};
+    if (!scene) return { count: 0 };
     const token = canvas?.tokens?.controlled?.[0] || canvas?.tokens?.hover;
     const zoneName = token?.name || 'TARGET';
     let count = 0;
     const doors = getSortedDoorDocuments();
-    const tCenter = token?.center || token?.document?.center || {x:0,y:0};
+    const tCenter = token?.center || token?.document?.center || { x: 0, y: 0 };
     for (const d of doors) {
-        const c = (d.document?.c || d.c || [0,0]);
+        const c = (d.document?.c || d.c || [0, 0]);
         const dx = (c[0] - tCenter.x), dy = (c[1] - tCenter.y);
         const dist = Math.hypot(dx, dy);
         if (dist < 600) { await applyDoorAction(d, 'LOCK'); count++; }
     }
-    return {count, zoneName};
+    return { count, zoneName };
 }
 
 async function performZoneScan(zoneLabel) {
@@ -3894,7 +3901,7 @@ async function performZoneScan(zoneLabel) {
             const y = t.document?.y ?? t.y ?? t.center?.y ?? 0;
             const w = t.document?.width ?? t.w ?? t.document?.texture?.width ?? 0;
             const h = t.document?.height ?? t.h ?? t.document?.texture?.height ?? 0;
-            targets.push({ x: x + w/2, y: y + h/2, w, h });
+            targets.push({ x: x + w / 2, y: y + h / 2, w, h });
         }
     }
     for (const r of regions) {
@@ -3904,7 +3911,7 @@ async function performZoneScan(zoneLabel) {
             const y = r.document?.y ?? r.y ?? r.center?.y ?? 0;
             const w = r.document?.width ?? r.w ?? 0;
             const h = r.document?.height ?? r.h ?? 0;
-            targets.push({ x: x + w/2, y: y + h/2, w, h });
+            targets.push({ x: x + w / 2, y: y + h / 2, w, h });
         }
     }
     if (!targets.length) return '0 ' + (game.i18n.localize('MUTHUR.lifeformsDetected') || 'lifeforms detected') + ': -';
@@ -3914,9 +3921,9 @@ async function performZoneScan(zoneLabel) {
         const ty = tok.document?.y ?? tok.y ?? tok.center?.y ?? 0;
         const tw = tok.document?.width ?? tok.w ?? tok.document?.texture?.width ?? (tok.w ?? 0);
         const th = tok.document?.height ?? tok.h ?? tok.document?.texture?.height ?? (tok.h ?? 0);
-        const cx = tx + (tw/2);
-        const cy = ty + (th/2);
-        return cx >= Z.x - Z.w/2 && cx <= Z.x + Z.w/2 && cy >= Z.y - Z.h/2 && cy <= Z.y + Z.h/2;
+        const cx = tx + (tw / 2);
+        const cy = ty + (th / 2);
+        return cx >= Z.x - Z.w / 2 && cx <= Z.x + Z.w / 2 && cy >= Z.y - Z.h / 2 && cy <= Z.y + Z.h / 2;
     };
     const inside = tokens.filter(t => targets.some(Z => isInside(t, Z)));
     const names = inside.map(t => {
@@ -3931,7 +3938,7 @@ async function performZoneScan(zoneLabel) {
 
 async function applyGasEffect() {
     const token = canvas?.tokens?.controlled?.[0] || canvas?.tokens?.hover;
-    const center = token?.center || token?.document?.center || {x:0,y:0};
+    const center = token?.center || token?.document?.center || { x: 0, y: 0 };
     const radius = 500;
     const tokens = canvas?.tokens?.placeables || [];
     let affected = 0;
@@ -3941,10 +3948,10 @@ async function applyGasEffect() {
             affected++;
             try {
                 await t.document?.setFlag?.('alien-mu-th-ur', 'gas', { poisoned: true, unconscious: true });
-            } catch(e) {}
+            } catch (e) { }
         }
     }
-    try { await playErrorSound?.(); } catch(e) {}
+    try { await playErrorSound?.(); } catch (e) { }
     return affected;
 }
 
@@ -3953,7 +3960,7 @@ async function applyPoisonToTokens(tokens) {
     let affected = 0;
     for (const t of list) {
         try {
-            try { t.control({ releaseOthers: false }); } catch(e) {}
+            try { t.control({ releaseOthers: false }); } catch (e) { }
             const poisoned = getPoisonedEffect();
             if (typeof t.toggleStatusEffect === 'function') {
                 await t.toggleStatusEffect(poisoned.id || poisoned.icon, { active: true, overlay: false });
@@ -3977,14 +3984,14 @@ async function applyPoisonToTokens(tokens) {
                         origin: 'alien-mu-th-ur',
                         flags: { core: { statusId: poisoned.id || 'poisoned' } }
                     };
-                    try { await actor.createEmbeddedDocuments('ActiveEffect', [effectData]); } catch(_) {}
+                    try { await actor.createEmbeddedDocuments('ActiveEffect', [effectData]); } catch (_) { }
                 }
             }
             await t.document?.setFlag?.('alien-mu-th-ur', 'gas', { poisoned: true });
             affected++;
-        } catch(e) {}
+        } catch (e) { }
     }
-    try { await playErrorSound?.(); } catch(e) {}
+    try { await playErrorSound?.(); } catch (e) { }
     return affected;
 }
 
@@ -4036,9 +4043,9 @@ async function applyCryoEffect(targetName) {
     }
     if (!matched) return '';
 
-    try { matched.control({ releaseOthers: true }); } catch(e) { try { matched.control(); } catch(_) {} }
+    try { matched.control({ releaseOthers: true }); } catch (e) { try { matched.control(); } catch (_) { } }
 
-    try { await matched.document?.setFlag?.('alien-mu-th-ur', 'cryo', { stasis: true }); } catch(e) { console.warn('CRYO | setFlag failed', e); }
+    try { await matched.document?.setFlag?.('alien-mu-th-ur', 'cryo', { stasis: true }); } catch (e) { console.warn('CRYO | setFlag failed', e); }
 
     const eff = getUnconsciousEffect();
     try {
@@ -4051,7 +4058,7 @@ async function applyCryoEffect(targetName) {
         } else if (typeof matched.toggleEffect === 'function') {
             console.log('CRYO | Token.toggleEffect', eff.icon || eff.id);
             await matched.toggleEffect(eff.icon || eff.id, { active: true, overlay: true });
-        } 
+        }
 
         const actor = matched.document?.actor;
         if (actor) {
@@ -4074,9 +4081,9 @@ async function applyCryoEffect(targetName) {
                 flags: { core: { statusId: eff.id || 'unconscious' } }
             };
             console.log('CRYO | ensure AE with statusId', effectData);
-            try { await actor.createEmbeddedDocuments('ActiveEffect', [effectData]); } catch(err) { /* ignore if already exists */ }
+            try { await actor.createEmbeddedDocuments('ActiveEffect', [effectData]); } catch (err) { /* ignore if already exists */ }
         }
-    } catch(e) { console.warn('CRYO | status effect failed', e); }
+    } catch (e) { console.warn('CRYO | status effect failed', e); }
 
     return matched.name || 'TARGET';
 }
@@ -4086,8 +4093,8 @@ async function releaseCryoForTokens(tokenList) {
     const eff = getUnconsciousEffect();
     for (const tok of tokenList) {
         try {
-            try { tok.control({ releaseOthers: false }); } catch(e) {}
-            try { await tok.document?.unsetFlag?.('alien-mu-th-ur', 'cryo'); } catch(e) { console.warn('CRYO | unsetFlag failed', e); }
+            try { tok.control({ releaseOthers: false }); } catch (e) { }
+            try { await tok.document?.unsetFlag?.('alien-mu-th-ur', 'cryo'); } catch (e) { console.warn('CRYO | unsetFlag failed', e); }
             if (typeof tok.toggleStatusEffect === 'function') {
                 console.log('CRYO | Token.disable toggleStatusEffect', eff.id || eff.icon);
                 await tok.toggleStatusEffect(eff.id || eff.icon, { active: false, overlay: false });
@@ -4100,10 +4107,10 @@ async function releaseCryoForTokens(tokenList) {
             }
             const actor = tok.document?.actor;
             if (actor?.effects) {
-                const toDelete = actor.effects.filter(e => (e.origin === 'alien-mu-th-ur') || (e.icon === (eff.icon || eff.id)) || (e.flags?.core?.statusId === (eff.id || 'unconscious')) || ((e.label||'').toLowerCase().includes('unconscious') || (e.label||'').toLowerCase().includes('inconscient')));
+                const toDelete = actor.effects.filter(e => (e.origin === 'alien-mu-th-ur') || (e.icon === (eff.icon || eff.id)) || (e.flags?.core?.statusId === (eff.id || 'unconscious')) || ((e.label || '').toLowerCase().includes('unconscious') || (e.label || '').toLowerCase().includes('inconscient')));
                 if (toDelete.length) {
-                    console.log('CRYO | delete AE on actor', toDelete.map(e=>e.id));
-                    await actor.deleteEmbeddedDocuments('ActiveEffect', toDelete.map(e=>e.id));
+                    console.log('CRYO | delete AE on actor', toDelete.map(e => e.id));
+                    await actor.deleteEmbeddedDocuments('ActiveEffect', toDelete.map(e => e.id));
                 }
             }
             if (actor) {
@@ -4116,7 +4123,7 @@ async function releaseCryoForTokens(tokenList) {
                 }
             }
             released++;
-        } catch(e) {}
+        } catch (e) { }
     }
     return released;
 }
@@ -4134,17 +4141,17 @@ async function handleSpecialOrder(chatLog, command) {
 
     let orderKey = command.toUpperCase()
         .replace(/^ORDRE\s+SPECIAL\s+/i, '')
-        .replace(/^ORDRE\s+SPÉCIAL\s+/i, '')  
-        .replace(/^ORDER\s+SPECIAL\s+/i, '')   
+        .replace(/^ORDRE\s+SPÉCIAL\s+/i, '')
+        .replace(/^ORDER\s+SPECIAL\s+/i, '')
         .replace(/^SPECIAL\s+ORDRE\s+/i, '')
-        .replace(/^SPÉCIAL\s+ORDRE\s+/i, '')   
-        .replace(/^SPECIAL\s+ORDER\s+/i, '')    
+        .replace(/^SPÉCIAL\s+ORDRE\s+/i, '')
+        .replace(/^SPECIAL\s+ORDER\s+/i, '')
         .replace(/^ORDRE\s+/i, '')
-        .replace(/^ORDER\s+/i, '')              
+        .replace(/^ORDER\s+/i, '')
         .replace(/^SPECIAL\s+/i, '')
-        .replace(/^SPÉCIAL\s+/i, '')           
+        .replace(/^SPÉCIAL\s+/i, '')
         .replace(/^PROTOCOLE\s+/i, '')
-        .replace(/^PROTOCOL\s+/i, '')          
+        .replace(/^PROTOCOL\s+/i, '')
         .trim();
 
     if (orders[orderKey]) {
@@ -4153,7 +4160,7 @@ async function handleSpecialOrder(chatLog, command) {
                 try {
                     game.socket.emit('module.alien-mu-th-ur', { type: 'cerberusApprovalRequest', fromId: game.user.id, fromName: game.user.name });
                     await displayMuthurMessage(chatLog, game.i18n.localize('MUTHUR.waitingForMother'), '', '#ff0000', 'communication');
-                } catch(_) {}
+                } catch (_) { }
                 return;
             }
 
@@ -4173,7 +4180,7 @@ async function handleSpecialOrder(chatLog, command) {
                 '#ff0000',
                 'error'
             );
-            
+
             syncCommandResult('SPECIAL_ORDER', {
                 text: game.i18n.localize("MOTHER.SpecialOrders.Cerberus.confirmation"),
                 color: '#ff0000',
@@ -4380,7 +4387,7 @@ async function handleSpecialOrder(chatLog, command) {
         const orderDesc = game.i18n.localize(`${orders[orderKey]}.description`);
 
         await displayHackMessage(chatLog, orderName, '#00ff00', 'reply', false);
-        try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: orderName, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch(e) {}
+        try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: orderName, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
         try {
             if (!game.user.isGM && hackSuccessful) {
                 game.socket.emit('module.alien-mu-th-ur', {
@@ -4391,10 +4398,10 @@ async function handleSpecialOrder(chatLog, command) {
                     timestamp: Date.now()
                 });
             }
-        } catch(e) {}
+        } catch (e) { }
 
         await displayHackMessage(chatLog, orderDesc, '#00ff00', 'reply', false);
-        try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: orderDesc, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch(e) {}
+        try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: orderDesc, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
         try {
             if (!game.user.isGM && hackSuccessful) {
                 game.socket.emit('module.alien-mu-th-ur', {
@@ -4405,7 +4412,7 @@ async function handleSpecialOrder(chatLog, command) {
                     timestamp: Date.now()
                 });
             }
-        } catch(e) {}
+        } catch (e) { }
     } else {
         await displayHackMessage(
             chatLog,
@@ -4709,7 +4716,7 @@ function createCerberusWindow() {
 
             cerberusWindow.style.left = `${currentX}px`;
             cerberusWindow.style.top = `${currentY}px`;
-            cerberusWindow.style.right = 'auto'; 
+            cerberusWindow.style.right = 'auto';
         }
     }
 
@@ -4898,7 +4905,7 @@ function displayGMHackProgress(chatLog) {
         updateProgress: (progress) => {
             progressFill.style.width = `${progress}%`;
             if (progress >= 100) {
-                clearInterval(spinnerInterval); 
+                clearInterval(spinnerInterval);
             }
         },
         cleanup: () => {

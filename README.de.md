@@ -1,70 +1,95 @@
-## 🇩🇪 Alien MU/TH/UR 6000 — Umfassender Leitfaden
+# 🌌 Alien MU/TH/UR 6000 — Multilingualer Hub & Brasilianisch-Portugiesische Custom-Edition
 
-MU/TH/UR 6000 für Foundry VTT (ALIEN RPG) — Retro‑Terminal mit vollständiger Synchronisation zwischen Spieler, Zuschauer und SL: Schreibmaschinen‑Effekt, CRT/Scanline‑Look, Glitches, Audio‑Signale, SL‑gesteuertes HACK und globales CERBERUS‑Protokoll.
+## 💛 Unterstütze das Projekt / Support the Project
 
-### 1) Hauptfunktionen
-- Retro‑Interface: Schreibmaschine, Scanline, CRT‑Farblook, leichte/starke Glitches
-- Spiegel‑Zuschauermodus: exakte Kopie der Spielerausgabe (inkl. HACK/CERBERUS)
-- Integriertes Audio: Tippen/Return/Fehler/Antwort mit Lautstärke und Throttling
-- HACK mit SL‑Entscheidung: ERFOLG/FEHLSCHLAG über Minifenster am SL‑Terminal
-- Spezialbefehle: 754/899/931/937/939/966 nach erfolgreichem Hack
-- CERBERUS‑Protokoll: SL‑Freigabe, rote Warnung, Spieler‑Bestätigung, globaler Countdown, Auto‑Schließen
-- Alarmsteuerung: synchrones Aktivieren/Stoppen (rotes Overlay + Sirene), STOP‑Knopf im SL‑Header
-- Umgebung: Türen/Lichter/GAS/Cryo via Spieleranfrage → SL‑Genehmigung → synchrone Ausführung
-- Terminal‑Verschiebung (optional): für SL und/oder Spieler/Zuschauer, ohne Eingaben zu blockieren
+Wenn dieses Modul geholfen hat, die Spannung und Immersion an deinem Spieltisch von **Alien RPG** zu steigern, ziehe bitte in Betracht, die Entwickler zu unterstützen, um neue Updates zu fördern!
 
-### 2) Spielerbefehle
-- HELP: listet verfügbare Befehle
-- STATUS: zeigt MU/TH/UR‑Status (Text über SL konfigurierbar)
-- /M <Nachricht>: Direktnachricht an MOTHER
-- CLEAR: Verlauf leeren (spiegelt sich bei Zuschauern)
-- EXIT: Terminal schließen (spiegelt sich bei Zuschauern)
-- HACK: Start des Hacks; SL entscheidet ERFOLG/FEHLSCHLAG; Animationen/Glitches synchron
-- ORDERS 754|899|931|937|939|966: zeigt Spezialbefehl (nach Hack)
-- CERBERUS: SL‑Freigabe anfragen; bei Zustimmung → rote Warnung + CONFIRM/CANCEL (nur Spieler) → globaler Countdown
+*   **Originaler Entwickler (ShazProd):** Unterstütze den Schöpfer des ursprünglichen Moduls, der das fantastische ästhetische Fundament und die Soundeffekte entworfen hat, indem du das Profil von [ShazProd auf GitHub](https://github.com/ShazProd) besuchst.
+*   **Entwickler des Forks & Spielleiter-Befehle (KorujaSedex123):** Wenn dir die vollständige Übersetzung ins brasilianische Portugiesisch (pt-BR) und das neue Feature für benutzerdefinierte Spielleiter-Befehle gefallen, unterstütze die Weiterentwicklung dieses Forks:
+    *   [☕ Spendier einen Kaffee (Ko-fi)](https://ko-fi.com/korujasedex)
+    *   [☕ Spendier einen Kaffee (Buy me a Coffee)](https://buymeacoffee.com/brunogrzegm)
+    *   🔑 **PIX**: `https://livepix.gg/korujasedex`
 
-### 3) Einstellungen
-- enableTypingSounds (Client), typingSoundVolume (Client)
-- enableScanline / scanlineSize (Client), enableTypewriter (Client)
-- allowHack (Welt)
-- allowDragGM / allowDragPlayers (Welt)
-- currentStatusKey / customStatusText (Welt)
-- captainUserIds / allowCaptainSpecialOrders (Welt)
-- alarmSoundPath (Welt)
+---
 
-### 4) HACK‑Ablauf (synchron)
-1. Spieler tippt HACK → SL erhält Entscheidungsdialog (am SL‑Terminal verankert)
-2. SL klickt ERFOLG/FEHLSCHLAG → zurück an Spieler
-3. Textsequenzen, Glitches und Sounds laufen bei Spieler und Zuschauern synchron
-4. Bei Erfolg: neue Befehle verfügbar; Anzeige auch beim SL
+```
+================================================================================
+ W E Y L A N D - Y U T A N I    ----    C O R P．
+ M U / T H / U R    6 0 0 0    S Y S T E M
+================================================================================
+```
 
-### 5) CERBERUS‑Protokoll
-1. Spieler tippt CERBERUS → SL sieht Genehmigen/Ablehnen + Minuten
-2. Wenn genehmigt: Spieler sieht rote Warnung; Zuschauer sehen denselben Text ohne Buttons
-3. Spieler bestätigt (CONFIRM) → globaler Countdown (schwebender Timer + Chat)
-4. Bei 0: Endsequenz, Aufräumen, automatisches Schließen der Interfaces
+Willkommen im Repository der Terminal-Schnittstelle **MU/TH/UR 6000** für **Foundry VTT**. Dieses Projekt bringt das retro-futuristische, grünleuchtende Computerterminal der Nostromo direkt in deine **Alien RPG** Tischrunden und sorgt für eine hochgradig immersive Sci-Fi-Horror-Atmosphäre.
 
-### 6) Alarm (global an/aus)
-- An: SL‑Genehmigung → Sirene + rotes Overlay für alle
-- Aus: SL‑STOP‑Knopf → zuverlässiges AudioHelper‑Stop + erzwungenes Stoppen
-- „Alarm deaktiviert“ wird an alle gesendet, inkl. Zuschauer
+---
 
-### 7) Umgebungssteuerung
-- TÜREN: LOCK/UNLOCK mit SL‑Auswahl/Genehmigung, synchrones Feedback
-- LICHTER: DIM/SHUTDOWN/RESTORE mit SL‑Genehmigung
-- GAS: SL wählt Ziele; Effekt synchron
-- CRYO POD / CRYO RELEASE: Auswahl über Dialoge am SL‑Terminal
+## 🤝 Besondere Anerkennung & Danksagung
 
-### 8) Sockets & Sync (wichtige Events)
-`muthurCommand`, `muthurResponse`, `updateSpectators`, `requestCurrentMessages`, `syncMessages`, `statusResponse`, `hackingAttempt/hackStream/hackGlitch/hackStopGlitch/hackComplete`, `alarmControl`, `showCerberusGlobal/stopCerberus`, `sessionStatus`, `closeMuthurChats`.
+Dieses Repository ist ein lokalisierter und modifizierter Fork des spektakulären Moduls **Alien MU/TH/UR 6000**, das ursprünglich von dem talentierten Entwickler **ShazProd** ([@ShazProd](https://github.com/ShazProd)) erstellt wurde.
 
-### 9) Installation & Start
-1. Modul installieren und aktivieren
-2. Spieler öffnet MU/TH/UR (Button in den Szenen‑Notizen/Steuerungen)
-3. SL genehmigt und wählt Zuschauer
-4. Befehle im Terminal eingeben
+*   **Englisch (Originaler Entwickler):** Wir möchten **ShazProd** unseren tiefsten Dank dafür aussprechen, dass er das unglaubliche Fundament, die Ästhetik und die Mechaniken des Original-Terminals entwickelt hat (wie CRT-Grafikeffekte, Schreibmaschineneffekte, Hacking-Protokolle, den Zuschauermodus, Umweltkontrollen und den nuklearen Countdown). Ohne seine harte Arbeit und sein Engagement für die Alien RPG-Community würde dieses Projekt nicht existieren. Danke, ShazProd, dass du uns dieses geniale Computer-Interface geschenkt hast! 🛸
+*   **Portugiesisch (Diese Version):** Diese von **KorujaSedex123** entwickelte Version erweitert die Arbeit von **ShazProd**. Sie bietet die vollständige Übersetzung ins brasilianische Portugiesisch (`pt-BR`) und fügt das innovative Feature für **benutzerdefinierte Spielleiter-Befehle** direkt über das Einstellungsmenü von Foundry VTT hinzu.
 
-### 10) Support
-Unterstützung der Entwicklung: Ko‑fi / Tipeee (Links in der Haupt‑README)
+---
 
+## 🌐 Dokumentationssprachen / Idiomas de Documentação
 
+Bitte wähle deine Sprache aus, um auf die spezifische Dokumentation und die Features zuzugreifen:
+
+*   🇧🇷 **Português (Brasil)**: [README.pt.md](README.pt.md) *(Manual em Português com suporte a Comandos Customizados)*
+*   🇬🇧 **English**: [README.en.md](README.en.md) *(English documentation featuring Custom GM Commands)*
+*   🇪🇸 **Español**: [README.es.md](README.es.md) *(Documentación en Español)*
+*   🇫🇷 **Français**: [README.fr.md](README.fr.md) *(Documentation en Français)*
+*   🇩🇪 **Deutsch**: [README.de.md](README.de.md) *(Deutsche Dokumentation)*
+*   🇮🇹 **Italiano**: [README.it.md](README.it.md)
+*   🇳🇱 **Nederlands**: [README.nl.md](README.nl.md)
+*   🇳🇴 **Norsk**: [README.no.md](README.no.md)
+*   🇸🇪 **Svenska**: [README.sv.md](README.sv.md)
+*   🇩🇰 **Dansk**: [README.da.md](README.da.md)
+
+---
+
+## ✨ Feature-Übersicht
+
+### 🛠️ Basis-Modul-Features (Entwickelt von ShazProd)
+
+*   📟 **Analoge CRT-Ästhetik**: Ausgeprägte CRT-Scanlines, Schreibmaschinen-Tippeffekt, Helligkeitsflimmern und synchronisierte visuelle Glitch-Effekte in Echtzeit.
+*   👁️ **Spiegel-Zuschauermodus**: Spieler können das Terminal des aktiven Operators in Echtzeit mitverfolgen und sehen exakt denselben Textfluss und dieselben Glitches!
+*   🔌 **Dynamisches Hacking-Protokoll**: Die Eingabe von `HACK` startet eine Anfrage zur Sicherheitsumgehung. Der Spielleiter (GM) erhält ein interaktives Pop-up, um den Hack sofort zu genehmigen oder abzulehnen.
+*   🚨 **CERBERUS-Protokoll**: Nuklearer Selbstzerstörungs-Countdown mit roter Vollbild-Warnschleife, Sirenen und automatischem Abmelden der Sitzung nach der Detonation.
+*   🎮 **Umweltkontrollen**: Vom Spielleiter freigegebene Terminalbefehle zum Verriegeln/Entriegeln von Türen, Steuern der Beleuchtung (`LIGHTS DIM/SHUTDOWN`), Entlüften von Gas oder Bedienen von Kryokapseln.
+
+### 🇧🇷 Eigene Fork-Features (Hinzugefügt von KorujaSedex123)
+
+*   🌐 **100% brasilianisch-portugiesische Lokalisierung**: Vollständige Übersetzung, die direkt auf die offizielle Terminologie der Alien RPG-Bücher des Verlags *New Order* abgestimmt ist (Stress, Panik, Spezialbefehle).
+*   ⚙️ **Dynamische benutzerdefinierte Spielleiter-Befehle**: Spielleiter können ihre eigenen Terminal-Prompts und -Antworten (wie versteckte Hinweise, Lore-Geheimnisse oder Unternehmensrichtlinien) direkt über das Foundry VTT Modul-Einstellungsmenü im einfachen JSON-Format registrieren — **keine Code-Bearbeitung erforderlich!**
+
+---
+
+## 🚀 Schnellinstallation
+
+So installierst du diese Custom-Edition des Moduls in Foundry VTT (v14 empfohlen):
+
+1.  Navigiere im Haupt-Setup-Bildschirm von Foundry VTT zu **Add-on Modules**.
+2.  Klicke auf **Install Module**.
+3.  Füge in das Feld **Manifest URL** den folgenden Link ein:
+    ```
+    https://github.com/KorujaSedex123/alien-mu-th-ur-pt-br/releases/latest/download/module.json
+    ```
+4.  Klicke auf **Install** und warte, bis der Vorgang abgeschlossen ist.
+5.  Aktiviere das Modul in den Welteinstellungen unter **Manage Modules**.
+
+---
+
+## 🛠️ Mitwirken
+
+Beiträge sind herzlich willkommen! Wenn du die neuen Features in andere Sprachen übersetzen, Fehler beheben oder neue Assets vorschlagen möchtest:
+
+1.  Erstelle einen **Fork** dieses Repositories.
+2.  Erstelle deinen Feature-Branch (`git checkout -b feature/AmazingImprovement`).
+3.  Commit deine Änderungen (`git commit -m 'Add some amazing feature'`).
+4.  Pushe den Branch (`git push origin feature/AmazingImprovement`).
+5.  Öffne einen **Pull Request**.
+
+---
+*Handbuch erstellt in voller Übereinstimmung mit den Weyland-Yutani-Richtlinien. Die Sicherheit der Vermögenswerte des Unternehmens ist unsere oberste Priorität.*

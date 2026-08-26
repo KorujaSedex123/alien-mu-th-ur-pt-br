@@ -33,7 +33,7 @@ Este repositorio es una bifurcación (fork) localizada y personalizada del espec
 ## 🌐 Idiomas de Documentación / Documentation Languages
 Por favor, elige tu idioma para acceder a la documentación específica y sus características:
 
-* 🇧🇷 **Português (Brasil)**: [README.pt.md](README.pt.md) *(Manual en portugués con soporte de Comandos Personalizados)*
+* 🇧🇷 **Português (Brasil)**: [README.md](README.md) *(Manual en portugués con soporte de Comandos Personalizados)*
 * 🇬🇧 **English**: [README.en.md](README.en.md) *(English documentation featuring Custom GM Commands)*
 * 🇪🇸 **Español**: [README.es.md](README.es.md) *(Documentación en español con soporte de Comandos Personalizados)*
 * 🇫🇷 **Français**: [README.fr.md](README.fr.md)

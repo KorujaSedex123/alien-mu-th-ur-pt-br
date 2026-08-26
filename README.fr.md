@@ -36,7 +36,7 @@ Ce dépôt est un fork localisé et personnalisé du spectaculaire module **Alie
 
 Veuillez choisir votre langue pour accéder à la documentation et aux fonctionnalités spécifiques :
 
-*   🇧🇷 **Português (Brasil)**: [README.pt.md](README.pt.md) *(Manual em Português com suporte a Comandos Customizados)*
+*   🇧🇷 **Português (Brasil)**: [README.md](README.md) *(Manual em Português com suporte a Comandos Customizados)*
 *   🇬🇧 **English**: [README.en.md](README.en.md) *(English documentation featuring Custom GM Commands)*
 *   🇪🇸 **Español**: [README.es.md](README.es.md) *(Documentación en Español)*
 *   🇫🇷 **Français**: [README.fr.md](README.fr.md) *(Documentation en Français)*

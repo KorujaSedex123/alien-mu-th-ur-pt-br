@@ -1,70 +1,69 @@
-## 🇩🇰 Alien MU/TH/UR 6000 — Komplet Guide
+# 🌌 Alien MU/TH/UR 6000 — Komplet installations- og tilpasningsvejledning
 
-MU/TH/UR 6000 til Foundry VTT (ALIEN RPG): retro‑terminal fuldt synkroniseret mellem Spiller, Tilskuer og GM: skrivemaskinevisning, CRT/scanline‑æstetik, glitches, lyd, GM‑styret HACK og globalt CERBERUS‑protokol.
+### *Synkroniseret retro-futuristisk terminalgrænseflade til ALIEN RPG (Foundry VTT v14)*
 
-### 1) Vigtigste funktioner
-- Retro‑interface: skrivemaskine, scanline, CRT‑tone, lette/kraftige glitches
-- Spejlet tilskuertilstand: tro kopi af Spillerens visning (inkl. HACK/CERBERUS)
-- Integreret lyd: tast/retur/fejl/svar med lydstyrke og begrænsning
-- HACK med GM‑beslutning: SUCCESS/FAILURE via minidialog forankret til GM‑terminal
-- Særlige Ordrer: 754/899/931/937/939/966 efter vellykket hack
-- CERBERUS‑protokol: GM‑godkendelse, rød advarsel, spillerbekræftelse, global nedtælling, automatisk lukning
-- Alarm: synkron on/off (rød overlay + sirene), STOP‑knap i GM‑header
-- Miljøkontrol: døre/lys/GAS/Cryo via spillers anmodning → GM‑godkendelse → synkron eksekvering
-- Træk‑og‑slip terminal (valgfrit): for GM og/eller spillere/tilskuere uden at blokere input
+Dette depot indeholder den tilpassede og lokaliserede version af **Alien MU/TH/UR 6000**-modulet (oprindeligt oprettet af *ShazProd*). Det simulerer en grøn-fosfor computerterminal fra 80'erne, hvilket gør det muligt for spillere at interagere i realtid med koloniens kunstige intelligens.
 
-### 2) Spillerkommandoer
-- HELP: liste over tilgængelige kommandoer
-- STATUS: viser MU/TH/UR‑status (tekst konfigurerbar af GM)
-- /M <besked>: direkte besked til MOTHER
-- CLEAR: rydder chat (spejles til tilskuere)
-- EXIT: lukker terminal (spejles til tilskuere)
-- HACK: starter hacking; GM afgør SUCCESS/FAILURE; animationer/glitches synkroniseres
-- ORDERS 754|899|931|937|939|966: viser Særlig Ordre (efter hack)
-- CERBERUS: beder om GM‑godkendelse; hvis godkendt → rød advarsel + CONFIRM/CANCEL (kun spiller) → global nedtælling
+---
 
-### 3) Indstillinger
-- enableTypingSounds (klient), typingSoundVolume (klient)
-- enableScanline / scanlineSize (klient), enableTypewriter (klient)
-- allowHack (verden)
-- allowDragGM / allowDragPlayers (verden)
-- currentStatusKey / customStatusText (verden)
-- captainUserIds / allowCaptainSpecialOrders (verden)
-- alarmSoundPath (verden)
+## 💛 Støt Projektet
+Hvis dette modul har hjulpet med at øge spændingen og indlevelsen ved dit **Alien RPG**-bord, kan du overveje at støtte udviklerne for at opmuntre til nye opdateringer!
+* **Oprindelig Skaber (ShazProd):** Overvej at støtte skaberen af det originale modul ved at besøge profilen for [ShazProd på GitHub](https://github.com/ShazProd).
+* **Udvikler af gaffelen (KorujaSedex123):** Hvis du nyder lokaliseringen og den nye funktion til brugerdefinerede GM-kommandoer, kan du støtte denne gaffel:
+  * [☕ Køb en Kaffe (Ko-fi)](https://ko-fi.com/korujasedex)
+  * [☕ Køb en Kaffe (Buy me a Coffee)](https://buymeacoffee.com/brunogrzegm)
+  * 🔑 **PIX**: `https://livepix.gg/korujasedex`
 
-### 4) HACK‑flow (synkron)
-1. Spiller skriver HACK → GM modtager beslutningsdialog (forankret til GM‑terminal)
-2. GM klikker SUCCESS/FAILURE → sendes tilbage til spiller
-3. Tekstsekvenser, glitches og lyd kører synkront hos Spiller og Tilskuere
-4. Ved success: nye ordrer tilgængelige; også vist hos GM
+---
 
-### 5) CERBERUS‑protokol
-1. Spiller skriver CERBERUS → GM ser godkend/afvis + minutter
-2. Hvis godkendt: Spiller ser rød advarsel; Tilskuere ser samme tekst uden knapper
-3. Spiller bekræfter (CONFIRM) → global nedtælling (flydende timer + chat)
-4. Ved 0: slutsekvens, oprydning, automatisk lukning af grænseflader
+## 🤝 Særlig anerkendelse og tak
+Dette depot er en lokaliseret og tilpasset gaffel af det fantastiske **Alien MU/TH/UR 6000**-modul, oprindeligt skabt af den talentfulde udvikler **ShazProd** ([@ShazProd](https://github.com/ShazProd)).
+* Vi ønsker at udtrykke vores dybeste taknemmelighed til **ShazProd** for at have udviklet den utrolige æstetik og mekanik i den originale terminal (såsom CRT-effekter, skrivemaskineeffekter, hackingprotokoller, tilskuertilstand, miljøkontrol og atomnedtælling).
 
-### 6) Alarm (global on/off)
-- On: GM‑godkendelse → sirene + rød overlay for alle
-- Off: GM STOP‑knap → pålidelig AudioHelper‑stop + tvungen stop
-- “Alarm deaktiveret” sendes til alle, inkl. tilskuere
+---
 
-### 7) Miljøkontroller
-- DØRE: LOCK/UNLOCK med GM‑valg/godkendelse, synkron feedback
-- LYS: DIM/SHUTDOWN/RESTORE med GM‑godkendelse
-- GAS: GM vælger mål; effekt synkroniseres
-- CRYO POD / CRYO RELEASE: valg via dialoger forankret til GM‑terminal
+## ✨ Funktionsoversigt
 
-### 8) Socket & Sync (vigtige events)
-`muthurCommand`, `muthurResponse`, `updateSpectators`, `requestCurrentMessages`, `syncMessages`, `statusResponse`, `hackingAttempt/hackStream/hackGlitch/hackStopGlitch/hackComplete`, `alarmControl`, `showCerberusGlobal/stopCerberus`, `sessionStatus`, `closeMuthurChats`.
+### 🛠️ Funktioner i basismodulet (Udviklet af ShazProd)
+* 📟 **Analog CRT-æstetik**: Tunge CRT-scanningslinjer, skrivemaskine-skriveeffekter, lysstyrkeflimren og synkroniserede visuelle glitch-effekter.
+* 👁️ **Spejl-tilskuertilstand**: Spillere kan se terminalen for den aktive operatør i realtid og dele nøjagtig samme tekststrøm og terminalfejl!
+* 🔌 **Dynamisk hackingprotokol**: At skrive `HACK` starter en anmodning om sikkerhedsforbigåelse. Game Master (GM) får en interaktiv pop-up til øjeblikkeligt at godkende eller afvise hacket.
+* 🚨 **CERBERUS-protokol**: Atom-selvdestruktionsnedtælling med røde advarselssløjfer på fuld skærm, sirener og automatisk logafbrydelse ved detonation.
+* 🎮 **Miljøkontrol**: GM-godkendte terminalkommandoer til at låse/låse op for døre, styre belysning (`LIGHTS DIM/SHUTDOWN`), udlufte gas eller betjene kryogene kapsler.
 
-### 9) Installation & Start
-1. Installer og aktiver modulet
-2. Spiller åbner MU/TH/UR (knap i scene‑noter/kontroller)
-3. GM godkender og vælger tilskuere
-4. Skriv kommandoer i terminalen
+### ⚙️ Brugerdefinerede gaffelfunktioner (Tilføjet af KorujaSedex123)
+* 🌐 **Komplet lokalisering**: Fuld oversettelse direkte kortlagt til den officielle terminologi for Alien rollespilsbøger.
+* 🔧 **Dynamiske brugerdefinerede GM-kommandoer**: GM'er kan registrere deres egne terminalmeddelelser og svar (såsom skjulte spor, lore-hemmeligheder eller virksomhedsdirektiver) direkte via modulsindstillingsmenuen i Foundry VTT i et simpelt JSON-format — **ingen koderedigering påkrævet!**
 
-### 10) Support
-Støt udviklingen: Ko‑fi / Tipeee (links i hoved‑README)
+---
 
+## 🚀 Hurtig installation
+Sådan installeres denne tilpassede udgave af modulet i din Foundry VTT:
+1. Naviger til **Add-on Modules** på Foundry VTT's hovedopsætningsskærm.
+2. Klik på **Install Module**.
+3. Indsæt linket nedenfor i feltet **Manifest URL**:
+   ```
+   https://github.com/KorujaSedex123/alien-mu-th-ur-pt-br/releases/latest/download/module.json
+   ```
+4. Klik på **Install** og vent, indtil processen er fuldført.
+5. Aktiver modulet i dine verdensindstillinger under **Manage Modules**.
 
+---
+
+## ⚙️ Vejledning til brugerdefinerede GM-kommandoer
+
+GM'er kan konfigurere deres egne brugerdefinerede kommandoer i Foundry VTT-modulindstillingerne ved at indtaste et simpelt JSON-objekt.
+
+### Eksempel på konfiguration:
+```json
+{
+  "LOGGE": "ADGANG TIL LOGBØGER... [12/04/2179]: Temperaturstigning registreret i sektor G-14.",
+  "DIREKTIV": "WEYLAND-YUTANI DIREKTIV: Beskyt fremmed teknologi for enhver pris. Besætningen kan ofres."
+}
+```
+
+Når en spiller skriver `LOGGE` o `DIREKTIV` i terminalen, vil MU/TH/UR svare med de meddelelser, der er konfigureret af GM!
+
+---
+
+*Vejledning genereret i overensstemmelse med specialdirektiv 937. Virksomhedens aktiver har den absolut højeste prioritet.*

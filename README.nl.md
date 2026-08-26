@@ -1,70 +1,69 @@
-## 🇳🇱 Alien MU/TH/UR 6000 — Complete Gids
+# 🌌 Alien MU/TH/UR 6000 — Volledige Installatie- en Aanpassingsgids
 
-MU/TH/UR 6000 voor Foundry VTT (ALIEN RPG): retro‑terminal volledig gesynchroniseerd tussen Speler, Toeschouwer en GM: typemachine‑weergave, CRT/scanline‑look, glitches, audio, door GM aangestuurd HACK en globaal CERBERUS‑protocol.
+### *Gesynchroniseerde Retro-Futuristische Terminalinterface voor ALIEN RPG (Foundry VTT v14)*
 
-### 1) Belangrijkste functies
-- Retro‑interface: typemachine, scanline, CRT‑tint, lichte/zware glitches
-- Spiegel‑toeschouwermodus: getrouwe kopie van de Spelerweergave (incl. HACK/CERBERUS)
-- Geïntegreerde audio: typen/return/fout/antwoord met volume en throttling
-- HACK met GM‑beslissing: SUCCES/MISLUKT via minidialoog aan GM‑terminal
-- Speciale Orders: 754/899/931/937/939/966 na geslaagde hack
-- CERBERUS‑protocol: GM‑goedkeuring, rode waarschuwing, spelerbevestiging, globale countdown, automatisch sluiten
-- Alarm: synchroon aan/uit (rood overlay + sirene), STOP‑knop in GM‑header
-- Omgeving: deuren/licht/GAS/Cryo via spelersverzoek → GM‑goedkeuring → gesynchroniseerde uitvoering
-- Terminal slepen (optioneel): voor GM en/of spelers/toeschouwers, zonder input te blokkeren
+Deze repository bevat de aangepaste en gelokaliseerde versie van de **Alien MU/TH/UR 6000** module (oorspronkelijk gemaakt door *ShazProd*). Het simuleert een groen-fosfor computerterminal uit de jaren '80, waarmee spelers in realtime kunnen communiceren met de kunstmatige intelligentie van de kolonie.
 
-### 2) Spelercommando’s
-- HELP: lijst met beschikbare commando’s
-- STATUS: toont MU/TH/UR‑status (tekst door GM instelbaar)
-- /M <bericht>: bericht rechtstreeks naar MOTHER
-- CLEAR: chat wissen (gespiegeld naar toeschouwers)
-- EXIT: terminal sluiten (gespiegeld naar toeschouwers)
-- HACK: start hack; GM beslist SUCCES/MISLUKT; animaties/glitches gesynchroniseerd
-- ORDERS 754|899|931|937|939|966: toont de Speciale Order (na hack)
-- CERBERUS: vraag GM‑goedkeuring; bij goedkeuring → rode waarschuwing + CONFIRM/CANCEL (alleen speler) → globale countdown
+---
 
-### 3) Instellingen
-- enableTypingSounds (client), typingSoundVolume (client)
-- enableScanline / scanlineSize (client), enableTypewriter (client)
-- allowHack (wereld)
-- allowDragGM / allowDragPlayers (wereld)
-- currentStatusKey / customStatusText (wereld)
-- captainUserIds / allowCaptainSpecialOrders (wereld)
-- alarmSoundPath (wereld)
+## 💛 Steun het Project
+Als deze module heeft geholpen om de spanning en immersie aan je **Alien RPG**-tafel te verhogen, overweeg dan om de ontwikkelaars te steunen om nieuwe updates te stimuleren!
+* **Originele Maker (ShazProd):** Overweeg om de maker van de originele module te steunen door zijn profiel op [ShazProd op GitHub](https://github.com/ShazProd) te bezoeken.
+* **Ontwikkelaar van de Fork (KorujaSedex123):** Als je geniet dier de lokalisatie en de nieuwe functie voor Aangepaste GM-commando's, steun dan deze fork:
+  * [☕ Koop een Koffie (Ko-fi)](https://ko-fi.com/korujasedex)
+  * [☕ Koop een Koffie (Buy me a Coffee)](https://buymeacoffee.com/brunogrzegm)
+  * 🔑 **PIX**: `https://livepix.gg/korujasedex`
 
-### 4) HACK‑flow (gesynchroniseerd)
-1. Speler typt HACK → GM ontvangt beslisvenster (aan GM‑terminal verankerd)
-2. GM klikt SUCCES/MISLUKT → terug naar speler
-3. Tekst, glitches en geluid lopen synchroon bij Speler en Toeschouwers
-4. Bij succes: nieuwe orders beschikbaar; ook zichtbaar bij GM
+---
 
-### 5) CERBERUS‑protocol
-1. Speler typt CERBERUS → GM ziet goedkeuren/weigeren + minuten
-2. Bij goedkeuring: Speler ziet rode waarschuwing; Toeschouwers zien dezelfde tekst zonder knoppen
-3. Speler bevestigt (CONFIRM) → globale countdown (zwevende timer + chat)
-4. Bij 0: eindsequentie, opschonen, automatisch sluiten
+## 🤝 Speciale Dank & Erkenning
+Deze repository is een gelokaliseerde en aangepaste fork van de spectaculaire **Alien MU/TH/UR 6000**-module, oorspronkelijk gemaakt door de getalenteerde ontwikkelaar **ShazProd** ([@ShazProd](https://github.com/ShazProd)).
+* We willen onze diepste dank betuigen aan **ShazProd** voor het ontwikkelen van de ongelooflijke esthetiek en mechanica van de originele terminal (zoals CRT-effecten, typemachine-effecten, hackprotocollen, toeschouwersmodus, omgevingscontroles en het nucleaire aftellen).
 
-### 6) Alarm (globaal aan/uit)
-- Aan: GM‑goedkeuring → sirene + rood overlay voor iedereen
-- Uit: GM STOP‑knop → betrouwbaar AudioHelper‑stop + geforceerde stops
-- “Alarm uitgeschakeld” naar iedereen, incl. toeschouwers
+---
 
-### 7) Omgevingsbediening
-- DEUREN: LOCK/UNLOCK met GM‑selectie/goedgekeuring, gesynchroniseerde feedback
-- LICHT: DIM/SHUTDOWN/RESTORE met GM‑goedkeuring
-- GAS: GM kiest doelen; effect gesynchroniseerd
-- CRYO POD / CRYO RELEASE: selectie via vensters aan GM‑terminal
+## ✨ Overzicht van Functies
 
-### 8) Sockets & Sync (belangrijkste events)
-`muthurCommand`, `muthurResponse`, `updateSpectators`, `requestCurrentMessages`, `syncMessages`, `statusResponse`, `hackingAttempt/hackStream/hackGlitch/hackStopGlitch/hackComplete`, `alarmControl`, `showCerberusGlobal/stopCerberus`, `sessionStatus`, `closeMuthurChats`.
+### 🛠️ Basismodule-functies (Ontwikkeld door ShazProd)
+* 📟 **Analoge CRT-esthetiek**: Zware CRT-scanlines, typemachine-typeringseffecten, helderheidsflikkering en gesynchroniseerde visuelle glitch-effecten.
+* 👁️ **Spiegel Toeschouwersmodus**: Spelers kunnen de terminal van de actieve operator in realtime bekijken, met exact dezelfde tekststroom en terminalglitches!
+* 🔌 **Dynamisch Hackprotocol**: Typen van `HACK` start een beveiligingsomleidingsverzoek. De Game Master (GM) krijgt een interactieve pop-up om de hack direct goed te keuren of te weigeren.
+* 🚨 **CERBERUS-protocol**: Nucleaire zelfvernietigingscountdown met rode waarschuwingslussen op het volledige scherm, sirenes en automatische uitlogging bij ontploffing.
+* 🎮 **Omgevingscontroles**: Door de GM goedgekeurde terminalcommando's om deuren te vergrendelen/ontgrendelen, verlichting te regelen (`LIGHTS DIM/SHUTDOWN`), gas af te blazen of cryogene capsules te bedienen.
 
-### 9) Installeren & Starten
-1. Installeer en activeer de module
-2. Speler opent MU/TH/UR (knop in scenenotities/bediening)
-3. GM keurt goed en selecteert toeschouwers
-4. Typ commando’s in de terminal
+### ⚙️ Aangepaste Fork-functies (Toegevoegd by KorujaSedex123)
+* 🌐 **Volledige Lokalisatie**: Volledige vertaling die direct aansluit bij de officiële terminologie van de Alien rollenspelboeken.
+* 🔧 **Dynamische Aangepaste GM-commando's**: GM's kunnen hun eigen terminalprompts en antwoorden (zoals verborgen aanwijzingen, lore-geheimen of bedrijfsrichtlijnen) rechtstreeks registreren via het Foundry VTT Module Settings-menu in een eenvoudig JSON-formaat — **geen codewijziging vereist!**
 
-### 10) Support
-Steun de ontwikkeling: Ko‑fi / Tipeee (links in de hoofd‑README)
+---
 
+## 🚀 Snelle Installatie
+Om deze aangepaste editie van de module in je Foundry VTT te installeren:
+1. Navigeer in het hoofdscherm van Foundry VTT naar **Add-on Modules**.
+2. Klik op **Install Module**.
+3. Plak de onderstaande link in het veld **Manifest URL**:
+   ```
+   https://github.com/KorujaSedex123/alien-mu-th-ur-pt-br/releases/latest/download/module.json
+   ```
+4. Klik op **Install** en wacht tot het proces is voltooid.
+5. Schakel de module in bij je wereldinstellingen onder **Manage Modules**.
 
+---
+
+## ⚙️ Handleiding voor Aangepaste GM-commando's
+
+GMs kunnen hun eigen aangepaste commando's configureren in de instellingen van de Foundry VTT-module door een eenvoudig JSON-object in te voeren.
+
+### Voorbeeldconfiguratie:
+```json
+{
+  "LOGBOEKEN": "TOEGANG TOT LOGBOEKEN... [12/04/2179]: Temperatuurstijging gedetecteerd in sector G-14.",
+  "RICHTLIJN": "WEYLAND-YUTANI RICHTLIJN: Bescherm buitenaardse technologie ten koste van tutto. Bemanning is opofferbaar."
+}
+```
+
+Als een speler `LOGBOEKEN` of `RICHTLIJN` in de terminal typt, antwoordt MU/TH/UR met de door de GM geconfigureerde berichten!
+
+---
+
+*Handleiding gegenereerd in overeenstemming met Speciale Richtlijn 937. De veiligheid van bedrijfsactiva is onze absolute prioriteit.*

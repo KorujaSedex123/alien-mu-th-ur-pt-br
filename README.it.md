@@ -1,70 +1,69 @@
-## 🇮🇹 Alien MU/TH/UR 6000 — Guida Completa
+# 🌌 Alien MU/TH/UR 6000 — Guida Completa all'Installazione e Personalizzazione
 
-MU/TH/UR 6000 per Foundry VTT (ALIEN RPG): terminale retrò completamente sincronizzato tra Giocatore, Spettatore e GM: effetto macchina da scrivere, estetica CRT/scanline, glitch, audio, HACK gestito dal GM e protocollo CERBERUS globale.
+### *Modulo di Interfaccia Terminale Retro-Futurista Sincronizzato per ALIEN RPG (Foundry VTT v14)*
 
-### 1) Caratteristiche principali
-- Interfaccia retrò: digitazione, scanline, tinta CRT, glitch leggeri/forti
-- Modalità Spettatore a specchio: copia fedele della vista del Giocatore (incl. HACK/CERBERUS)
-- Audio integrato: battitura/return/errore/risposta con volume e limitazione
-- HACK con decisione del GM: SUCCESSO/FALLIMENTO tramite mini‑finestra ancorata al terminale GM
-- Ordini Speciali: 754/899/931/937/939/966 dopo hack riuscito
-- Protocollo CERBERUS: approvazione GM, avviso rosso, conferma del giocatore, conto alla rovescia globale, chiusura automatica
-- Allarme: attivazione/arresto sincronizzati (overlay rosso + sirena), pulsante STOP sull’header GM
-- Controlli ambiente: porte/luci/GAS/Cryo via richiesta del giocatore → approvazione GM → esecuzione sincronizzata
-- Trascinamento terminale (opzionale): per GM e/o giocatori/spettatori, senza bloccare l’input
+Questo repository contiene la versione personalizzata e localizzata del modulo **Alien MU/TH/UR 6000** (originariamente creato da *ShazProd*). Simula un terminale di computer a fosfori verdi degli anni '80, consentendo ai giocatori di interagire in tempo reale con l'intelligenza artificiale della colonia.
 
-### 2) Comandi del Giocatore
-- HELP: elenca i comandi disponibili
-- STATUS: mostra lo stato di MU/TH/UR (testo configurabile dal GM)
-- /M <messaggio>: messaggio diretto a MOTHER
-- CLEAR: pulisce la chat (riflesso agli spettatori)
-- EXIT: chiude il terminale (riflesso agli spettatori)
-- HACK: avvia l’hacking; il GM decide SUCCESSO/FALLIMENTO; animazioni/glitch sincronizzati
-- ORDERS 754|899|931|937|939|966: mostra l’Ordine Speciale (post‑hack)
-- CERBERUS: richiede approvazione GM; se approvato → avviso rosso + CONFIRM/CANCEL (solo giocatore) → conto alla rovescia globale
+---
 
-### 3) Impostazioni
-- enableTypingSounds (client), typingSoundVolume (client)
-- enableScanline / scanlineSize (client), enableTypewriter (client)
-- allowHack (mondo)
-- allowDragGM / allowDragPlayers (mondo)
-- currentStatusKey / customStatusText (mondo)
-- captainUserIds / allowCaptainSpecialOrders (mondo)
-- alarmSoundPath (mondo)
+## 💛 Supporta il Progetto
+Se questo modulo ha contribuito a elevare la tensione e l'immersione nelle tue sessioni di **Alien RPG**, considera di supportare gli sviluppatori per incoraggiare nuovi aggiornamenti!
+* **Creatore Originale (ShazProd):** Supporta il creatore del modulo originale accedendo al profilo di [ShazProd su GitHub](https://github.com/ShazProd).
+* **Sviluppatore del Fork (KorujaSedex123):** Se apprezzi la localizzazione e la nuova funzionalità dei Comandi Personalizzati del GM, supporta questo fork:
+  * [☕ Offri un Caffè (Ko-fi)](https://ko-fi.com/korujasedex)
+  * [☕ Offri un Caffè (Buy me a Coffee)](https://buymeacoffee.com/brunogrzegm)
+  * 🔑 **PIX**: `https://livepix.gg/korujasedex`
 
-### 4) Flusso HACK (sincronizzato)
-1. Il giocatore digita HACK → il GM riceve la finestra di decisione (ancorata al terminale GM)
-2. Il GM clicca SUCCESSO/FALLIMENTO → rimandato al giocatore
-3. Sequenze di testo, glitch e suoni in sincrono su Giocatore e Spettatori
-4. In caso di successo: nuovi ordini disponibili; mostrati anche al GM
+---
 
-### 5) Protocollo CERBERUS
-1. Il giocatore digita CERBERUS → il GM vede approva/rifiuta + minuti
-2. Se approvato: il giocatore vede un avviso rosso; gli spettatori vedono lo stesso testo senza pulsanti
-3. Il giocatore conferma (CONFIRM) → conto alla rovescia globale (timer flottante + chat)
-4. A 0: sequenza finale, pulizia, chiusura automatica delle interfacce
+## 🤝 Crediti Speciali & Ringraziamenti
+Questo repository è un fork localizzato e personalizzato dello straordinario modulo **Alien MU/TH/UR 6000** creato originariamente dal talentuoso sviluppatore **ShazProd** ([@ShazProd](https://github.com/ShazProd)).
+* Vogliamo esprimere la nostra più profonda gratitudine a **ShazProd** per aver sviluppato l'incredibile estetica e meccanica del terminale originale (come effetti CRT, effetti di digitazione macchina, protocolli di hacking, modalità spettatore, controlli ambientali e il conto alla rovescia nucleare).
 
-### 6) Allarme (globale on/off)
-- On: approvazione GM → sirena + overlay rosso per tutti
-- Off: pulsante STOP GM → arresto affidabile via AudioHelper + stop forzato
-- “Allarme disattivato” inviato a tutti, inclusi spettatori
+---
 
-### 7) Controlli Ambiente
-- PORTE: LOCK/UNLOCK con selezione/approvazione GM, feedback sincronizzato
-- LUCI: DIM/SHUTDOWN/RESTORE con approvazione GM
-- GAS: il GM sceglie i bersagli; effetto sincronizzato
-- CRYO POD / CRYO RELEASE: selezione tramite finestre ancorate al terminale GM
+## ✨ Riepilogo delle Funzionalità
 
-### 8) Socket & Sync (eventi principali)
-`muthurCommand`, `muthurResponse`, `updateSpectators`, `requestCurrentMessages`, `syncMessages`, `statusResponse`, `hackingAttempt/hackStream/hackGlitch/hackStopGlitch/hackComplete`, `alarmControl`, `showCerberusGlobal/stopCerberus`, `sessionStatus`, `closeMuthurChats`.
+### 🛠️ Funzionalità del Modulo Base (Sviluppato da ShazProd)
+* 📟 **Estetica CRT Analogica**: Linee di scansione CRT pesanti, effetti di digitazione meccanica, sfarfallio della luminosità ed effetti di glitch visivi sincronizzati.
+* 👁️ **Modalità Spettatore Specchio**: I giocatori possono guardare lo schermo dell'operatore attivo in tempo reale, condividendo lo stesso identico flusso di testo e gli stessi glitch!
+* 🔌 **Protocollo di Hacking Dinamico**: Digitando `HACK` si avvia una richiesta di bypass della sicurezza. Il Game Master (GM) riceve un pop-up interattivo per approvare o negare istantaneamente l'hacking.
+* 🚨 **Protocollo CERBERUS**: Conto alla rovescia per l'autodistruzione nucleare con avvisi rossi a schermo intero, sirene e disconnessione automatica della sessione al termine.
+* 🎮 **Controlli Ambientali**: Comandi approvati dal GM per bloccare/sbloccare porte, controllare l'illuminazione (`LIGHTS DIM/SHUTDOWN`), scaricare gas o operare le capsule criogeniche.
 
-### 9) Installazione & Avvio
-1. Installa e abilita il modulo
-2. Il giocatore apre MU/TH/UR (pulsante nelle note/controlli della scena)
-3. Il GM approva e seleziona gli spettatori
-4. Digita i comandi nel terminale
+### ⚙️ Funzionalità del Fork Personalizzato (Aggiunto da KorujaSedex123)
+* 🌐 **Localizzazione Completa**: Traduzione integrata direttamente con la terminologia ufficiale del gioco di ruolo di Alien.
+* 🔧 **Comandi di Gioco Personalizzati del GM**: I GM possono registrare i propri comandi di terminale e risposte (come indizi nascosti, segreti di lore o direttive aziendali) direttamente tramite il menu di configurazione dei moduli di Foundry VTT in un formato JSON estremamente semplice — **senza bisogno di modificare il codice!**
 
-### 10) Supporto
-Supporto allo sviluppo: Ko‑fi / Tipeee (link nel README principale)
+---
 
+## 🚀 Installazione Rapida
+Per installare questa edizione personalizzata del modulo nel tuo Foundry VTT:
+1. Nella schermata principale di configurazione di Foundry VTT, naviga su **Add-on Modules**.
+2. Clicca su **Install Module**.
+3. Nel campo **Manifest URL**, incolla il link sottostante:
+   ```
+   https://github.com/KorujaSedex123/alien-mu-th-ur-pt-br/releases/latest/download/module.json
+   ```
+4. Clicca su **Install** e attendi il completamento del processo.
+5. Abilita il modulo nelle impostazioni del tuo mondo sotto **Manage Modules**.
 
+---
+
+## ⚙️ Guida ai Comandi di Gioco Personalizzati del GM
+
+I GM possono configurare i propri comandi personalizzati nelle impostazioni del modulo Foundry VTT inserendo un oggetto JSON semplice. 
+
+### Esempio di Configurazione:
+```json
+{
+  "REGISTRI": "ACCESSO AI REGISTRI DI BORDO... [12/04/2179]: Rilevato aumento della temperatura nel settore G-14.",
+  "DIRETTIVA": "DIRETTIVA WEYLAND-YUTANI: Proteggere la tecnologia aliena a tutti i costi. L'equipaggio è sacrificabile."
+}
+```
+
+Quando un giocatore digita `REGISTRI` o `DIRETTIVA` nel terminale, MU/TH/UR risponderà con i messaggi configurati dal GM!
+
+---
+
+*Manuale generato in conformità con la Direttiva Speciale 937. La sicurezza degli asset aziendali è la nostra massima priorità.*

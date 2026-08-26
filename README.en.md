@@ -31,7 +31,7 @@ This repository is a localized and custom fork of the spectacular **Alien MU/TH/
 
 ## 🌐 Documentation Languages
 Please choose your language to access the specific documentation and features:
-* 🇧🇷 **Português (Brasil)**: [README.pt.md](README.pt.md) *(Manual em Português com suporte a Comandos Customizados)*
+* 🇧🇷 **Português (Brasil)**: [README.md](README.md) *(Manual em Português com suporte a Comandos Customizados)*
 * 🇬🇧 **English**: [README.en.md](README.en.md) *(English documentation featuring Custom GM Commands)*
 * 🇫🇷 **Français**: [README.fr.md](README.fr.md)
 * 🇩🇪 **Deutsch**: [README.de.md](README.de.md)

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Correction pour le mode spectateur de MU/TH/UR
  * Ce script corrige les problèmes de synchronisation entre le joueur actif et les spectateurs
  */
@@ -84,7 +84,7 @@ Hooks.once('ready', () => {
     if (typeof updateSpectatorsWithMessage !== 'function') {
         window.updateSpectatorsWithMessage = function(text, prefix = '', color = '#00ff00', messageType = 'normal') {
             // Envoyer le message à tous les spectateurs via le socket
-            game.socket.emit('module.alien-mu-th-ur', {
+            game.socket.emit('module.alien-mu-th-ur-pt-br', {
                 type: 'updateSpectators',
                 text: text,
                 prefix: prefix,
@@ -121,7 +121,7 @@ Hooks.once('ready', () => {
                     currentMuthurSession.userId = null;
                     currentMuthurSession.userName = null;
 
-                    game.socket.emit('module.alien-mu-th-ur', {
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', {
                         type: 'sessionStatus',
                         active: false
                     });
@@ -151,7 +151,7 @@ Hooks.once('ready', () => {
                 currentMuthurSession.userName = game.user.name;
                 
                 // Informer le GM qu'un joueur a lancé MU/TH/UR et attendre sa sélection de spectateurs
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'requestSpectatorSelection',
                     userId: game.user.id,
                     userName: game.user.name
@@ -200,7 +200,7 @@ Hooks.once('ready', () => {
     // S'assurer que les spectateurs voient la séquence de boot
     Hooks.on('ready', () => {
         // Écouter les événements socket
-        game.socket.on('module.alien-mu-th-ur', (data) => {
+        game.socket.on('module.alien-mu-th-ur-pt-br', (data) => {
             if (data.type === 'continueBootSequence' && !game.user.isGM) {
                 if (data.spectatorIds && data.spectatorIds.includes(game.user.id)) {
                     // Les spectateurs voient aussi la séquence de boot
@@ -249,7 +249,7 @@ Hooks.once('ready', () => {
             
             // Envoyer un signal aux joueurs sélectionnés pour ouvrir l'interface en mode spectateur
             if (selectedPlayers.length > 0) {
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'openSpectatorInterface',
                     spectatorIds: selectedPlayers,
                     activeUserId: activeUserId,
@@ -258,7 +258,7 @@ Hooks.once('ready', () => {
             }
             
             // Envoyer un signal au joueur actif et aux spectateurs pour continuer avec la séquence de démarrage
-            game.socket.emit('module.alien-mu-th-ur', {
+            game.socket.emit('module.alien-mu-th-ur-pt-br', {
                 type: 'continueBootSequence',
                 targetUserId: activeUserId,
                 spectatorIds: selectedPlayers
@@ -270,7 +270,7 @@ Hooks.once('ready', () => {
             dialog.remove();
             
             // Envoyer un signal au joueur actif pour continuer avec la séquence de démarrage (sans spectateurs)
-            game.socket.emit('module.alien-mu-th-ur', {
+            game.socket.emit('module.alien-mu-th-ur-pt-br', {
                 type: 'continueBootSequence',
                 targetUserId: activeUserId,
                 spectatorIds: []
@@ -283,7 +283,7 @@ Hooks.once('ready', () => {
     // Remplacer la fonction updateSpectatorsWithMessage pour qu'elle fonctionne correctement
     window.updateSpectatorsWithMessage = function(text, prefix = '', color = '#00ff00', messageType = 'normal') {
         // Envoyer le message à tous les spectateurs via le socket
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'updateSpectators',
             text: text,
             prefix: prefix,

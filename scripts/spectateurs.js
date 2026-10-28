@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Correction pour le mode spectateur de MU/TH/UR
  * Ce script corrige les problèmes de synchronisation entre le joueur actif et les spectateurs
  */
@@ -13,7 +13,7 @@ Hooks.once('ready', () => {
     // Fonction pour mettre à jour les interfaces spectateurs avec un nouveau message
     window.updateSpectatorsWithMessage = function(text, prefix = '', color = '#00ff00', messageType = 'normal') {
         // Envoyer le message à tous les spectateurs via le socket
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'updateSpectators',
             text: text,
             prefix: prefix,
@@ -36,7 +36,7 @@ Hooks.once('ready', () => {
     // Fonction pour synchroniser les résultats des commandes spéciales
     window.syncCommandResult = function(command, result) {
         // Envoyer le résultat de la commande à tous les spectateurs
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'commandResult',
             command: command,
             result: result
@@ -128,7 +128,7 @@ Hooks.once('ready', () => {
                     currentMuthurSession.userId = null;
                     currentMuthurSession.userName = null;
 
-                    game.socket.emit('module.alien-mu-th-ur', {
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', {
                         type: 'sessionStatus',
                         active: false
                     });
@@ -158,7 +158,7 @@ Hooks.once('ready', () => {
                 currentMuthurSession.userName = game.user.name;
                 
                 // Informer le GM qu'un joueur a lancé MU/TH/UR et attendre sa sélection de spectateurs
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'requestSpectatorSelection',
                     userId: game.user.id,
                     userName: game.user.name
@@ -238,7 +238,7 @@ Hooks.once('ready', () => {
                     
                     // Envoyer un signal aux joueurs sélectionnés pour ouvrir l'interface en mode spectateur
                     if (selectedPlayers.length > 0) {
-                        game.socket.emit('module.alien-mu-th-ur', {
+                        game.socket.emit('module.alien-mu-th-ur-pt-br', {
                             type: 'openSpectatorInterface',
                             spectatorIds: selectedPlayers,
                             activeUserId: activeUserId,
@@ -247,7 +247,7 @@ Hooks.once('ready', () => {
                     }
                     
                     // Envoyer un signal au joueur actif et aux spectateurs pour continuer avec la séquence de démarrage
-                    game.socket.emit('module.alien-mu-th-ur', {
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', {
                         type: 'continueBootSequence',
                         targetUserId: activeUserId,
                         spectatorIds: selectedPlayers
@@ -259,7 +259,7 @@ Hooks.once('ready', () => {
                     dialog.remove();
                     
                     // Envoyer un signal au joueur actif pour continuer avec la séquence de démarrage (sans spectateurs)
-                    game.socket.emit('module.alien-mu-th-ur', {
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', {
                         type: 'continueBootSequence',
                         targetUserId: activeUserId,
                         spectatorIds: []
@@ -275,7 +275,7 @@ Hooks.once('ready', () => {
     window.syncHackingAttempt = function() {
         try { console.log('MUTHUR Spectator | syncHackingAttempt demandé par initiateur'); } catch(e) {}
         // Informer les spectateurs qu'une tentative de hack est en cours
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'hackingAttempt'
         });
     };
@@ -326,7 +326,7 @@ Hooks.once('ready', () => {
     };
     
     // Écouter les événements socket pour les spectateurs
-    game.socket.on('module.alien-mu-th-ur', (data) => {
+    game.socket.on('module.alien-mu-th-ur-pt-br', (data) => {
         // Effacer le chat côté spectateur lorsque le joueur envoie CLEAR
         if (data.type === 'clearSpectatorChat' && !game.user.isGM) {
             try {
@@ -447,7 +447,7 @@ Hooks.once('ready', () => {
                     });
                 });
                 
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'syncMessages',
                     messages: messageData,
                     targetSpectatorId: data.spectatorId

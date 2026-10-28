@@ -1,36 +1,205 @@
-<form autocomplete="off" onsubmit="event.preventDefault();">
-    <p style="color: #00ff00; font-family: monospace;">Cadastre os comandos e as respostas da MUTHUR:</p>
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
-        <thead>
-            <tr style="border-bottom: 1px solid #00ff00; color: #ff9900;">
-                <th style="text-align: left;">Comando</th>
-                <th style="text-align: left;">Resposta da IA</th>
-                <th style="width: 60px; text-align: center;" title="Exige Hack?"><i class="fas fa-unlock-alt"></i></th>
-                <th style="width: 40px;"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each commands}}
-            <tr class="command-row">
-                <td><input type="text" name="commandKey" value="{{this.command}}" style="background: black; color: #00ff00; border: 1px solid #333; font-family: monospace;" placeholder="COMANDO"/></td>
-                <td><input type="text" name="commandResponse" value="{{this.response}}" style="background: black; color: #00ff00; border: 1px solid #333; font-family: monospace;" placeholder="Resposta..."/></td>
-                <td style="text-align: center;">
-                    <input type="checkbox" name="commandRequiresHack" {{#if this.requiresHack}}checked{{/if}} style="cursor: pointer;" title="Marque se este comando só deve funcionar após um HACK bem sucedido"/>
-                </td>
-                <td style="text-align: center;">
-                    <button type="button" class="remove-command" style="background: #330000; color: #ff0000; border: 1px solid #ff0000; width: 30px; height: 30px;" title="Remover"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-    
-    <div style="display: flex; gap: 10px;">
-        <button type="button" class="add-command" style="background: black; color: #00ff00; border: 1px solid #00ff00; font-family: monospace;">
-            <i class="fas fa-plus"></i> Adicionar Comando
+<form autocomplete="off" onsubmit="event.preventDefault();" class="muthur-config-form">
+    <style>
+        .muthur-config-form {
+            background: #050a05;
+            color: #00ff00;
+            font-family: monospace;
+            padding: 8px;
+        }
+        .muthur-config-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #00ff00;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+        .muthur-config-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #00ff00;
+            text-shadow: 0 0 5px rgba(0,255,0,0.5);
+            margin: 0;
+        }
+        .muthur-search-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+        .muthur-search-input {
+            flex: 1;
+            background: #000;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 6px 10px;
+            font-family: monospace;
+            border-radius: 2px;
+        }
+        .muthur-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+        }
+        .muthur-table th {
+            color: #ff9900;
+            text-transform: uppercase;
+            font-size: 12px;
+            padding: 6px;
+            border-bottom: 1px solid #333;
+        }
+        .muthur-command-row {
+            border-bottom: 1px solid #1a2e1a;
+            transition: background 0.2s;
+        }
+        .muthur-command-row:hover {
+            background: rgba(0, 255, 0, 0.05);
+        }
+        .muthur-input-cmd {
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #224422;
+            font-family: monospace;
+            font-weight: bold;
+            padding: 6px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 2px;
+        }
+        .muthur-textarea-resp {
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #224422;
+            font-family: monospace;
+            padding: 6px;
+            width: 100%;
+            box-sizing: border-box;
+            resize: vertical;
+            min-height: 48px;
+            border-radius: 2px;
+        }
+        .muthur-btn {
+            background: #000;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 6px 12px;
+            font-family: monospace;
+            cursor: pointer;
+            font-size: 12px;
+            border-radius: 2px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .muthur-btn:hover {
+            background: #003300;
+            box-shadow: 0 0 6px #00ff00;
+        }
+        .muthur-btn-accent {
+            border-color: #ff9900;
+            color: #ff9900;
+        }
+        .muthur-btn-accent:hover {
+            background: #332200;
+            box-shadow: 0 0 6px #ff9900;
+        }
+        .muthur-btn-danger {
+            background: #200;
+            border-color: #ff3333;
+            color: #ff3333;
+            width: 32px;
+            height: 32px;
+            justify-content: center;
+            padding: 0;
+        }
+        .muthur-btn-danger:hover {
+            background: #500;
+            box-shadow: 0 0 6px #ff3333;
+        }
+        .muthur-actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #224422;
+            padding-top: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .muthur-left-actions, .muthur-right-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .muthur-badge-hack {
+            color: #ff9900;
+            font-size: 11px;
+            text-align: center;
+        }
+    </style>
+
+    <div class="muthur-config-header">
+        <h3 class="muthur-config-title"><i class="fas fa-terminal"></i> PROTOCOLOS & DIRETRIZES DA IA MU/TH/UR</h3>
+        <span style="font-size: 11px; color: #888;">WEYLAND-YUTANI CORP</span>
+    </div>
+
+    <div class="muthur-search-bar">
+        <i class="fas fa-search" style="color: #00ff00;"></i>
+        <input type="text" class="muthur-search-input" id="muthur-cmd-filter" placeholder="Buscar comando ou resposta..." />
+        <button type="button" class="muthur-btn load-preset-btn" title="Carregar Comandos Prontos de Cenários">
+            <i class="fas fa-database"></i> Presets
         </button>
-        <button type="submit" name="submit" style="background: black; color: #ff9900; border: 1px solid #ff9900; font-family: monospace;">
-            <i class="fas fa-save"></i> Salvar Protocolos
-        </button>
+    </div>
+
+    <div style="max-height: 400px; overflow-y: auto; border: 1px solid #1a2e1a; padding: 4px; margin-bottom: 8px;">
+        <table class="muthur-table">
+            <thead>
+                <tr>
+                    <th style="width: 30%; text-align: left;">Comando</th>
+                    <th style="width: 52%; text-align: left;">Resposta da IA (Suporta Múltiplas Linhas)</th>
+                    <th style="width: 10%; text-align: center;" title="Exige invasão / Root (HACK)"><i class="fas fa-user-shield"></i> HACK?</th>
+                    <th style="width: 8%; text-align: center;"></th>
+                </tr>
+            </thead>
+            <tbody id="muthur-commands-tbody">
+                {{#each commands}}
+                <tr class="command-row muthur-command-row">
+                    <td style="vertical-align: top; padding: 4px;">
+                        <input type="text" name="commandKey" value="{{this.command}}" class="muthur-input-cmd" placeholder="COMANDO" />
+                    </td>
+                    <td style="vertical-align: top; padding: 4px;">
+                        <textarea name="commandResponse" class="muthur-textarea-resp" placeholder="Resposta da IA...">{{this.response}}</textarea>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center; padding: 4px;">
+                        <input type="checkbox" name="commandRequiresHack" {{#if this.requiresHack}}checked{{/if}} style="cursor: pointer; transform: scale(1.2);" title="Exige HACK prévio para responder" />
+                    </td>
+                    <td style="vertical-align: middle; text-align: center; padding: 4px;">
+                        <button type="button" class="muthur-btn muthur-btn-danger remove-command" title="Remover"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="muthur-actions-bar">
+        <div class="muthur-left-actions">
+            <button type="button" class="muthur-btn add-command">
+                <i class="fas fa-plus"></i> Novo Comando
+            </button>
+            <button type="button" class="muthur-btn export-json-btn" title="Baixar arquivo JSON com os comandos atuais">
+                <i class="fas fa-file-export"></i> Exportar
+            </button>
+            <button type="button" class="muthur-btn import-json-btn" title="Importar arquivo JSON de comandos">
+                <i class="fas fa-file-import"></i> Importar
+            </button>
+            <input type="file" id="muthur-import-file-input" accept=".json" style="display: none;" />
+        </div>
+        <div class="muthur-right-actions">
+            <button type="submit" name="submit" class="muthur-btn muthur-btn-accent">
+                <i class="fas fa-save"></i> Gravar Protocolos
+            </button>
+        </div>
     </div>
 </form>

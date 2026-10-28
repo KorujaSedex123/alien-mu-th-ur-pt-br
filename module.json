@@ -20,8 +20,6 @@
   },
   "socket": true,
   "esmodules": [
-    "greensock/esm/all.js",
-    "scripts/muthur-settings.js",
     "scripts/main.js",
     "scripts/spectateurs.js"
   ],

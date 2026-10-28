@@ -2,7 +2,7 @@
     "MUTHUR": {
         "welcome": "MU/TH/UR 6000 v2.1.0\nTERMINAL ATIVO...\nINTERFACE 2037\nAGUARDANDO COMANDO...",
         "waitingResponse": "AGUARDANDO RESPOSTA...",
-        "help": "COMANDOS DISPONÍVEIS:\n- HELP: EXIBIR ESTA AJUDA\n- STATUS: STATUS DO SISTEMA\n- CLEAR: LIMPAR TELA\n- EXIT: FECHAR TERMINAL\n- /M [MENSAGEM]: COMUNICAR COM A MÃE\n \nAGUARDANDO COMANDO...",
+        "help": "COMANDOS DISPONÍVEIS:\n- AJUDA / HELP: EXIBIR ESTA AJUDA\n- STATUS / ESTADO: STATUS DO SISTEMA\n- LIMPAR / CLEAR: LIMPAR TELA\n- SAIR / EXIT: FECHAR TERMINAL\n- PORTAS / DOORS: LISTAR PORTAS DA ÁREA\n- TRANCAR PORTA [N] / LOCK DOOR [N]: TRANCAR PORTA\n- ABRIR PORTA [N] / UNLOCK DOOR [N]: DESTRANCAR PORTA\n- LUZES APAGAR / SHUTDOWN LIGHTS: APAGAR ILUMINAÇÃO\n- LUZES RESTAURAR / RESTORE LIGHTS: RESTAURAR ILUMINAÇÃO\n- ALARME / ALARM: ACIONAR ALARME GERAL\n- GAS / GÁS: LIBERAR GÁS NA ÁREA\n- /M [MENSAGEM]: COMUNICAR COM A MÃE\n \nAGUARDANDO COMANDO...",
         "status": "MU/TH/UR 6000 v2.1.0\nTODOS OS SISTEMAS OPERACIONAIS\nNENHUMA ANOMALIA DETECTADA",
         "commandNotFound": "COMANDO NÃO RECONHECIDO. DIGITE 'HELP' PARA A LISTA DE COMANDOS.",
         "sessionEnded": "SESSÃO ENCERRADA",
@@ -129,14 +129,6 @@
             "support": "Para apoiar meus projetos:"
         },
         "SETTINGS": {
-            "ALIEN-MU-TH-UR": {
-                "Settings": {
-                    "CustomCommands": {
-                        "Name": "Comandos Personalizados",
-                        "Hint": "Cadastre novos comandos em formato JSON. Exemplo: {\"PURGA\": \"Iniciando ejeção de gás...\", \"SENHA\": \"Acesso concedido.\"}."
-                    }
-                }
-            },
             "useTokenName": {
                 "name": "Usar Nome do Personagem",
                 "hint": "Usa o nome da ficha do personagem em vez do nome de usuário do jogador nas mensagens"
@@ -391,6 +383,14 @@
                 "Stopped": "SOBRECARGA DO REATOR CANCELADA",
                 "goodbye": "BOA SORTE",
                 "StopCerberus": "Desativar Cérbero"
+            }
+        }
+    },
+    "ALIEN-MU-TH-UR": {
+        "Settings": {
+            "CustomCommands": {
+                "Name": "Comandos Personalizados",
+                "Hint": "Cadastre novos comandos e respostas automáticas para o MU/TH/UR."
             }
         }
     }

@@ -1,4 +1,5 @@
-import gsap from "/scripts/greensock/esm/all.js";
+﻿// gsap import removed - using window.gsap fallback if present
+const gsap = window.gsap || { to: (el, opts) => { if(opts && opts.onComplete) opts.onComplete(); }, from: (el, opts) => {}, timeline: () => ({ to: () => {} }) };
 
 console.error("lancement de muthur");
 let currentReplySound = null;
@@ -205,7 +206,7 @@ async function showBootSequence(isSpectator = false) {
             opacity: 1,
             duration: 1,
             onComplete: () => {
-                if (game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
+                if (game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds')) {
                     playComSound();
                 }
             }
@@ -273,8 +274,8 @@ function startCerberusCountdown(minutes) {
         if (floatingCountdown) floatingCountdown.textContent = countdownText;
 
         if (timeLeft <= 10 && timeLeft > 0) {
-            const audio = new Audio(`modules/alien-mu-th-ur/sounds/count/${timeLeft}.mp3`);
-            audio.volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
+            const audio = new Audio(`modules/alien-mu-th-ur-pt-br/sounds/count/${timeLeft}.mp3`);
+            audio.volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
             audio.play();
         }
 
@@ -302,9 +303,9 @@ function startCerberusCountdown(minutes) {
                 });
             }
 
-            if (game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
-                const audio = new Audio('modules/alien-mu-th-ur/sounds/pec_message/error.wav');
-                audio.volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
+            if (game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds')) {
+                const audio = new Audio('modules/alien-mu-th-ur-pt-br/sounds/pec_message/error.wav');
+                audio.volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
                 audio.play();
             }
 
@@ -435,7 +436,7 @@ function sendToGM(message, actionType = 'command', commandType = '') {
     }
 
     try {
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'muthurCommand',
             command: message,
             user: game.user.name,
@@ -456,40 +457,196 @@ class MuthurCommandsConfig extends FormApplication {
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
             id: 'muthur-custom-commands-menu',
-            title: 'Protocolos e Comandos MUTHUR',
-            template: 'modules/alien-mu-th-ur/templates/custom-commands.hbs',
-            width: 600,
+            title: 'Protocolos e Comandos MU/TH/UR 6000',
+            template: 'modules/alien-mu-th-ur-pt-br/templates/custom-commands.hbs',
+            width: 720,
             height: "auto",
-            closeOnSubmit: true
+            closeOnSubmit: true,
+            resizable: true
         });
     }
 
     getData() {
-        let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || [];
+        let cmds = game.settings.get('alien-mu-th-ur-pt-br', 'customCommandsData') || [];
         if (!Array.isArray(cmds)) cmds = [];
         return { commands: cmds };
     }
 
     activateListeners(html) {
         super.activateListeners(html);
-        html.find('.add-command').click(async (event) => {
+
+        const tbody = html.find('#muthur-commands-tbody');
+
+        const bindRowEvents = (row) => {
+            row.find('.remove-command').off('click').on('click', (e) => {
+                e.preventDefault();
+                $(e.currentTarget).closest('.command-row').remove();
+            });
+        };
+
+        // Adicionar novo comando
+        html.find('.add-command').on('click', (event) => {
             event.preventDefault();
-            html.find('tbody').append(`
-                <tr class="command-row">
-                    <td><input type="text" name="commandKey" value="" style="background: black; color: #00ff00; border: 1px solid #333; font-family: monospace;" placeholder="NOVO COMANDO"/></td>
-                    <td><input type="text" name="commandResponse" value="" style="background: black; color: #00ff00; border: 1px solid #333; font-family: monospace;" placeholder="Nova resposta..."/></td>
-                    <td style="text-align: center;"><input type="checkbox" name="commandRequiresHack" style="cursor: pointer;"/></td>
-                    <td style="text-align: center;"><button type="button" class="remove-command" style="background: #330000; color: #ff0000; border: 1px solid #ff0000; width: 30px; height: 30px;"><i class="fas fa-trash"></i></button></td>
+            const newRow = $(`
+                <tr class="command-row muthur-command-row">
+                    <td style="vertical-align: top; padding: 4px;">
+                        <input type="text" name="commandKey" value="" class="muthur-input-cmd" placeholder="NOVO COMANDO" />
+                    </td>
+                    <td style="vertical-align: top; padding: 4px;">
+                        <textarea name="commandResponse" class="muthur-textarea-resp" placeholder="Resposta da IA..."></textarea>
+                    </td>
+                    <td style="vertical-align: middle; text-align: center; padding: 4px;">
+                        <input type="checkbox" name="commandRequiresHack" style="cursor: pointer; transform: scale(1.2);" title="Exige HACK prévio" />
+                    </td>
+                    <td style="vertical-align: middle; text-align: center; padding: 4px;">
+                        <button type="button" class="muthur-btn muthur-btn-danger remove-command" title="Remover"><i class="fas fa-trash"></i></button>
+                    </td>
                 </tr>
             `);
-            html.find('.remove-command').off('click').click(e => $(e.currentTarget).closest('.command-row').remove());
-            this.setPosition({ height: "auto" });
+            tbody.prepend(newRow);
+            bindRowEvents(newRow);
+            newRow.find('input[name="commandKey"]').focus();
         });
 
-        html.find('.remove-command').click(event => {
-            event.preventDefault();
-            $(event.currentTarget).closest('.command-row').remove();
-            this.setPosition({ height: "auto" });
+        // Eventos para remover linhas existentes
+        tbody.find('.command-row').each((_, r) => bindRowEvents($(r)));
+
+        // Filtro / Busca em tempo real
+        html.find('#muthur-cmd-filter').on('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            tbody.find('.command-row').each((_, r) => {
+                const cmd = $(r).find('[name="commandKey"]').val().toLowerCase();
+                const resp = $(r).find('[name="commandResponse"]').val().toLowerCase();
+                if (cmd.includes(query) || resp.includes(query)) {
+                    $(r).show();
+                } else {
+                    $(r).hide();
+                }
+            });
+        });
+
+        // Exportar comandos para arquivo JSON
+        html.find('.export-json-btn').on('click', (e) => {
+            e.preventDefault();
+            const currentData = [];
+            tbody.find('.command-row').each((_, row) => {
+                const key = $(row).find('[name="commandKey"]').val().trim().toUpperCase();
+                const response = $(row).find('[name="commandResponse"]').val().trim();
+                const requiresHack = $(row).find('[name="commandRequiresHack"]').is(':checked');
+                if (key && response) currentData.push({ command: key, response, requiresHack });
+            });
+            const blob = new Blob([JSON.stringify(currentData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `muthur-comandos-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            ui.notifications.info("Comandos exportados com sucesso!");
+        });
+
+        // Importar comandos de arquivo JSON
+        const fileInput = html.find('#muthur-import-file-input');
+        html.find('.import-json-btn').on('click', () => fileInput.click());
+        fileInput.on('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async (evt) => {
+                try {
+                    const imported = JSON.parse(evt.target.result);
+                    if (Array.isArray(imported)) {
+                        imported.forEach(item => {
+                            if (!item.command || !item.response) return;
+                            const row = $(`
+                                <tr class="command-row muthur-command-row">
+                                    <td style="vertical-align: top; padding: 4px;">
+                                        <input type="text" name="commandKey" value="${item.command}" class="muthur-input-cmd" />
+                                    </td>
+                                    <td style="vertical-align: top; padding: 4px;">
+                                        <textarea name="commandResponse" class="muthur-textarea-resp">${item.response}</textarea>
+                                    </td>
+                                    <td style="vertical-align: middle; text-align: center; padding: 4px;">
+                                        <input type="checkbox" name="commandRequiresHack" ${item.requiresHack ? 'checked' : ''} style="cursor: pointer; transform: scale(1.2);" />
+                                    </td>
+                                    <td style="vertical-align: middle; text-align: center; padding: 4px;">
+                                        <button type="button" class="muthur-btn muthur-btn-danger remove-command"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            `);
+                            tbody.append(row);
+                            bindRowEvents(row);
+                        });
+                        ui.notifications.info(`${imported.length} comandos carregados para a tabela. Clique em "Gravar Protocolos" para salvar.`);
+                    }
+                } catch (err) {
+                    ui.notifications.error("Erro ao ler arquivo JSON!");
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // Carregar Presets de Cenários
+        html.find('.load-preset-btn').on('click', async (e) => {
+            e.preventDefault();
+            const presets = {
+                nostromo: {
+                    name: "USCSS Nostromo (1979)",
+                    cmds: [
+                        { command: "CARGA", response: "CARGA ATUAL: Minério bruto (20.000.000 toneladas)\nDESTINO: Terra\nSTATUS: Rota nominal alterada para interceptação de transmissão de sinal de socorro.", requiresHack: false },
+                        { command: "TRIPULACAO", response: "TRIPULAÇÃO ATIVA: 7 membros.\nOFICIAL DE CIÊNCIAS: Ash (Designação W-Y).\nOFICIAL DE VOO: Ripley, E.\nCAPITÃO: Dallas, A.", requiresHack: false },
+                        { command: "ORDEM 937", response: "DIRETRIZ DA COMPANHIA 937 (CONFIDENCIAL):\nInvestigar forma de vida. Recolher espécime.\nTodas as outras prioridades são secundárias.\nTripulação descartável.", requiresHack: true },
+                        { command: "REATOR", response: "REATOR DE FUSÃO: Operando a 98% de estabilidade.\nProcedimento de purga disponível via Protocolo Cérbero.", requiresHack: false }
+                    ]
+                },
+                sevastopol: {
+                    name: "Estação Sevastopol (Seegson)",
+                    cmds: [
+                        { command: "APOLLO", response: "SISTEMA CENTRAL APOLLO:\nProtocolo de Perigo Nível 5 ativo.\nDiretrizes de quarentena em vigor.\nAndroides Sintéticos Working Joe em modo de segurança.", requiresHack: false },
+                        { command: "QUARNTENA", response: "ZONA MÉDICA E ENGENHARIA ISOLADAS.\nPermissão de trânsito negada pela administração executiva.", requiresHack: true }
+                    ]
+                }
+            };
+
+            const presetChoice = await Dialog.wait({
+                title: "Selecionar Cenário Pré-configurado",
+                content: "<p style='font-family:monospace;'>Escolha um preset de comandos para carregar na lista:</p>",
+                buttons: {
+                    nostromo: {
+                        label: "USCSS Nostromo",
+                        callback: () => presets.nostromo.cmds
+                    },
+                    sevastopol: {
+                        label: "Estação Sevastopol",
+                        callback: () => presets.sevastopol.cmds
+                    }
+                },
+                default: "nostromo"
+            });
+
+            if (presetChoice && Array.isArray(presetChoice)) {
+                presetChoice.forEach(item => {
+                    const row = $(`
+                        <tr class="command-row muthur-command-row">
+                            <td style="vertical-align: top; padding: 4px;">
+                                <input type="text" name="commandKey" value="${item.command}" class="muthur-input-cmd" />
+                            </td>
+                            <td style="vertical-align: top; padding: 4px;">
+                                <textarea name="commandResponse" class="muthur-textarea-resp">${item.response}</textarea>
+                            </td>
+                            <td style="vertical-align: middle; text-align: center; padding: 4px;">
+                                <input type="checkbox" name="commandRequiresHack" ${item.requiresHack ? 'checked' : ''} style="cursor: pointer; transform: scale(1.2);" />
+                            </td>
+                            <td style="vertical-align: middle; text-align: center; padding: 4px;">
+                                <button type="button" class="muthur-btn muthur-btn-danger remove-command"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `);
+                    tbody.prepend(row);
+                    bindRowEvents(row);
+                });
+                ui.notifications.info("Preset inserido na lista! Lembre-se de gravar.");
+            }
         });
     }
 
@@ -504,13 +661,14 @@ class MuthurCommandsConfig extends FormApplication {
                 newData.push({ command: key, response: response, requiresHack: requiresHack });
             }
         });
-        await game.settings.set('alien-mu-th-ur', 'customCommandsData', newData);
+        await game.settings.set('alien-mu-th-ur-pt-br', 'customCommandsData', newData);
+        ui.notifications.info("Protocolos da MU/TH/UR gravados com sucesso!");
     }
 }
 // --- FIM DA CLASSE ---
 
 Hooks.once('init', () => {
-    game.modules.get('alien-mu-th-ur').api = {
+    game.modules.get('alien-mu-th-ur-pt-br').api = {
         version: "1.0.0"
     };
 
@@ -521,7 +679,7 @@ Hooks.once('init', () => {
     };
 
     // Registra o Menu que abrirá o botão
-    game.settings.registerMenu('alien-mu-th-ur', 'customCommandsMenu', {
+    game.settings.registerMenu('alien-mu-th-ur-pt-br', 'customCommandsMenu', {
         name: 'ALIEN-MU-TH-UR.Settings.CustomCommands.Name',
         label: 'Configurar Protocolos',
         hint: 'ALIEN-MU-TH-UR.Settings.CustomCommands.Hint',
@@ -531,14 +689,14 @@ Hooks.once('init', () => {
     });
 
     // Registra o Objeto invisível que guarda os dados salvos pelo Menu
-    game.settings.register('alien-mu-th-ur', 'customCommandsData', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'customCommandsData', {
         scope: 'world',
         config: Array, // Fica invisível, pois o menu acima gerencia isso
         type: Object,
         default: []
     });
 
-    game.settings.register('alien-mu-th-ur', 'welcomeMessageShown', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'welcomeMessageShown', {
         scope: 'world', // Salva por mundo (cada mesa nova verá uma vez)
         config: false,  // Fica invisível no menu
         type: Boolean,
@@ -586,7 +744,7 @@ Hooks.once('init', () => {
         { text: 'MOTHER.ConnectionTerminated', color: '#ff0000', type: 'error' }
     ];
 
-    game.settings.register('alien-mu-th-ur', 'enableTypingSounds', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'enableTypingSounds', {
         name: "MUTHUR.SETTINGS.typingSound.name",
         hint: "MUTHUR.SETTINGS.typingSound.hint",
         scope: 'client',
@@ -609,7 +767,7 @@ Hooks.once('init', () => {
         { key: 'phCryo', scope: 'world', type: Boolean, def: true },
     ];
     for (const s of phSettings) {
-        game.settings.register('alien-mu-th-ur', s.key, {
+        game.settings.register('alien-mu-th-ur-pt-br', s.key, {
             name: `MUTHUR.SETTINGS.postHack.${s.key}.name`,
             hint: `MUTHUR.SETTINGS.postHack.${s.key}.hint`,
             scope: s.scope,
@@ -620,18 +778,18 @@ Hooks.once('init', () => {
     }
 
     try {
-        game.settings.register('alien-mu-th-ur', 'alarmSoundPath', {
+        game.settings.register('alien-mu-th-ur-pt-br', 'alarmSoundPath', {
             name: 'MUTHUR – Alarm sound',
             hint: 'Sélectionnez le son d\'alarme à jouer lors de l\'activation.',
             scope: 'world',
             config: true,
             type: String,
-            default: '/modules/alien-mu-th-ur/sounds/reply/Computer_Reply_1.wav',
+            default: '/modules/alien-mu-th-ur-pt-br/sounds/reply/Computer_Reply_1.wav',
             filePicker: true
         });
     } catch (e) { }
 
-    game.settings.register('alien-mu-th-ur', 'typingSoundVolume', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'typingSoundVolume', {
         name: "MUTHUR.SETTINGS.typingSoundVolume.name",
         hint: "MUTHUR.SETTINGS.typingSoundVolume.hint",
         scope: 'client',
@@ -641,7 +799,7 @@ Hooks.once('init', () => {
         default: 0.2
     });
 
-    game.settings.register('alien-mu-th-ur', 'enableScanline', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'enableScanline', {
         name: "MUTHUR.SETTINGS.scanline.name",
         hint: "MUTHUR.SETTINGS.scanline.hint",
         scope: 'client',
@@ -651,7 +809,7 @@ Hooks.once('init', () => {
         onChange: value => { console.log("Effet scanline:", value); }
     });
 
-    game.settings.register('alien-mu-th-ur', 'scanlineSize', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'scanlineSize', {
         name: "MUTHUR.SETTINGS.scanlineSize.name",
         hint: "MUTHUR.SETTINGS.scanlineSize.hint",
         scope: 'client',
@@ -662,7 +820,7 @@ Hooks.once('init', () => {
         onChange: value => { console.log("Taille du scanline:", value); }
     });
 
-    game.settings.register('alien-mu-th-ur', 'enableTypewriter', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'enableTypewriter', {
         name: "MUTHUR.SETTINGS.typewriter.name",
         hint: "MUTHUR.SETTINGS.typewriter.hint",
         scope: 'client',
@@ -672,7 +830,7 @@ Hooks.once('init', () => {
         onChange: value => { console.log("Effet typewriter:", value); }
     });
 
-    game.settings.register('alien-mu-th-ur', 'allowHack', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'allowHack', {
         name: "MUTHUR.SETTINGS.allowHack.name",
         hint: "MUTHUR.SETTINGS.allowHack.hint",
         scope: 'world',
@@ -682,7 +840,32 @@ Hooks.once('init', () => {
         restricted: true
     });
 
-    game.settings.register('alien-mu-th-ur', 'allowDragGM', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'hackResolutionMode', {
+        name: 'Modo de Resolução de Invasão (HACK)',
+        hint: 'Define como a tentativa de invasão (HACK) é resolvida: Menu de Rolagem Oficial do Alien RPG, Rolagem Direta ou Aprovação Manual do Mestre.',
+        scope: 'world',
+        config: true,
+        type: String,
+        choices: {
+            'dialog': 'Menu de Rolagem Oficial do Alien RPG (Diálogo de Modificadores)',
+            'dice': 'Rolagem Automática (Sem Diálogo)',
+            'gm': 'Aprovação Manual do Mestre'
+        },
+        default: 'dialog',
+        restricted: true
+    });
+
+    game.settings.register('alien-mu-th-ur-pt-br', 'hackRequiredSuccesses', {
+        name: 'Sucessos Necessários para Invasão',
+        hint: 'Quantidade mínima de sucessos (resultados 6) necessários para invadir o MU/TH/UR.',
+        scope: 'world',
+        config: true,
+        type: Number,
+        default: 1,
+        restricted: true
+    });
+
+    game.settings.register('alien-mu-th-ur-pt-br', 'allowDragGM', {
         name: 'MUTHUR.SETTINGS.allowDragGM.name',
         hint: 'MUTHUR.SETTINGS.allowDragGM.hint',
         scope: 'world',
@@ -692,7 +875,7 @@ Hooks.once('init', () => {
         restricted: true
     });
 
-    game.settings.register('alien-mu-th-ur', 'allowDragPlayers', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'allowDragPlayers', {
         name: 'MUTHUR.SETTINGS.allowDragPlayers.name',
         hint: 'MUTHUR.SETTINGS.allowDragPlayers.hint',
         scope: 'world',
@@ -702,7 +885,7 @@ Hooks.once('init', () => {
         restricted: true
     });
 
-    game.settings.register('alien-mu-th-ur', 'currentStatusKey', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'currentStatusKey', {
         name: 'MUTHUR.STATUS.current',
         hint: 'MUTHUR.STATUS.currentHint',
         scope: 'world',
@@ -724,7 +907,7 @@ Hooks.once('init', () => {
         restricted: true
     });
 
-    game.settings.register('alien-mu-th-ur', 'customStatusText', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'customStatusText', {
         name: 'MUTHUR.STATUS.customText',
         hint: 'MUTHUR.STATUS.customTextHint',
         scope: 'world',
@@ -734,7 +917,7 @@ Hooks.once('init', () => {
         restricted: true
     });
 
-    game.settings.register('alien-mu-th-ur', 'captainUserIds', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'captainUserIds', {
         name: 'MUTHUR.ROLES.captains',
         hint: 'MUTHUR.ROLES.captainsHint',
         scope: 'world',
@@ -744,7 +927,7 @@ Hooks.once('init', () => {
         restricted: true
     });
 
-    game.settings.register('alien-mu-th-ur', 'allowCaptainSpecialOrders', {
+    game.settings.register('alien-mu-th-ur-pt-br', 'allowCaptainSpecialOrders', {
         name: 'MUTHUR.ROLES.allowCaptainOrders',
         hint: 'MUTHUR.ROLES.allowCaptainOrdersHint',
         scope: 'world',
@@ -757,7 +940,7 @@ Hooks.once('init', () => {
 
 window.MUTHUR = window.MUTHUR || {};
 window.MUTHUR.updateColors = () => {
-    const motherColor = game.settings.get('alien-mu-th-ur', 'motherResponseColor');
+    const motherColor = game.settings.get('alien-mu-th-ur-pt-br', 'motherResponseColor');
     const mamanMessages = document.querySelectorAll('.muthur-chat-log div');
     mamanMessages.forEach(msg => {
         if (msg.textContent.startsWith('/M')) {
@@ -852,7 +1035,7 @@ async function typeWriterEffect(element, text, speed = 30) {
 }
 
 function updateSpectatorsWithMessage(text, prefix = '', color = '#00ff00', messageType = 'normal') {
-    game.socket.emit('module.alien-mu-th-ur', {
+    game.socket.emit('module.alien-mu-th-ur-pt-br', {
         type: 'updateSpectators',
         text: text,
         prefix: prefix,
@@ -876,10 +1059,10 @@ async function displayMuthurMessage(chatLog, text, prefix = '', color = '#00ff00
 
     try { messageDiv.classList.add('message', messageType || 'normal'); } catch (e) { }
 
-    const typewriterEnabled = game.settings.get('alien-mu-th-ur', 'enableTypewriter');
+    const typewriterEnabled = game.settings.get('alien-mu-th-ur-pt-br', 'enableTypewriter');
     const soundGloballyMuted = (window.MUTHUR && window.MUTHUR.muteForSpectator) ? true : false;
-    const soundEnabled = !soundGloballyMuted && game.settings.get('alien-mu-th-ur', 'enableTypingSounds');
-    const scanlineEnabled = game.settings.get('alien-mu-th-ur', 'enableScanline');
+    const soundEnabled = !soundGloballyMuted && game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds');
+    const scanlineEnabled = game.settings.get('alien-mu-th-ur-pt-br', 'enableScanline');
 
     try {
         if (soundEnabled) {
@@ -908,7 +1091,7 @@ async function displayMuthurMessage(chatLog, text, prefix = '', color = '#00ff00
                 messageDiv.appendChild(lineDiv);
 
                 if (scanlineEnabled) {
-                    const scanlineSize = game.settings.get('alien-mu-th-ur', 'scanlineSize');
+                    const scanlineSize = game.settings.get('alien-mu-th-ur-pt-br', 'scanlineSize');
                     const lineScanline = document.createElement('div');
                     lineScanline.style.cssText = `
                         position: absolute;
@@ -981,7 +1164,7 @@ function showMuthurInterface() {
         currentMuthurSession.userId = game.user.id;
         currentMuthurSession.userName = game.user.name;
 
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'sessionStatus',
             active: true,
             userId: game.user.id,
@@ -995,7 +1178,7 @@ function showMuthurInterface() {
     const sidebar = document.getElementById('sidebar');
     const rightPosition = sidebar ? `${sidebar.offsetWidth + 20}px` : '320px';
 
-    const allowPlayersDrag = (() => { try { return game.settings.get('alien-mu-th-ur', 'allowDragPlayers'); } catch (_) { return false; } })();
+    const allowPlayersDrag = (() => { try { return game.settings.get('alien-mu-th-ur-pt-br', 'allowDragPlayers'); } catch (_) { return false; } })();
     chatContainer.style.cssText = `
         position: ${allowPlayersDrag ? 'absolute' : 'fixed'};
         bottom: 20px;
@@ -1029,9 +1212,29 @@ function showMuthurInterface() {
         align-items: center;
     `;
 
+    // Alternador de Modo (CMD vs MÃE)
+    let currentInputMode = 'cmd'; // 'cmd' ou 'mother'
+    const modeToggleBtn = document.createElement('button');
+    modeToggleBtn.className = 'muthur-mode-toggle-btn';
+    modeToggleBtn.innerHTML = '<b>CMD &gt;</b>';
+    modeToggleBtn.title = 'Clique ou aperte TAB para alternar entre Comando Operacional (CMD) e Falar Direto com a MÃE (MÃE)';
+    modeToggleBtn.style.cssText = `
+        background: black;
+        border: 1px solid #00ff00;
+        color: #00ff00;
+        cursor: pointer;
+        font-family: monospace;
+        font-size: 11px;
+        height: 26px;
+        padding: 2px 6px;
+        white-space: nowrap;
+        transition: all 0.2s;
+        border-radius: 2px;
+    `;
+
     const input = document.createElement('input');
     input.type = 'text';
-    input.placeholder = game.i18n.localize("MUTHUR.inputPlaceholder");
+    input.placeholder = 'Digite um comando (ex: AJUDA, STATUS, PORTAS)...';
     input.style.cssText = `
         flex: 1;
         background: black;
@@ -1039,8 +1242,44 @@ function showMuthurInterface() {
         color: #00ff00;
         padding: 4px 6px;
         font-family: monospace;
-        height: 24px;
+        height: 26px;
+        box-sizing: border-box;
     `;
+
+    const updateModeUI = () => {
+        if (currentInputMode === 'cmd') {
+            modeToggleBtn.innerHTML = '<b>CMD &gt;</b>';
+            modeToggleBtn.style.borderColor = '#00ff00';
+            modeToggleBtn.style.color = '#00ff00';
+            modeToggleBtn.style.boxShadow = 'none';
+            input.placeholder = 'Digite um comando (ex: AJUDA, STATUS, PORTAS)...';
+            input.style.borderColor = '#00ff00';
+            input.style.color = '#00ff00';
+        } else {
+            modeToggleBtn.innerHTML = '<b>MÃE &gt;</b>';
+            modeToggleBtn.style.borderColor = '#ff9900';
+            modeToggleBtn.style.color = '#ff9900';
+            modeToggleBtn.style.boxShadow = '0 0 6px rgba(255, 153, 0, 0.6)';
+            input.placeholder = 'Mensagem direta para a MÃE / MU-TH-UR...';
+            input.style.borderColor = '#ff9900';
+            input.style.color = '#ff9900';
+        }
+    };
+
+    modeToggleBtn.onclick = (e) => {
+        e.preventDefault();
+        currentInputMode = (currentInputMode === 'cmd') ? 'mother' : 'cmd';
+        updateModeUI();
+        input.focus();
+    };
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            currentInputMode = (currentInputMode === 'cmd') ? 'mother' : 'cmd';
+            updateModeUI();
+        }
+    });
 
     const sendButton = document.createElement('button');
     sendButton.className = 'muthur-enter-btn';
@@ -1052,10 +1291,11 @@ function showMuthurInterface() {
         color: #00ff00;
         cursor: pointer;
         font-family: monospace;
-        height: 24px;
+        height: 26px;
         width: 32px;
     `;
 
+    inputContainer.appendChild(modeToggleBtn);
     inputContainer.appendChild(input);
     inputContainer.appendChild(sendButton);
     chatContainer.appendChild(chatLog);
@@ -1090,14 +1330,33 @@ function showMuthurInterface() {
 
     async function handleCommand() {
         if (input.value.trim()) {
-            const command = input.value.trim().toUpperCase();
+            const rawInput = input.value.trim();
+            const command = rawInput.toUpperCase();
             input.value = '';
+
+            // Se estiver em modo MÃE ou começar com /M
+            const isMotherDirect = (currentInputMode === 'mother') || command.startsWith('/M ') || command === '/M';
+
+            if (isMotherDirect) {
+                let message = rawInput;
+                if (message.toUpperCase().startsWith('/M')) {
+                    message = message.substring(2).trim();
+                }
+                await syncMessageToSpectators(chatLog, message, 'MÃE > ', '#ffaa00', 'communication');
+                await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingResponse") || "AGUARDANDO RESPOSTA DA MÃE...", '', '#00ff00', 'communication');
+                chatLog.scrollTop = chatLog.scrollHeight;
+                if (!game.user.isGM) {
+                    sendToGM(message, 'command', 'm');
+                }
+                return;
+            }
+
             await syncMessageToSpectators(chatLog, command, '> ');
             chatLog.scrollTop = chatLog.scrollHeight;
 
             // --- INÍCIO: COMANDOS PERSONALIZADOS ---
             try {
-                let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || [];
+                let cmds = game.settings.get('alien-mu-th-ur-pt-br', 'customCommandsData') || [];
                 if (!Array.isArray(cmds)) cmds = [];
 
                 // Pega todas as versões do comando digitado (tanto as públicas quanto as hackeadas)
@@ -1123,7 +1382,7 @@ function showMuthurInterface() {
                         if (!game.user.isGM) {
                             sendToGM(game.i18n.format("MUTHUR.SpecialOrderAttempt", { command: command }));
                         }
-                        if (game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
+                        if (game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds')) {
                             playErrorSound();
                         }
                         return; // Barra a execução
@@ -1182,13 +1441,13 @@ function showMuthurInterface() {
             if (isSpecialOrder(command) || isCerberus(command)) {
                 const isCaptain = (() => {
                     try {
-                        const ids = game.settings.get('alien-mu-th-ur', 'captainUserIds') || [];
+                        const ids = game.settings.get('alien-mu-th-ur-pt-br', 'captainUserIds') || [];
                         return ids.includes(game.user.id);
                     } catch (e) { return false; }
                 })();
 
                 const allowCaptain = (() => {
-                    try { return game.settings.get('alien-mu-th-ur', 'allowCaptainSpecialOrders'); } catch (e) { return true; }
+                    try { return game.settings.get('alien-mu-th-ur-pt-br', 'allowCaptainSpecialOrders'); } catch (e) { return true; }
                 })();
 
                 const canAccess = game.user.isGM || hackSuccessful || (allowCaptain && isCaptain);
@@ -1197,7 +1456,7 @@ function showMuthurInterface() {
                     if (!game.user.isGM) {
                         sendToGM(game.i18n.format("MUTHUR.SpecialOrderAttempt", { command: command }));
                     }
-                    if (game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
+                    if (game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds')) {
                         playErrorSound();
                     }
                     return;
@@ -1208,21 +1467,15 @@ function showMuthurInterface() {
             }
 
             if (command.startsWith(motherPrefix)) {
-                const message = command.substring(motherPrefix.length).trim();
-                await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingResponse"), '', '#00ff00', 'communication');
-                chatLog.scrollTop = chatLog.scrollHeight;
-                if (!game.user.isGM) {
-                    sendToGM(message, 'command', 'm');
-                }
                 return;
             }
 
             await new Promise(resolve => setTimeout(resolve, 500));
 
-            const knownCommands = ['HACK', 'HELP', 'STATUS', 'CLEAR', 'EXIT'];
+            const knownCommands = ['HACK', 'HACKEAR', 'INVASAO', 'HELP', 'AJUDA', 'STATUS', 'ESTADO', 'CLEAR', 'LIMPAR', 'EXIT', 'SAIR'];
             const isKnownCommand = knownCommands.includes(command);
 
-            if (/^(LIST\s+DOORS|DOORS)$/.test(command)) {
+            if (/^(LIST\s+DOORS|DOORS|PORTAS|LISTAR\s+PORTAS)$/.test(command)) {
                 const doors = getDoorsByPrefix('AD');
                 if (!doors.length) {
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.noDoorsFound") || "No doors found.", '', '#00ff00', 'reply');
@@ -1239,71 +1492,71 @@ function showMuthurInterface() {
             }
 
             let m;
-            if ((m = command.match(/^LOCK\s+DOOR\s+(\d+)$/))) {
+            if ((m = command.match(/^(?:LOCK\s+DOOR|TRANCAR\s+PORTA|FECHAR\s+PORTA|BLOQUEAR\s+PORTA)\s+(\d+)$/))) {
                 const index = parseInt(m[1], 10) - 1;
                 if (!hackSuccessful && !game.user.isGM) {
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.permissionDenied") || "ACCESS DENIED.", '', '#ff0000', 'error');
                     return;
                 }
                 try {
-                    game.socket.emit('module.alien-mu-th-ur', { type: 'doorControlRequest', action: 'LOCK', index, filteredPrefix: 'AD', fromId: game.user.id, fromName: game.user.name });
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'doorControlRequest', action: 'LOCK', index, filteredPrefix: 'AD', fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.requestSent") || "Request sent to GM...", '', '#00ff00', 'reply');
                 } catch (e) { }
                 return;
             }
-            if ((m = command.match(/^UNLOCK\s+DOOR\s+(\d+)$/))) {
+            if ((m = command.match(/^(?:UNLOCK\s+DOOR|DESTRANCAR\s+PORTA|ABRIR\s+PORTA|DESBLOQUEAR\s+PORTA)\s+(\d+)$/))) {
                 const index = parseInt(m[1], 10) - 1;
                 if (!hackSuccessful && !game.user.isGM) {
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.permissionDenied") || "ACCESS DENIED.", '', '#ff0000', 'error');
                     return;
                 }
                 try {
-                    game.socket.emit('module.alien-mu-th-ur', { type: 'doorControlRequest', action: 'UNLOCK', index, filteredPrefix: 'AD', fromId: game.user.id, fromName: game.user.name });
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'doorControlRequest', action: 'UNLOCK', index, filteredPrefix: 'AD', fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.requestSent") || "Request sent to GM...", '', '#00ff00', 'reply');
                 } catch (e) { }
                 return;
             }
 
-            if (/^SHUTDOWN\s+LIGHTS$/.test(command)) {
+            if (/^(?:SHUTDOWN\s+LIGHTS|APAGAR\s+LUZES|DESLIGAR\s+LUZES|LUZES\s+APAGAR|LUZES\s+DESLIGAR)$/.test(command)) {
                 if (!hackSuccessful && !game.user.isGM) {
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.permissionDenied") || "ACCESS DENIED.", '', '#ff0000', 'error');
                     return;
                 }
                 try {
-                    game.socket.emit('module.alien-mu-th-ur', { type: 'lightsControlRequest', action: 'SHUTDOWN', fromId: game.user.id, fromName: game.user.name });
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'lightsControlRequest', action: 'SHUTDOWN', fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
                 } catch (e) { }
                 return;
             }
-            if (/^RESTORE\s+LIGHTS$/.test(command)) {
+            if (/^(?:RESTORE\s+LIGHTS|LIGAR\s+LUZES|RESTAURAR\s+LUZES|LUZES\s+LIGAR|LUZES\s+RESTAURAR)$/.test(command)) {
                 if (!hackSuccessful && !game.user.isGM) {
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.permissionDenied") || "ACCESS DENIED.", '', '#ff0000', 'error');
                     return;
                 }
                 try {
-                    game.socket.emit('module.alien-mu-th-ur', { type: 'lightsControlRequest', action: 'RESTORE', fromId: game.user.id, fromName: game.user.name });
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'lightsControlRequest', action: 'RESTORE', fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
                 } catch (e) { }
                 return;
             }
 
-            if (/^(ACTIVATE\s+ALARM|ALARM|ALARME|ACTIV[ÉE]R?\s+ALARME)$/.test(command)) {
+            if (/^(ACTIVATE\s+ALARM|ALARM|ALARME|ATIVAR\s+ALARME|ACTIV[ÉE]R?\s+ALARME)$/.test(command)) {
                 if (!hackSuccessful && !game.user.isGM) {
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.permissionDenied") || "ACCESS DENIED.", '', '#ff0000', 'error');
                     return;
                 }
                 try {
-                    game.socket.emit('module.alien-mu-th-ur', { type: 'alarmRequest', fromId: game.user.id, fromName: game.user.name, overlay: true });
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'alarmRequest', fromId: game.user.id, fromName: game.user.name, overlay: true });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
                     try { sendToGM(command, 'command', 'valid'); } catch (_) { }
                 } catch (e) { }
                 return;
             }
 
-            if ((m = command.match(/^GAS\s+TARGETS?$/))) {
+            if ((m = command.match(/^(?:GAS\s+TARGETS?|GAS|GÁS|LIBERAR\s+G[AÁ]S|PURGA)$/))) {
                 if (!hackSuccessful && !game.user.isGM) { await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.permissionDenied") || "ACCESS DENIED.", '', '#ff0000', 'error'); return; }
                 try {
-                    game.socket.emit('module.alien-mu-th-ur', { type: 'gasRequest', fromId: game.user.id, fromName: game.user.name });
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'gasRequest', fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
                 } catch (e) { }
                 return;
@@ -1312,7 +1565,7 @@ function showMuthurInterface() {
                 const targetName = (m[1] || '').trim();
                 if (!hackSuccessful && !game.user.isGM) { await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.permissionDenied") || "ACCESS DENIED.", '', '#ff0000', 'error'); return; }
                 try {
-                    game.socket.emit('module.alien-mu-th-ur', { type: 'cryoRequest', targetName, fromId: game.user.id, fromName: game.user.name });
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'cryoRequest', targetName, fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
                 } catch (e) { }
                 return;
@@ -1322,7 +1575,7 @@ function showMuthurInterface() {
                 const all = false;
                 if (!hackSuccessful && !game.user.isGM) { await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.permissionDenied") || "ACCESS DENIED.", '', '#ff0000', 'error'); return; }
                 try {
-                    game.socket.emit('module.alien-mu-th-ur', { type: 'cryoReleaseRequest', all, fromId: game.user.id, fromName: game.user.name });
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'cryoReleaseRequest', all, fromId: game.user.id, fromName: game.user.name });
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.waitingForMother") || "EN ATTENTE DE MAMAN", '', '#00ff00', 'reply');
                 } catch (e) { }
                 return;
@@ -1330,7 +1583,10 @@ function showMuthurInterface() {
 
             switch (command) {
                 case 'HACK':
-                    if (!game.settings.get('alien-mu-th-ur', 'allowHack') && !game.user.isGM) {
+                case 'HACKEAR':
+                case 'INVASAO':
+                case 'INVASÃO':
+                    if (!game.settings.get('alien-mu-th-ur-pt-br', 'allowHack') && !game.user.isGM) {
                         await displayMuthurMessage(chatLog, game.i18n.localize("MUTHUR.commandNotFound"), '', '#00ff00', 'error');
                         sendToGM(game.i18n.localize("MOTHER.HackDisabledInfo"), 'hack');
                     } else {
@@ -1338,11 +1594,12 @@ function showMuthurInterface() {
                     }
                     return;
                 case 'HELP':
+                case 'AJUDA':
                     // 1. Mostra a ajuda nativa básica
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.help"), '', '#00ff00', 'reply');
 
                     // 2. Mostra a ajuda nativa Pós-Hack (Ordens 937, etc)
-                    if (hackSuccessful && game.settings.get('alien-mu-th-ur', 'phShowInHelp')) {
+                    if (hackSuccessful && game.settings.get('alien-mu-th-ur-pt-br', 'phShowInHelp')) {
                         const extra = buildPostHackHelpList();
                         if (extra) {
                             await syncMessageToSpectators(chatLog, extra, '', '#00ff00', 'reply');
@@ -1351,7 +1608,7 @@ function showMuthurInterface() {
 
                     // --- 3. INÍCIO: MOSTRAR COMANDOS PERSONALIZADOS NO HELP ---
                     try {
-                        let cmds = game.settings.get('alien-mu-th-ur', 'customCommandsData') || [];
+                        let cmds = game.settings.get('alien-mu-th-ur-pt-br', 'customCommandsData') || [];
                         if (!Array.isArray(cmds)) cmds = [];
 
                         let availableCustomCmds = new Set(); // Usamos Set para evitar nomes duplicados na tela
@@ -1382,8 +1639,9 @@ function showMuthurInterface() {
                     }
                     break;
                 case 'STATUS':
+                case 'ESTADO':
                     if (!game.user.isGM) {
-                        game.socket.emit('module.alien-mu-th-ur', {
+                        game.socket.emit('module.alien-mu-th-ur-pt-br', {
                             type: 'statusRequest',
                             fromId: game.user.id,
                             fromName: game.user.name
@@ -1391,7 +1649,7 @@ function showMuthurInterface() {
                         try { sendToGM(command, 'command', 'valid'); } catch (e) { }
                         await displayMuthurMessage(chatLog, game.i18n.localize('MUTHUR.waitingResponse'), '', '#00ff00', 'communication');
                     } else {
-                        const key = game.settings.get('alien-mu-th-ur', 'currentStatusKey');
+                        const key = game.settings.get('alien-mu-th-ur-pt-br', 'currentStatusKey');
                         const presets = {
                             normal: 'MUTHUR.STATUS.text.normal',
                             anomalyDetected: 'MUTHUR.STATUS.text.anomalyDetected',
@@ -1405,15 +1663,16 @@ function showMuthurInterface() {
                         };
                         const i18nKey = (key === 'custom') ? null : (presets[key] || 'MUTHUR.status');
                         const statusText = i18nKey ? game.i18n.localize(i18nKey)
-                            : (game.settings.get('alien-mu-th-ur', 'customStatusText') || game.i18n.localize('MUTHUR.status'));
+                            : (game.settings.get('alien-mu-th-ur-pt-br', 'customStatusText') || game.i18n.localize('MUTHUR.status'));
                         await syncMessageToSpectators(chatLog, statusText, '', '#00ff00', 'reply');
                     }
                     break;
                 case 'CLEAR':
+                case 'LIMPAR':
                     chatLog.innerHTML = '';
                     if (!game.user.isGM) {
                         try {
-                            game.socket.emit('module.alien-mu-th-ur', { type: 'clearSpectatorChat' });
+                            game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'clearSpectatorChat' });
                         } catch (e) { console.warn('MUTHUR | emission clearSpectatorChat échouée', e); }
                     }
                     if (hackSuccessful) {
@@ -1426,6 +1685,7 @@ function showMuthurInterface() {
                     }
                     break;
                 case 'EXIT':
+                case 'SAIR':
                     await syncMessageToSpectators(chatLog, game.i18n.localize("MUTHUR.sessionEnded"), '', '#00ff00', 'reply');
                     setTimeout(() => {
                         const muthurContainer = document.getElementById('muthur-chat-container');
@@ -1436,7 +1696,7 @@ function showMuthurInterface() {
                             currentMuthurSession.active = false;
                             currentMuthurSession.userId = null;
                             currentMuthurSession.userName = null;
-                            game.socket.emit('module.alien-mu-th-ur', {
+                            game.socket.emit('module.alien-mu-th-ur-pt-br', {
                                 type: 'sessionStatus',
                                 active: false
                             });
@@ -1456,7 +1716,7 @@ function showMuthurInterface() {
     };
 
     input.addEventListener('keypress', async (event) => {
-        const soundEnabled = game.settings.get('alien-mu-th-ur', 'enableTypingSounds');
+        const soundEnabled = game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds');
         if (soundEnabled) { playTypeSound(); }
 
         if (event.key === 'Enter' || event.key === 'NumpadEnter') {
@@ -1542,7 +1802,7 @@ function toggleMuthurChat() {
             currentMuthurSession.userId = null;
             currentMuthurSession.userName = null;
 
-            game.socket.emit('module.alien-mu-th-ur', {
+            game.socket.emit('module.alien-mu-th-ur-pt-br', {
                 type: 'sessionStatus',
                 active: false
             });
@@ -1567,7 +1827,7 @@ function toggleMuthurChat() {
         currentMuthurSession.userId = game.user.id;
         currentMuthurSession.userName = game.user.name;
 
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'requestSpectatorSelection',
             userId: game.user.id,
             userName: game.user.name
@@ -1590,7 +1850,7 @@ function createGMMuthurInterface(userName, userId) {
     const rightPosition = sidebar ? `${sidebar.offsetWidth + 20}px` : '320px';
 
     container.style.cssText = `
-        position: ${game.settings.get('alien-mu-th-ur', 'allowDragGM') ? 'absolute' : 'fixed'};
+        position: ${game.settings.get('alien-mu-th-ur-pt-br', 'allowDragGM') ? 'absolute' : 'fixed'};
         bottom: 20px;
         right: ${document.getElementById('sidebar').offsetWidth + 20}px;
         width: 400px;
@@ -1642,7 +1902,7 @@ function createGMMuthurInterface(userName, userId) {
 
     function buildGMHelpPanelContent() {
         const lines = [];
-        const g = (k) => { try { return game.settings.get('alien-mu-th-ur', k); } catch (e) { return false; } };
+        const g = (k) => { try { return game.settings.get('alien-mu-th-ur-pt-br', k); } catch (e) { return false; } };
         const sec = (k) => ({
             title: game.i18n.localize(`MUTHUR.helpMenu.sections.${k}.title`) || k.toUpperCase(),
             desc: game.i18n.localize(`MUTHUR.helpMenu.sections.${k}.desc`) || ''
@@ -1745,13 +2005,13 @@ function createGMMuthurInterface(userName, userId) {
             document.body.removeChild(container);
         }
 
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'closePlayerInterface',
             targetUserId: userId
         });
 
         try {
-            game.socket.emit('module.alien-mu-th-ur', {
+            game.socket.emit('module.alien-mu-th-ur-pt-br', {
                 type: 'sessionStatus',
                 active: false,
                 userId: currentMuthurSession?.userId || userId,
@@ -1786,7 +2046,7 @@ function createGMMuthurInterface(userName, userId) {
         console.log('[MUTHUR][ALARM] GM clicked STOP. Stopping locally and emitting universal command.');
         try { stopAlarm(); } catch (e) { console.warn('[MUTHUR][ALARM] local stop error:', e); }
         try {
-            game.socket.emit('module.alien-mu-th-ur', { type: 'alarmControl', action: 'off' });
+            game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'alarmControl', action: 'off' });
         } catch (e) {
             console.warn('[MUTHUR][ALARM] emit off error:', e);
         }
@@ -1801,7 +2061,7 @@ function createGMMuthurInterface(userName, userId) {
     container.appendChild(headerContainer);
 
     try {
-        if (game.settings.get('alien-mu-th-ur', 'allowDragGM')) {
+        if (game.settings.get('alien-mu-th-ur-pt-br', 'allowDragGM')) {
             let isDragging = false; let ox = 0; let oy = 0; let sx = 0; let sy = 0;
             const startDrag = (e) => { isDragging = true; const r = container.getBoundingClientRect(); sx = r.left; sy = r.top; ox = (e.touches ? e.touches[0].clientX : e.clientX); oy = (e.touches ? e.touches[0].clientY : e.clientY); e.preventDefault(); };
             const onMove = (e) => { if (!isDragging) return; const cx = (e.touches ? e.touches[0].clientX : e.clientX); const cy = (e.touches ? e.touches[0].clientY : e.clientY); container.style.left = (sx + (cx - ox)) + 'px'; container.style.top = (sy + (cy - oy)) + 'px'; container.style.right = ''; container.style.bottom = ''; };
@@ -1864,7 +2124,7 @@ function createGMMuthurInterface(userName, userId) {
     document.body.appendChild(colorPicker);
 
     let savedColor = '#ff9900';
-    try { savedColor = game.settings.get('alien-mu-th-ur', 'gmResponseColor') || '#ff9900'; } catch (e) { }
+    try { savedColor = game.settings.get('alien-mu-th-ur-pt-br', 'gmResponseColor') || '#ff9900'; } catch (e) { }
     colorPicker.value = savedColor;
 
     const colorDropdown = document.createElement('div');
@@ -1892,7 +2152,7 @@ function createGMMuthurInterface(userName, userId) {
             Array.from(colorMenu.children).forEach(c => c.setAttribute('aria-pressed', 'false'));
             btn.setAttribute('aria-pressed', 'true');
             colorDropdown.classList.remove('open');
-            try { game.settings.set('alien-mu-th-ur', 'gmResponseColor', selectedColor); } catch (e) { }
+            try { game.settings.set('alien-mu-th-ur-pt-br', 'gmResponseColor', selectedColor); } catch (e) { }
         });
         return btn;
     };
@@ -1913,7 +2173,7 @@ function createGMMuthurInterface(userName, userId) {
         Array.from(colorMenu.children).forEach(c => c.setAttribute('aria-pressed', 'false'));
         customSwatch.setAttribute('aria-pressed', 'true');
         colorDropdown.classList.remove('open');
-        try { game.settings.set('alien-mu-th-ur', 'gmResponseColor', selectedColor); } catch (e) { }
+        try { game.settings.set('alien-mu-th-ur-pt-br', 'gmResponseColor', selectedColor); } catch (e) { }
     });
     colorMenu.appendChild(customSwatch);
 
@@ -1943,16 +2203,16 @@ function createGMMuthurInterface(userName, userId) {
 
         const list = document.createElement('div');
         list.style.cssText = 'max-height: 240px; overflow: auto; margin-bottom: 8px;';
-        const ids = (() => { try { return game.settings.get('alien-mu-th-ur', 'captainUserIds') || []; } catch (e) { return []; } })();
+        const ids = (() => { try { return game.settings.get('alien-mu-th-ur-pt-br', 'captainUserIds') || []; } catch (e) { return []; } })();
         game.users.forEach(u => {
             if (u.isGM) return;
             const row = document.createElement('label');
             row.style.cssText = 'display:flex; align-items:center; gap:6px; margin: 2px 0;';
             const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = ids.includes(u.id);
             cb.addEventListener('change', async () => {
-                const current = (() => { try { return game.settings.get('alien-mu-th-ur', 'captainUserIds') || []; } catch (e) { return []; } })();
+                const current = (() => { try { return game.settings.get('alien-mu-th-ur-pt-br', 'captainUserIds') || []; } catch (e) { return []; } })();
                 const next = cb.checked ? Array.from(new Set([...current, u.id])) : current.filter(id => id !== u.id);
-                try { await game.settings.set('alien-mu-th-ur', 'captainUserIds', next); } catch (e) { console.error(e); }
+                try { await game.settings.set('alien-mu-th-ur-pt-br', 'captainUserIds', next); } catch (e) { console.error(e); }
             });
             const name = document.createElement('span'); name.textContent = u.name;
             row.appendChild(cb); row.appendChild(name); list.appendChild(row);
@@ -1962,9 +2222,9 @@ function createGMMuthurInterface(userName, userId) {
         const allowWrap = document.createElement('label');
         allowWrap.style.cssText = 'display:flex; align-items:center; gap:6px; margin-top: 6px;';
         const allow = document.createElement('input'); allow.type = 'checkbox';
-        try { allow.checked = game.settings.get('alien-mu-th-ur', 'allowCaptainSpecialOrders'); } catch (e) { }
+        try { allow.checked = game.settings.get('alien-mu-th-ur-pt-br', 'allowCaptainSpecialOrders'); } catch (e) { }
         allow.addEventListener('change', async () => {
-            try { await game.settings.set('alien-mu-th-ur', 'allowCaptainSpecialOrders', allow.checked); } catch (e) { console.error(e); }
+            try { await game.settings.set('alien-mu-th-ur-pt-br', 'allowCaptainSpecialOrders', allow.checked); } catch (e) { console.error(e); }
         });
         const allowLbl = document.createElement('span'); allowLbl.textContent = game.i18n.localize('MUTHUR.ROLES.allowCaptainOrders');
         allowWrap.appendChild(allow); allowWrap.appendChild(allowLbl);
@@ -2020,7 +2280,7 @@ function createGMMuthurInterface(userName, userId) {
     };
 
     input.addEventListener('keypress', () => {
-        const soundEnabled = game.settings.get('alien-mu-th-ur', 'enableTypingSounds');
+        const soundEnabled = game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds');
         if (soundEnabled) { playTypeSound(); }
     });
 
@@ -2186,7 +2446,7 @@ function showGMSpectatorSelectionDialog(activeUserId, activeUserName) {
         dialog.remove();
 
         if (selectedPlayers.length > 0) {
-            game.socket.emit('module.alien-mu-th-ur', {
+            game.socket.emit('module.alien-mu-th-ur-pt-br', {
                 type: 'openSpectatorInterface',
                 spectatorIds: selectedPlayers,
                 activeUserId: activeUserId,
@@ -2194,7 +2454,7 @@ function showGMSpectatorSelectionDialog(activeUserId, activeUserName) {
             });
         }
 
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'continueBootSequence',
             targetUserId: activeUserId,
             spectatorIds: selectedPlayers,
@@ -2204,7 +2464,7 @@ function showGMSpectatorSelectionDialog(activeUserId, activeUserName) {
 
     cancelButton.addEventListener('click', () => {
         dialog.remove();
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'continueBootSequence',
             targetUserId: activeUserId,
             spectatorIds: [],
@@ -2364,7 +2624,7 @@ async function handleMuthurResponse(data) {
         chatLog.appendChild(buttonsDiv);
 
         document.getElementById('enableHack').onclick = async () => {
-            await game.settings.set('alien-mu-th-ur', 'allowHack', true);
+            await game.settings.set('alien-mu-th-ur-pt-br', 'allowHack', true);
             buttonsDiv.remove();
             await displayMuthurMessage(
                 chatLog,
@@ -2411,91 +2671,80 @@ async function handleMuthurResponse(data) {
 }
 
 Hooks.on('getSceneControlButtons', (controls) => {
-    console.error("Hook getSceneControlButtons appelé");
-
-    const toolDef = {
-        name: "muthur",
-        title: "MU/TH/UR 6000",
-        icon: "fas fa-robot",
+    // Ferramenta do Terminal MU/TH/UR 6000
+    const muthurTool = {
+        name: "muthur-terminal",
+        title: "Terminal MU/TH/UR 6000",
+        icon: "fas fa-terminal",
         visible: true,
-        onClick: () => {
-            console.log("MUTHUR | bouton cliqué");
-            toggleMuthurChat();
-        },
         button: true,
-        toggle: false,
-        active: false
+        onClick: () => {
+            toggleMuthurChat();
+        }
     };
 
+    // 1. Caso Padrão Foundry VTT: Lista (Array) de Controles
     const controlList = Array.isArray(controls)
         ? controls
         : (Array.isArray(controls?.controls) ? controls.controls : null);
+
     if (controlList) {
-        try {
-            console.log("MUTHUR getSceneControlButtons | groupes:", controlList.map(c => ({ name: c.name, tools: Array.isArray(c.tools) ? c.tools.length : 0 })));
-        } catch (e) {
-            console.warn("MUTHUR getSceneControlButtons | log groupes échoué:", e);
+        // A: Criar um grupo próprio dedicado na barra de ferramentas lateral
+        let muthurGroup = controlList.find(c => c.name === "muthur");
+        if (!muthurGroup) {
+            muthurGroup = {
+                name: "muthur",
+                title: "MU/TH/UR 6000",
+                icon: "fas fa-desktop",
+                visible: true,
+                layer: "controls",
+                tools: [muthurTool]
+            };
+            controlList.push(muthurGroup);
         }
 
-        let targetGroup = controlList.find((c) => c.name === "token")
-            || controlList.find((c) => c.name === "notes");
-        if (!targetGroup) {
-            console.warn("MUTHUR | Aucun groupe cible trouvé (token/notes) en mode tableau. Bouton non ajouté.");
-            return;
-        }
-        if (!Array.isArray(targetGroup.tools)) targetGroup.tools = [];
-        const exists = targetGroup.tools.some((t) => t.name === toolDef.name);
-        console.log("MUTHUR | groupe ciblé (array):", targetGroup.name, "outils existants:", targetGroup.tools.map(t => t.name));
-        if (!exists) {
-            targetGroup.tools.push(toolDef);
-            console.log("MUTHUR | bouton ajouté (array) dans le groupe:", targetGroup.name);
+        // B: Injetar também na barra principal de Tokens para acesso instantâneo em 1 clique
+        const tokenGroup = controlList.find(c => c.name === "token");
+        if (tokenGroup && Array.isArray(tokenGroup.tools)) {
+            if (!tokenGroup.tools.some(t => t.name === muthurTool.name)) {
+                tokenGroup.tools.push({
+                    name: "muthur-token-btn",
+                    title: "Terminal MU/TH/UR 6000",
+                    icon: "fas fa-desktop",
+                    visible: true,
+                    button: true,
+                    onClick: () => toggleMuthurChat()
+                });
+            }
         }
         return;
     }
 
+    // 2. Caso de Objeto indexado por chaves
     if (controls && typeof controls === 'object') {
-        const keys = Object.keys(controls);
-        console.log("MUTHUR getSceneControlButtons | clés objet:", keys);
-
-        let targetKey = null;
-        if (controls.notes) targetKey = 'notes';
-        else if (controls.token) targetKey = 'token';
-        else targetKey = keys.find(k => controls[k] && (Array.isArray(controls[k].tools) || (controls[k].tools && typeof controls[k].tools === 'object')));
-
-        if (!targetKey) {
-            console.warn("MUTHUR getSceneControlButtons | aucun groupe avec tools trouvé parmi:", keys);
-            return;
+        if (!controls.muthur) {
+            controls.muthur = {
+                name: "muthur",
+                title: "MU/TH/UR 6000",
+                icon: "fas fa-desktop",
+                visible: true,
+                tools: { "muthur-terminal": muthurTool }
+            };
         }
-
-        const groupObj = controls[targetKey];
-        let tools = groupObj.tools;
-
-        if (Array.isArray(tools)) {
-            const exists = tools.some((t) => t.name === toolDef.name);
-            console.log("MUTHUR | groupe ciblé (object-array):", targetKey, "outils existants:", tools.map(t => t.name));
-            if (!exists) {
-                tools.push(toolDef);
-                console.log("MUTHUR | bouton ajouté (object-array) dans le groupe:", targetKey);
+        if (controls.token) {
+            if (Array.isArray(controls.token.tools)) {
+                if (!controls.token.tools.some(t => t.name === muthurTool.name)) {
+                    controls.token.tools.push(muthurTool);
+                }
+            } else if (controls.token.tools && typeof controls.token.tools === 'object') {
+                controls.token.tools["muthur-terminal"] = muthurTool;
             }
-        } else if (tools && typeof tools === 'object') {
-            const exists = !!tools[toolDef.name];
-            console.log("MUTHUR | groupe ciblé (object-map):", targetKey, "outils existants:", Object.keys(tools));
-            if (!exists) {
-                tools[toolDef.name] = toolDef;
-                console.log("MUTHUR | bouton ajouté (object-map) dans le groupe:", targetKey);
-            }
-        } else {
-            groupObj.tools = { [toolDef.name]: toolDef };
-            console.log("MUTHUR | tools étaient absents. Création map avec outil dans:", targetKey);
         }
-        return;
     }
-
-    console.warn("MUTHUR getSceneControlButtons | structure inconnue:", controls);
 });
 
 Hooks.once('ready', async () => {
-    if (game.user.isGM && !game.settings.get('alien-mu-th-ur', 'welcomeMessageShown')) {
+    if (game.user.isGM && !game.settings.get('alien-mu-th-ur-pt-br', 'welcomeMessageShown')) {
         ChatMessage.create({
             speaker: { alias: "MU/TH/UR 6000" },
             content: `
@@ -2510,7 +2759,7 @@ Hooks.once('ready', async () => {
         });
 
         // Atualiza a memória para "true" para não mostrar nunca mais neste mundo
-        game.settings.set('alien-mu-th-ur', 'welcomeMessageShown', true);
+        game.settings.set('alien-mu-th-ur-pt-br', 'welcomeMessageShown', true);
     }
 
     currentMuthurSession = {
@@ -2519,7 +2768,7 @@ Hooks.once('ready', async () => {
         userName: null
     };
 
-    game.socket.on('module.alien-mu-th-ur', (data) => {
+    game.socket.on('module.alien-mu-th-ur-pt-br', (data) => {
         if (data.type === 'muthurCommand' && game.user.isGM) {
             handleMuthurResponse(data);
         } else if (data.type === 'muthurResponse' && !game.user.isGM) {
@@ -2541,7 +2790,7 @@ Hooks.once('ready', async () => {
         } else if (data.type === 'openSpectatorInterface' && !game.user.isGM && data.spectatorIds.includes(game.user.id)) {
             showSpectatorInterface(data.activeUserId, data.activeUserName, true);
 
-            game.socket.emit('module.alien-mu-th-ur', {
+            game.socket.emit('module.alien-mu-th-ur-pt-br', {
                 type: 'requestCurrentMessages',
                 targetUserId: data.activeUserId,
                 spectatorId: game.user.id
@@ -2566,7 +2815,7 @@ Hooks.once('ready', async () => {
                     });
                 });
 
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'syncMessages',
                     messages: messageData,
                     targetSpectatorId: data.spectatorId
@@ -2649,8 +2898,8 @@ Hooks.once('ready', async () => {
             const ko = document.createElement('button'); ko.textContent = 'X'; ko.style.cssText = 'background:black; color:#ff0000; border:1px solid #ff0000; padding:4px 10px;';
             wrap.appendChild(ok); wrap.appendChild(ko);
             appendDialogToGM(wrap, 'bottom-right', 8);
-            ok.onclick = () => { const m = Math.max(1, Math.min(60, parseInt(inp.value, 10) || 10)); try { game.socket.emit('module.alien-mu-th-ur', { type: 'cerberusApproval', targetUserId: data.fromId, approved: true, minutes: m }); } catch (_) { } wrap.remove(); };
-            ko.onclick = () => { try { game.socket.emit('module.alien-mu-th-ur', { type: 'cerberusApproval', targetUserId: data.fromId, approved: false }); } catch (_) { } wrap.remove(); };
+            ok.onclick = () => { const m = Math.max(1, Math.min(60, parseInt(inp.value, 10) || 10)); try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'cerberusApproval', targetUserId: data.fromId, approved: true, minutes: m }); } catch (_) { } wrap.remove(); };
+            ko.onclick = () => { try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'cerberusApproval', targetUserId: data.fromId, approved: false }); } catch (_) { } wrap.remove(); };
         } else if (data.type === 'cerberusApproval' && data.targetUserId === game.user.id) {
             if (!data.approved) {
                 const chatLog = document.querySelector('.muthur-chat-log'); if (chatLog) displayMuthurMessage(chatLog, game.i18n.localize('MUTHUR.requestDenied') || 'Request denied.', '', '#00ff00', 'reply');
@@ -2674,7 +2923,7 @@ Hooks.once('ready', async () => {
                         try {
                             createCerberusWindow();
                             startCerberusCountdown(window.__cerberusDurationMinutes || 10);
-                            game.socket.emit('module.alien-mu-th-ur', { type: 'showCerberusGlobal', fromId: game.user.id, fromName: game.user.name, minutes: window.__cerberusDurationMinutes || 10, startTime: Date.now() });
+                            game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'showCerberusGlobal', fromId: game.user.id, fromName: game.user.name, minutes: window.__cerberusDurationMinutes || 10, startTime: Date.now() });
                         } catch (_) { }
                     };
                     noBtn.onclick = async () => {
@@ -2737,7 +2986,7 @@ Hooks.once('ready', async () => {
                     gmChatLog.appendChild(buttonsDiv);
 
                     document.getElementById('enableHack').onclick = async () => {
-                        await game.settings.set('alien-mu-th-ur', 'allowHack', true);
+                        await game.settings.set('alien-mu-th-ur-pt-br', 'allowHack', true);
                         buttonsDiv.remove();
                         await displayMuthurMessage(
                             gmChatLog,
@@ -2805,8 +3054,8 @@ Hooks.once('ready', async () => {
                 };
                 const i18nKey = (key === 'custom') ? null : (presets[key] || 'MUTHUR.status');
                 const statusText = i18nKey ? game.i18n.localize(i18nKey)
-                    : (game.settings.get('alien-mu-th-ur', 'customStatusText') || game.i18n.localize('MUTHUR.status'));
-                game.socket.emit('module.alien-mu-th-ur', {
+                    : (game.settings.get('alien-mu-th-ur-pt-br', 'customStatusText') || game.i18n.localize('MUTHUR.status'));
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'statusResponse',
                     targetUserId: requesterId,
                     text: statusText,
@@ -2887,7 +3136,7 @@ Hooks.once('ready', async () => {
                 notifyBackToRequester(data.fromId, msg, '#ff0000');
                 broadcastToSpectators(msg, '#ff0000');
                 try { triggerAlarm(true); } catch (e) { console.warn('[MUTHUR][ALARM] local trigger error:', e); }
-                try { console.log('[MUTHUR][ALARM] emit alarmControl:on'); game.socket.emit('module.alien-mu-th-ur', { type: 'alarmControl', action: 'on' }); } catch (e) { console.warn('[MUTHUR][ALARM] emit on error:', e); }
+                try { console.log('[MUTHUR][ALARM] emit alarmControl:on'); game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'alarmControl', action: 'on' }); } catch (e) { console.warn('[MUTHUR][ALARM] emit on error:', e); }
                 try {
                     const headerStopBtn = document.getElementById('gm-muthur-stop-alarm-btn');
                     if (headerStopBtn) headerStopBtn.style.display = 'flex';
@@ -2899,13 +3148,13 @@ Hooks.once('ready', async () => {
             const title = document.createElement('div');
             title.textContent = `${data.fromName || 'PLAYER'} → HACK ?`;
             title.style.cssText = 'margin-bottom:6px; font-weight:bold;';
-            const ok = document.createElement('button'); ok.textContent = 'SUCCÈS'; ok.style.cssText = 'background:black; color:#00ff00; border:1px solid #00ff00; padding:4px 10px; margin-right:6px;';
-            const ko = document.createElement('button'); ko.textContent = 'ÉCHEC'; ko.style.cssText = 'background:black; color:#ff0000; border:1px solid #ff0000; padding:4px 10px;';
+            const ok = document.createElement('button'); ok.textContent = 'SUCESSO'; ok.style.cssText = 'background:black; color:#00ff00; border:1px solid #00ff00; padding:4px 10px; margin-right:6px; cursor:pointer; font-weight:bold;';
+            const ko = document.createElement('button'); ko.textContent = 'FALHA'; ko.style.cssText = 'background:black; color:#ff0000; border:1px solid #ff0000; padding:4px 10px; cursor:pointer; font-weight:bold;';
             wrap.appendChild(title); wrap.appendChild(ok); wrap.appendChild(ko);
             appendDialogToGM(wrap, 'bottom-right', 8);
             const decide = (success) => {
                 wrap.remove();
-                game.socket.emit('module.alien-mu-th-ur', { type: 'hackDecision', targetUserId: data.fromId, success });
+                game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackDecision', targetUserId: data.fromId, success });
             };
             ok.onclick = () => decide(true);
             ko.onclick = () => decide(false);
@@ -3059,7 +3308,7 @@ function sendGMResponse(targetUserId, message, color = '#ff9900') {
     }
 
     try {
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'muthurResponse',
             command: message,
             fromGM: true,
@@ -3104,9 +3353,9 @@ function playComSoundThrottled(minIntervalMs = 200) {
 
 function playTypeSound() {
     try {
-        const volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
+        const volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
         const randomNumber = Math.floor(Math.random() * 34) + 1;
-        const soundPath = `/modules/alien-mu-th-ur/sounds/keypress/Keypress_${randomNumber}.wav`;
+        const soundPath = `/modules/alien-mu-th-ur-pt-br/sounds/keypress/Keypress_${randomNumber}.wav`;
 
         const sound = new Audio(soundPath);
         sound.volume = volume;
@@ -3125,7 +3374,7 @@ function playTypeSound() {
 
 function isTypewriterEnabled() {
     try {
-        return game.settings.get('alien-mu-th-ur', 'enableTypewriter');
+        return game.settings.get('alien-mu-th-ur-pt-br', 'enableTypewriter');
     } catch (error) {
         console.warn("Erreur lors de la lecture des paramètres typewriter:", error);
         return true;
@@ -3147,9 +3396,9 @@ async function playSoundWithHelper(soundPath, volume, loop = false, label = 'gen
 
 function playReturnSound() {
     try {
-        const volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
+        const volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
         const randomNumber = Math.floor(Math.random() * 19) + 1;
-        const soundPath = `/modules/alien-mu-th-ur/sounds/Key press return/Return_beep_${randomNumber}.wav`;
+        const soundPath = `/modules/alien-mu-th-ur-pt-br/sounds/Key press return/Return_beep_${randomNumber}.wav`;
         return playSoundWithHelper(soundPath, volume, false, 'return');
     } catch (error) {
         console.error("Erreur lors de la lecture du son de retour:", error);
@@ -3158,8 +3407,8 @@ function playReturnSound() {
 
 function playErrorSound() {
     try {
-        const volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
-        const soundPath = `/modules/alien-mu-th-ur/sounds/pec_message/error.wav`;
+        const volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
+        const soundPath = `/modules/alien-mu-th-ur-pt-br/sounds/pec_message/error.wav`;
         return playSoundWithHelper(soundPath, volume, false, 'error');
     } catch (error) {
         console.error("Erreur lors de la lecture du son d'erreur:", error);
@@ -3168,9 +3417,9 @@ function playErrorSound() {
 
 function playComSound() {
     try {
-        const volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
+        const volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
         const randomNumber = Math.floor(Math.random() * 3) + 1;
-        const soundPath = `/modules/alien-mu-th-ur/sounds/pec_message/Save_Sound_Communications_${randomNumber}.wav`;
+        const soundPath = `/modules/alien-mu-th-ur-pt-br/sounds/pec_message/Save_Sound_Communications_${randomNumber}.wav`;
         return playSoundWithHelper(soundPath, volume, false, 'communication');
     } catch (error) {
         console.error("Erreur lors de la lecture du son de communication:", error);
@@ -3184,9 +3433,9 @@ async function playReplySound() {
             currentReplySound.currentTime = 0;
         }
 
-        const volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
+        const volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
         const randomNumber = Math.floor(Math.random() * 9) + 1;
-        const soundPath = `/modules/alien-mu-th-ur/sounds/reply/Computer_Reply_${randomNumber}.wav`;
+        const soundPath = `/modules/alien-mu-th-ur-pt-br/sounds/reply/Computer_Reply_${randomNumber}.wav`;
 
         if (typeof AudioHelper !== 'undefined' && AudioHelper?.play) {
             await AudioHelper.play({ src: soundPath, volume, autoplay: true, loop: false }, true);
@@ -3234,7 +3483,7 @@ async function displayHackMessage(chatLog, message, color, type, isPassword = fa
 
     if (isPassword) {
         messageDiv.textContent = message;
-        if (!soundGloballyMuted && game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
+        if (!soundGloballyMuted && game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds')) {
             playComSoundThrottled();
         }
         return Promise.resolve();
@@ -3243,7 +3492,7 @@ async function displayHackMessage(chatLog, message, color, type, isPassword = fa
         for (const char of message) {
             displayedText += char;
             messageDiv.textContent = displayedText;
-            if (!soundGloballyMuted && game.settings.get('alien-mu-th-ur', 'enableTypingSounds') && char === ' ') {
+            if (!soundGloballyMuted && game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds') && char === ' ') {
                 playComSoundThrottled();
             }
             await new Promise(resolve => setTimeout(resolve, 20));
@@ -3270,29 +3519,121 @@ async function simulateHackingAttempt(chatLog) {
     try { console.log('MUTHUR | container chat trouvé côté initiateur =', !!container); } catch (e) { }
     container.classList.add('hacking-active');
 
-    const typingSoundEnabled = game.settings.get('alien-mu-th-ur', 'enableTypingSounds');
+    const typingSoundEnabled = game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds');
     const originalTypeSound = playTypeSound;
     playTypeSound = () => { };
 
-    let isSuccess;
-    let roll;
-    if (!game.user.isGM) {
+    let isSuccess = false;
+    let roll = null;
+    let hackMode = 'dialog';
+    try { hackMode = game.settings.get('alien-mu-th-ur-pt-br', 'hackResolutionMode') || 'dialog'; } catch (_) { }
+
+    if (hackMode === 'gm' && !game.user.isGM) {
         try {
             await new Promise((resolve) => {
-                game.socket.emit('module.alien-mu-th-ur', { type: 'hackDecisionRequest', fromId: game.user.id, fromName: game.user.name });
+                game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackDecisionRequest', fromId: game.user.id, fromName: game.user.name });
                 const handler = (data) => {
                     if (data.type === 'hackDecision' && data.targetUserId === game.user.id) {
                         isSuccess = !!data.success;
-                        game.socket.off('module.alien-mu-th-ur', handler);
+                        game.socket.off('module.alien-mu-th-ur-pt-br', handler);
                         resolve();
                     }
                 };
-                game.socket.on('module.alien-mu-th-ur', handler);
+                game.socket.on('module.alien-mu-th-ur-pt-br', handler);
             });
         } catch (_) { }
     } else {
-        roll = await new Roll('1d6').evaluate({ async: true });
-        isSuccess = roll.total % 2 === 0;
+        // Obter Ator (Personagem ou Token Controlado)
+        const actor = game.user.character || canvas?.tokens?.controlled?.[0]?.actor || null;
+        const requiredSuccesses = Number(game.settings.get('alien-mu-th-ur-pt-br', 'hackRequiredSuccesses') || 1);
+
+        if (hackMode === 'dialog' && actor && typeof actor.rollAbilityMod === 'function') {
+            // Invoca o Menu / Diálogo Oficial de Rolagem do Alien RPG
+            await syncMessageToSpectators(chatLog, "\nINICIALIZANDO INTERFACE DE MODIFICADORES DE ROLAGEM...", '', '#00ff00', 'reply');
+
+            const comtechSkill = actor.system?.skills?.comtech || {};
+            const skillMod = Number(comtechSkill.mod ?? comtechSkill.value ?? 1);
+            const skillLabel = game.i18n.localize('ALIENRPG.Skillcomtech') || 'Comtech';
+
+            const dataset = {
+                action: 'RollAbility',
+                roll: skillMod,
+                spbutt: 'comtech',
+                label: `${actor.name} - ${skillLabel}`,
+                actorid: actor.id
+            };
+
+            const prevSCount = game.alienrpg?.rollArr?.sCount ?? null;
+
+            // Abre o menu oficial de modificadores do sistema Alien RPG
+            const dialogResult = await actor.rollAbilityMod(actor, dataset);
+
+            if (dialogResult === 'cancelled') {
+                await syncMessageToSpectators(chatLog, "TENTATIVA DE INVASÃO CANCELADA PELO OPERADOR.", '', '#ff9900', 'error');
+                container.classList.remove('hacking-active');
+                return;
+            }
+
+            // Aguarda processamento da rolagem no sistema alienrpg
+            await new Promise(r => setTimeout(r, 600));
+
+            const totalSuccesses = (game.alienrpg?.rollArr?.sCount ?? ((game.alienrpg?.rollArr?.r1Six ?? 0) + (game.alienrpg?.rollArr?.r2Six ?? 0)));
+            const stressPanics = Number(game.alienrpg?.rollArr?.r2One ?? 0);
+
+            isSuccess = (totalSuccesses >= requiredSuccesses);
+
+            let rollOutput = `\n[TESTE DE INVASÃO: ${actor.name.toUpperCase()}]\n`;
+            rollOutput += `TOTAL DE SUCESSOS: ${totalSuccesses} / ${requiredSuccesses} NECESSÁRIOS\n`;
+            if (stressPanics > 0) {
+                rollOutput += `!!! DETECTADO PÂNICO NOS DADOS DE ESTRESSE (${stressPanics}) !!!\n`;
+            }
+            rollOutput += isSuccess ? `RESULTADO: INVASÃO BEM-SUCEDIDA\n` : `RESULTADO: FALHA NA INVASÃO\n`;
+            await syncMessageToSpectators(chatLog, rollOutput, '', isSuccess ? '#00ff00' : '#ff3333', 'reply');
+        } else {
+            // Fallback ou modo automático sem diálogo
+            let baseDice = 4;
+            let stressDice = 0;
+            let actorName = game.user.name;
+
+            if (actor) {
+                actorName = actor.name;
+                const systemData = actor.system || {};
+                const wits = Number(systemData.attributes?.wits?.value ?? systemData.attributes?.esprit?.value ?? 2);
+                const comtech = Number(systemData.skills?.comtech?.value ?? systemData.skills?.technologie?.value ?? 1);
+                stressDice = Number(systemData.general?.stress?.value ?? 0);
+                baseDice = Math.max(1, wits + comtech);
+            }
+
+            const baseRoll = await new Roll(`${baseDice}d6`).evaluate({ async: true });
+            const baseSixes = baseRoll.dice[0]?.results?.filter(r => r.result === 6)?.length || 0;
+            const baseResults = (baseRoll.dice[0]?.results || []).map(r => r.result);
+
+            let stressSixes = 0;
+            let stressPanics = 0;
+            let stressResults = [];
+
+            if (stressDice > 0) {
+                const stressRoll = await new Roll(`${stressDice}d6`).evaluate({ async: true });
+                stressResults = (stressRoll.dice[0]?.results || []).map(r => r.result);
+                stressSixes = stressResults.filter(res => res === 6).length;
+                stressPanics = stressResults.filter(res => res === 1).length;
+            }
+
+            const totalSuccesses = baseSixes + stressSixes;
+            isSuccess = (totalSuccesses >= requiredSuccesses);
+
+            let rollOutput = `\n[TESTE DE INVASÃO COMTECH: ${actorName.toUpperCase()}]\n`;
+            rollOutput += `DADOS DE BASE (${baseDice}d6): [ ${baseResults.join(', ')} ] -> SUCESSOS: ${baseSixes}\n`;
+            if (stressDice > 0) {
+                rollOutput += `DADOS DE ESTRESSE (${stressDice}d6): [ ${stressResults.join(', ')} ] -> SUCESSOS: ${stressSixes}`;
+                if (stressPanics > 0) rollOutput += ` | !!! PÂNICO (1s): ${stressPanics} !!!`;
+                rollOutput += `\n`;
+            }
+            rollOutput += `TOTAL DE SUCESSOS: ${totalSuccesses} / ${requiredSuccesses} NECESSÁRIOS\n`;
+            rollOutput += isSuccess ? `RESULTADO: INVASÃO BEM-SUCEDIDA\n` : `RESULTADO: FALHA NA INVASÃO\n`;
+
+            await syncMessageToSpectators(chatLog, rollOutput, '', isSuccess ? '#00ff00' : '#ff3333', 'reply');
+        }
     }
 
     const generatePassword = () => {
@@ -3383,18 +3724,18 @@ async function simulateHackingAttempt(chatLog) {
         type: 'reply'
     }));
 
-    try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackingAttempt', fromId: game.user.id }); console.log('MUTHUR | hackingAttempt émis aux spectateurs'); } catch (e) { console.warn('MUTHUR | emission hackingAttempt échouée', e); }
+    try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackingAttempt', fromId: game.user.id }); console.log('MUTHUR | hackingAttempt émis aux spectateurs'); } catch (e) { console.warn('MUTHUR | emission hackingAttempt échouée', e); }
     const stopHackingWindows = createHackingWindows();
     try { console.log('MUTHUR | createHackingWindows() appelée côté initiateur'); } catch (e) { }
     try {
         for (let i = 0; i < window.hackingSequences.length; i++) {
             const line = window.hackingSequences[i];
             await displayHackMessage(chatLog, line, '#00ff00', 'reply', false);
-            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: line, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
+            try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackStream', text: line, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
             chatLog.scrollTop = chatLog.scrollHeight;
 
             if (!game.user.isGM) {
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'hackProgress',
                     progress: Math.floor((i + 1) * 30 / window.hackingSequences.length),
                     fromId: game.user.id
@@ -3405,7 +3746,7 @@ async function simulateHackingAttempt(chatLog) {
         for (let i = 0; i < passwordAttempts.length; i++) {
             const attempt = passwordAttempts[i];
             await displayHackMessage(chatLog, attempt.text, attempt.color, attempt.type, true);
-            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: attempt.text, color: attempt.color, msgType: attempt.type, isPassword: true }); } catch (e) { }
+            try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackStream', text: attempt.text, color: attempt.color, msgType: attempt.type, isPassword: true }); } catch (e) { }
             chatLog.scrollTop = chatLog.scrollHeight;
 
             if (Math.random() < (i / passwordAttempts.length) * 0.5) {
@@ -3414,7 +3755,7 @@ async function simulateHackingAttempt(chatLog) {
             await new Promise(resolve => setTimeout(resolve, 50));
 
             if (!game.user.isGM) {
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'hackProgress',
                     progress: Math.floor(30 + (i + 1) * 40 / passwordAttempts.length),
                     fromId: game.user.id
@@ -3425,7 +3766,7 @@ async function simulateHackingAttempt(chatLog) {
         for (let i = 0; i < window.postPasswordSequences.length; i++) {
             const line = window.postPasswordSequences[i];
             await displayHackMessage(chatLog, line, '#00ff00', 'reply', false);
-            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: line, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
+            try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackStream', text: line, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
 
             if (Math.random() < 0.6) {
                 await glitchEffect();
@@ -3434,7 +3775,7 @@ async function simulateHackingAttempt(chatLog) {
             chatLog.scrollTop = chatLog.scrollHeight;
 
             if (!game.user.isGM) {
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'hackProgress',
                     progress: Math.floor(70 + (i + 1) * 15 / window.postPasswordSequences.length),
                     fromId: game.user.id
@@ -3447,15 +3788,15 @@ async function simulateHackingAttempt(chatLog) {
             await new Promise(resolve => setTimeout(resolve, 100));
             const txt = game.i18n.localize(alertSequences[i].text);
             await displayHackMessage(chatLog, txt, alertSequences[i].color, alertSequences[i].type, false);
-            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: txt, color: alertSequences[i].color, msgType: alertSequences[i].type, isPassword: false }); } catch (e) { }
+            try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackStream', text: txt, color: alertSequences[i].color, msgType: alertSequences[i].type, isPassword: false }); } catch (e) { }
             chatLog.scrollTop = chatLog.scrollHeight;
 
             if (alertSequences[i].text === 'MOTHER.AdminPrivileges') {
-                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStopGlitch' }); } catch (e) { }
+                try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackStopGlitch' }); } catch (e) { }
             }
 
             if (!game.user.isGM) {
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'hackProgress',
                     progress: Math.floor(85 + (i + 1) * 15 / alertSequences.length),
                     fromId: game.user.id
@@ -3464,8 +3805,8 @@ async function simulateHackingAttempt(chatLog) {
 
             if (Math.random() > 0.7) {
                 await glitchEffect();
-                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackGlitch' }); } catch (e) { }
-                if (game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
+                try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackGlitch' }); } catch (e) { }
+                if (game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds')) {
                     playErrorSound();
                 }
             }
@@ -3480,7 +3821,7 @@ async function simulateHackingAttempt(chatLog) {
                 overlay.style.opacity = '0.8';
                 overlay.style.backgroundColor = 'rgba(255,0,0,0.2)';
                 await glitchEffect();
-                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackGlitch' }); } catch (e) { }
+                try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackGlitch' }); } catch (e) { }
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
 
@@ -3489,12 +3830,12 @@ async function simulateHackingAttempt(chatLog) {
 
             for (let i = 0; i < 5; i++) {
                 await glitchEffect();
-                try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackGlitch' }); } catch (e) { }
+                try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackGlitch' }); } catch (e) { }
                 await new Promise(resolve => setTimeout(resolve, 200));
             }
 
             if (!game.user.isGM) {
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'hackComplete',
                     success: isSuccess,
                     fromId: game.user.id,
@@ -3520,7 +3861,7 @@ async function simulateHackingAttempt(chatLog) {
                 color: '#00ff00',
                 type: 'normal'
             });
-            try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: game.i18n.localize('MOTHER.WelcomeAdminFull'), color: '#00ff00', msgType: 'normal', isPassword: false }); } catch (e) { }
+            try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackStream', text: game.i18n.localize('MOTHER.WelcomeAdminFull'), color: '#00ff00', msgType: 'normal', isPassword: false }); } catch (e) { }
         }
 
     } finally {
@@ -3537,14 +3878,14 @@ async function simulateHackingAttempt(chatLog) {
     style.remove();
 
     if (!game.user.isGM) {
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'hackComplete',
             success: isSuccess,
             fromId: game.user.id,
             fromName: game.user.name
         });
 
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'muthurCommand',
             command: game.i18n.format("MUTHUR.HackDetectionMessage", {
                 userName: game.user.name,
@@ -3561,7 +3902,7 @@ async function simulateHackingAttempt(chatLog) {
         localStorage.setItem('muthur-terminal-lock', lockTime.toString());
 
         if (!game.user.isGM) {
-            game.socket.emit('module.alien-mu-th-ur', {
+            game.socket.emit('module.alien-mu-th-ur-pt-br', {
                 type: 'hackComplete',
                 success: isSuccess,
                 fromId: game.user.id,
@@ -3595,7 +3936,7 @@ async function simulateHackingAttempt(chatLog) {
     }
 
     if (!game.user.isGM) {
-        game.socket.emit('module.alien-mu-th-ur', {
+        game.socket.emit('module.alien-mu-th-ur-pt-br', {
             type: 'hackComplete',
             success: isSuccess,
             fromId: game.user.id
@@ -3633,7 +3974,7 @@ function getDoorPreferredLabel(doorDoc) {
     const doc = doorDoc?.document || doorDoc;
     const flags = doc?.flags || {};
     const tagger = flags['tagger']?.tags || [];
-    const our = flags['alien-mu-th-ur'] || {};
+    const our = flags['alien-mu-th-ur-pt-br'] || {};
     const name = doc?.name || '';
     const tags = [].concat(name ? [name] : [], tagger, our.tags || [], our.airlockTag || []);
     const ad = tags.find(t => /^AD/i.test(String(t)));
@@ -3724,7 +4065,7 @@ function showApprovalDialog(text, cb) {
 
 function notifyBackToRequester(userId, text, color) {
     if (!userId) return;
-    game.socket.emit('module.alien-mu-th-ur', { type: 'muthurResponse', targetUserId: userId, command: text, color: color || '#00ff00' });
+    game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'muthurResponse', targetUserId: userId, command: text, color: color || '#00ff00' });
 }
 
 function broadcastToSpectators(text, color) {
@@ -3767,7 +4108,7 @@ function appendDialogToGM(element, position = 'bottom-right', margin = 10) {
 
 function buildPostHackHelpList() {
     const lines = [];
-    const g = (k) => { try { return game.settings.get('alien-mu-th-ur', k); } catch (e) { return false; } };
+    const g = (k) => { try { return game.settings.get('alien-mu-th-ur-pt-br', k); } catch (e) { return false; } };
     if (g('phSpecialOrders')) lines.push('- ORDERS: 754, 899, 931, 937, 939, 966');
     lines.push('- CERBERUS');
     if (g('phDoors')) lines.push('- DOORS, LOCK DOOR X, UNLOCK DOOR X');
@@ -3784,7 +4125,7 @@ function buildPostHackHelpList() {
 let currentAlarm = { howl: null, src: null };
 async function triggerAlarm(withOverlay) {
     try {
-        const src = (game.settings.get('alien-mu-th-ur', 'alarmSoundPath') || '').trim();
+        const src = (game.settings.get('alien-mu-th-ur-pt-br', 'alarmSoundPath') || '').trim();
         console.log('[MUTHUR][ALARM] triggerAlarm requested | withOverlay=', withOverlay, '| src=', src);
         const volume = 1.0;
         if (src) {
@@ -3947,7 +4288,7 @@ async function applyGasEffect() {
         if (dist <= radius) {
             affected++;
             try {
-                await t.document?.setFlag?.('alien-mu-th-ur', 'gas', { poisoned: true, unconscious: true });
+                await t.document?.setFlag?.('alien-mu-th-ur-pt-br', 'gas', { poisoned: true, unconscious: true });
             } catch (e) { }
         }
     }
@@ -3981,13 +4322,13 @@ async function applyPoisonToTokens(tokens) {
                         label: 'Poisoned',
                         icon: poisoned.icon || 'icons/svg/poison.svg',
                         disabled: false,
-                        origin: 'alien-mu-th-ur',
+                        origin: 'alien-mu-th-ur-pt-br',
                         flags: { core: { statusId: poisoned.id || 'poisoned' } }
                     };
                     try { await actor.createEmbeddedDocuments('ActiveEffect', [effectData]); } catch (_) { }
                 }
             }
-            await t.document?.setFlag?.('alien-mu-th-ur', 'gas', { poisoned: true });
+            await t.document?.setFlag?.('alien-mu-th-ur-pt-br', 'gas', { poisoned: true });
             affected++;
         } catch (e) { }
     }
@@ -4045,7 +4386,7 @@ async function applyCryoEffect(targetName) {
 
     try { matched.control({ releaseOthers: true }); } catch (e) { try { matched.control(); } catch (_) { } }
 
-    try { await matched.document?.setFlag?.('alien-mu-th-ur', 'cryo', { stasis: true }); } catch (e) { console.warn('CRYO | setFlag failed', e); }
+    try { await matched.document?.setFlag?.('alien-mu-th-ur-pt-br', 'cryo', { stasis: true }); } catch (e) { console.warn('CRYO | setFlag failed', e); }
 
     const eff = getUnconsciousEffect();
     try {
@@ -4077,7 +4418,7 @@ async function applyCryoEffect(targetName) {
                 label: 'Unconscious',
                 icon: eff.icon || 'icons/svg/unconscious.svg',
                 disabled: false,
-                origin: 'alien-mu-th-ur',
+                origin: 'alien-mu-th-ur-pt-br',
                 flags: { core: { statusId: eff.id || 'unconscious' } }
             };
             console.log('CRYO | ensure AE with statusId', effectData);
@@ -4094,7 +4435,7 @@ async function releaseCryoForTokens(tokenList) {
     for (const tok of tokenList) {
         try {
             try { tok.control({ releaseOthers: false }); } catch (e) { }
-            try { await tok.document?.unsetFlag?.('alien-mu-th-ur', 'cryo'); } catch (e) { console.warn('CRYO | unsetFlag failed', e); }
+            try { await tok.document?.unsetFlag?.('alien-mu-th-ur-pt-br', 'cryo'); } catch (e) { console.warn('CRYO | unsetFlag failed', e); }
             if (typeof tok.toggleStatusEffect === 'function') {
                 console.log('CRYO | Token.disable toggleStatusEffect', eff.id || eff.icon);
                 await tok.toggleStatusEffect(eff.id || eff.icon, { active: false, overlay: false });
@@ -4107,7 +4448,7 @@ async function releaseCryoForTokens(tokenList) {
             }
             const actor = tok.document?.actor;
             if (actor?.effects) {
-                const toDelete = actor.effects.filter(e => (e.origin === 'alien-mu-th-ur') || (e.icon === (eff.icon || eff.id)) || (e.flags?.core?.statusId === (eff.id || 'unconscious')) || ((e.label || '').toLowerCase().includes('unconscious') || (e.label || '').toLowerCase().includes('inconscient')));
+                const toDelete = actor.effects.filter(e => (e.origin === 'alien-mu-th-ur-pt-br') || (e.icon === (eff.icon || eff.id)) || (e.flags?.core?.statusId === (eff.id || 'unconscious')) || ((e.label || '').toLowerCase().includes('unconscious') || (e.label || '').toLowerCase().includes('inconscient')));
                 if (toDelete.length) {
                     console.log('CRYO | delete AE on actor', toDelete.map(e => e.id));
                     await actor.deleteEmbeddedDocuments('ActiveEffect', toDelete.map(e => e.id));
@@ -4158,14 +4499,14 @@ async function handleSpecialOrder(chatLog, command) {
         if (orderKey === 'CERBERUS') {
             if (!game.user.isGM) {
                 try {
-                    game.socket.emit('module.alien-mu-th-ur', { type: 'cerberusApprovalRequest', fromId: game.user.id, fromName: game.user.name });
+                    game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'cerberusApprovalRequest', fromId: game.user.id, fromName: game.user.name });
                     await displayMuthurMessage(chatLog, game.i18n.localize('MUTHUR.waitingForMother'), '', '#ff0000', 'communication');
                 } catch (_) { }
                 return;
             }
 
             if (!game.user.isGM && hackSuccessful) {
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'muthurCommand',
                     command: game.i18n.format("MOTHER.CerberusHackAlert", { userName: game.user.name }),
                     user: 'MUTHUR 6000',
@@ -4290,7 +4631,7 @@ async function handleSpecialOrder(chatLog, command) {
                         'error'
                     );
                     if (!game.user.isGM && hackSuccessful) {
-                        game.socket.emit('module.alien-mu-th-ur', {
+                        game.socket.emit('module.alien-mu-th-ur-pt-br', {
                             type: 'muthurCommand',
                             command: game.i18n.localize("MOTHER.CerberusConfirmed"),
                             user: 'MUTHUR 6000',
@@ -4310,7 +4651,7 @@ async function handleSpecialOrder(chatLog, command) {
                         'reply'
                     );
                     if (!game.user.isGM && hackSuccessful) {
-                        game.socket.emit('module.alien-mu-th-ur', {
+                        game.socket.emit('module.alien-mu-th-ur-pt-br', {
                             type: 'muthurCommand',
                             command: game.i18n.localize("MOTHER.CerberusCancelled"),
                             user: 'MUTHUR 6000',
@@ -4350,7 +4691,7 @@ async function handleSpecialOrder(chatLog, command) {
             createCerberusWindow();
             startCerberusCountdown(window.__cerberusDurationMinutes || 10);
 
-            game.socket.emit('module.alien-mu-th-ur', {
+            game.socket.emit('module.alien-mu-th-ur-pt-br', {
                 type: 'showCerberusGlobal',
                 fromId: game.user.id,
                 fromName: game.user.name,
@@ -4373,7 +4714,7 @@ async function handleSpecialOrder(chatLog, command) {
                 currentMuthurSession.userId = null;
                 currentMuthurSession.userName = null;
 
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'closeMuthurChats',
                     fromId: game.user.id
                 });
@@ -4387,10 +4728,10 @@ async function handleSpecialOrder(chatLog, command) {
         const orderDesc = game.i18n.localize(`${orders[orderKey]}.description`);
 
         await displayHackMessage(chatLog, orderName, '#00ff00', 'reply', false);
-        try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: orderName, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
+        try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackStream', text: orderName, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
         try {
             if (!game.user.isGM && hackSuccessful) {
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'muthurCommand',
                     command: orderName,
                     user: 'MUTHUR 6000',
@@ -4401,10 +4742,10 @@ async function handleSpecialOrder(chatLog, command) {
         } catch (e) { }
 
         await displayHackMessage(chatLog, orderDesc, '#00ff00', 'reply', false);
-        try { game.socket.emit('module.alien-mu-th-ur', { type: 'hackStream', text: orderDesc, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
+        try { game.socket.emit('module.alien-mu-th-ur-pt-br', { type: 'hackStream', text: orderDesc, color: '#00ff00', msgType: 'reply', isPassword: false }); } catch (e) { }
         try {
             if (!game.user.isGM && hackSuccessful) {
-                game.socket.emit('module.alien-mu-th-ur', {
+                game.socket.emit('module.alien-mu-th-ur-pt-br', {
                     type: 'muthurCommand',
                     command: orderDesc,
                     user: 'MUTHUR 6000',
@@ -4425,7 +4766,7 @@ async function handleSpecialOrder(chatLog, command) {
 }
 
 async function displayCerberusProtocol(chatLog) {
-    if (!game.settings.get('alien-mu-th-ur', 'allowCerberus')) {
+    if (!game.settings.get('alien-mu-th-ur-pt-br', 'allowCerberus')) {
         await displayMuthurMessage(
             chatLog,
             game.i18n.localize("MOTHER.CerberusDisabled"),
@@ -4541,12 +4882,12 @@ async function displayCerberusProtocol(chatLog) {
         if (floatingCountdown) floatingCountdown.textContent = countdownText;
 
         if (timeLeft <= 10 && timeLeft > 0) {
-            const audio = new Audio(`modules/alien-mu-th-ur/sounds/count/${timeLeft}.mp3`);
-            audio.volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
+            const audio = new Audio(`modules/alien-mu-th-ur-pt-br/sounds/count/${timeLeft}.mp3`);
+            audio.volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
             audio.play();
         }
 
-        if (timeLeft % 30 === 0 && timeLeft > 10 && game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
+        if (timeLeft % 30 === 0 && timeLeft > 10 && game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds')) {
             playErrorSound();
         }
 
@@ -4565,8 +4906,8 @@ async function displayCerberusProtocol(chatLog) {
 }
 
 function createCerberusWindow() {
-    const audio = new Audio('modules/alien-mu-th-ur/sounds/count/Cerberuslunch.mp3');
-    audio.volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
+    const audio = new Audio('modules/alien-mu-th-ur-pt-br/sounds/count/Cerberuslunch.mp3');
+    audio.volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
     audio.play();
 
     const cerberusWindow = document.createElement('div');
@@ -4732,7 +5073,7 @@ function createCerberusWindow() {
     if (game.user.isGM) {
         const stopButton = cerberusWindow.querySelector('#stop-cerberus');
         stopButton.addEventListener('click', () => {
-            game.socket.emit('module.alien-mu-th-ur', {
+            game.socket.emit('module.alien-mu-th-ur-pt-br', {
                 type: 'stopCerberus'
             });
 
@@ -4917,15 +5258,15 @@ function displayGMHackProgress(chatLog) {
 
 async function playEndSequence() {
     try {
-        if (game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
-            const byebye = new Audio('modules/alien-mu-th-ur/sounds/count/Weythanks.mp3');
-            byebye.volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
+        if (game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds')) {
+            const byebye = new Audio('modules/alien-mu-th-ur-pt-br/sounds/count/Weythanks.mp3');
+            byebye.volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
             await byebye.play();
 
             await new Promise(resolve => byebye.onended = resolve);
 
-            const boom = new Audio('modules/alien-mu-th-ur/sounds/count/boom.mp3');
-            boom.volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
+            const boom = new Audio('modules/alien-mu-th-ur-pt-br/sounds/count/boom.mp3');
+            boom.volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
             await boom.play();
         }
 
@@ -4934,9 +5275,9 @@ async function playEndSequence() {
 
         createDeathScreen();
 
-        if (game.settings.get('alien-mu-th-ur', 'enableTypingSounds')) {
-            const deathMusic = new Audio('modules/alien-mu-th-ur/sounds/count/musicmort.mp3');
-            deathMusic.volume = game.settings.get('alien-mu-th-ur', 'typingSoundVolume');
+        if (game.settings.get('alien-mu-th-ur-pt-br', 'enableTypingSounds')) {
+            const deathMusic = new Audio('modules/alien-mu-th-ur-pt-br/sounds/count/musicmort.mp3');
+            deathMusic.volume = game.settings.get('alien-mu-th-ur-pt-br', 'typingSoundVolume');
             await deathMusic.play();
 
             deathMusic.addEventListener('ended', () => {

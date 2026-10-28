@@ -1,0 +1,30 @@
+name: Release Creation
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Compacta todos os arquivos do módulo dentro do ZIP
+      - name: Create Module Zip
+        run: |
+          zip -r ./alien-mu-th-ur-pt-br.zip . -x "*.git*" "*.github*" "*.vscode*"
+
+      # Anexa o module.json e o zip diretamente na Release criada
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            module.json
+            alien-mu-th-ur-pt-br.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
